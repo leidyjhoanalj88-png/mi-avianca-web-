@@ -1,1856 +1,800 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>avianca - Encuentra tiquetes y vuelos baratos | Web oficial</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-<style>
-:root{
-  --rojo:#E3001B;
-  --negro:#1A1A1A;
-  --gris:#666;
-  --gris-claro:#F5F5F5;
-  --borde:#E0E0E0;
-  --celeste:#C8E6F5;
-  --celeste-dark:#A8D4EC;
-  --verde:#22C55E;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;color:var(--negro);background:#fff;-webkit-font-smoothing:antialiased}
-a{text-decoration:none;color:inherit}
-button{cursor:pointer;border:none;font-family:inherit;background:none}
-input,select{font-family:inherit;outline:none}
-
-/* ══ NAVBAR ══════════════════════════════════ */
-.navbar{
-  position:sticky;top:0;z-index:200;
-  background:#fff;
-  border-bottom:1px solid var(--borde);
-  height:60px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px;
-}
-.nav-hamburger{
-  font-size:22px;color:var(--negro);
-  padding:8px;cursor:pointer;
-}
-/* Logo real avianca con pajarito */
-.nav-logo{
-  display:flex;align-items:center;gap:0;
-  position:absolute;left:50%;transform:translateX(-50%);
-}
-.logo-text-av{
-  font-size:26px;font-weight:800;
-  color:var(--rojo);letter-spacing:-0.04em;
-  font-style:italic;
-  line-height:1;
-}
-/* Pajarito SVG exacto de Avianca */
-.logo-bird{
-  width:32px;height:32px;
-  margin-left:2px;margin-top:-4px;
-}
-.nav-right-icons{display:flex;align-items:center;gap:4px}
-.nav-icon-btn{
-  padding:6px 10px;font-size:13px;font-weight:600;
-  color:var(--negro);border-radius:20px;
-  transition:background .15s;cursor:pointer;
-}
-.nav-icon-btn:hover{background:var(--gris-claro)}
-.nav-btn-login{
-  background:var(--rojo);color:#fff;
-  padding:8px 16px;border-radius:20px;
-  font-size:13px;font-weight:600;
-  transition:background .2s;
-}
-.nav-btn-login:hover{background:#C0001A}
-
-/* ══ HERO CELESTE (exacto al sitio real) ═════ */
-.hero{
-  background:linear-gradient(160deg, #D6EEF8 0%, #B8DDEF 40%, #C5E4F2 70%, #E8C8D8 100%);
-  padding:28px 20px 32px;
-  position:relative;
-  overflow:hidden;
-  min-height:520px;
-}
-/* Forma diagonal del fondo como en el sitio real */
-.hero::before{
-  content:'';
-  position:absolute;
-  bottom:-40px;left:-20px;right:-20px;
-  height:80px;
-  background:#fff;
-  transform:rotate(-2deg);
-  border-radius:4px;
-}
-/* Avión volando sutil en el fondo */
-.hero-plane-bg{
-  position:absolute;
-  top:20px;right:-30px;
-  opacity:.08;
-  font-size:140px;
-  transform:rotate(-15deg);
-  pointer-events:none;
-  animation:planeBgMove 25s linear infinite;
-}
-@keyframes planeBgMove{
-  0%{right:-30px;top:20px}
-  50%{right:40%;top:10px}
-  100%{right:-30px;top:20px}
-}
-
-/* Avión SVG animado volando */
-.plane-anim{
-  position:absolute;
-  pointer-events:none;
-  animation:planefly 16s cubic-bezier(.2,.05,.8,.95) infinite;
-  filter:drop-shadow(0 4px 12px rgba(0,0,0,.2));
-  z-index:2;
-}
-@keyframes planefly{
-  0%  {left:-20%;bottom:48%;opacity:0;transform:rotate(-4deg) scale(.55)}
-  7%  {opacity:1}
-  40% {left:35%;bottom:60%;transform:rotate(-3deg) scale(.78)}
-  70% {left:70%;bottom:70%;transform:rotate(-2deg) scale(.9)}
-  90% {left:105%;bottom:78%;opacity:1}
-  95% {opacity:0}
-  100%{left:108%;bottom:80%;opacity:0}
-}
-/* Estela */
-.plane-trail{
-  position:absolute;
-  height:1.5px;
-  background:linear-gradient(to left,transparent,rgba(255,255,255,.7),transparent);
-  border-radius:2px;
-  pointer-events:none;
-  z-index:1;
-  animation:trailfly 16s cubic-bezier(.2,.05,.8,.95) infinite;
-}
-.trail-a{width:80px;animation-delay:0s}
-.trail-b{width:50px;opacity:.4;bottom:calc(60% + 6px);animation-delay:.03s}
-@keyframes trailfly{
-  0%  {left:-22%;bottom:calc(60% + 2px);opacity:0}
-  7%  {opacity:.7}
-  70% {left:56%;opacity:.4}
-  90% {left:96%;opacity:0}
-  100%{left:100%;opacity:0}
-}
-
-.hero-content{position:relative;z-index:3}
-
-/* ══ BUSCADOR REAL (copia exacta móvil) ══════ */
-.buscador-card{
-  background:#fff;
-  border-radius:20px;
-  padding:20px;
-  box-shadow:0 4px 24px rgba(0,0,0,.1);
-  margin-top:20px;
-}
-
-/* Pill tipo viaje */
-.trip-pills{
-  display:flex;
-  background:#F0F0F0;
-  border-radius:30px;
-  padding:4px;
-  margin-bottom:18px;
-  gap:0;
-}
-.trip-pill{
-  flex:1;padding:10px 0;
-  border-radius:26px;
-  font-size:15px;font-weight:500;
-  color:var(--gris);
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  cursor:pointer;transition:all .2s;
-  background:none;border:none;
-}
-.trip-pill.active{
-  background:#fff;
-  color:var(--negro);
-  font-weight:600;
-  box-shadow:0 2px 8px rgba(0,0,0,.1);
-}
-.pill-dot{
-  width:18px;height:18px;
-  border-radius:50%;
-  border:2px solid #ccc;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-  transition:all .2s;
-}
-.trip-pill.active .pill-dot{
-  border-color:var(--verde);
-  background:var(--verde);
-}
-.pill-dot-inner{
-  width:8px;height:8px;
-  border-radius:50%;background:#fff;
-  display:none;
-}
-.trip-pill.active .pill-dot-inner{display:block}
-
-/* Campos origen/destino */
-.od-box{
-  border:1.5px solid var(--borde);
-  border-radius:12px;
-  overflow:hidden;
-  margin-bottom:10px;
-}
-.od-field{
-  display:flex;align-items:center;gap:12px;
-  padding:14px 16px;
-  cursor:pointer;
-  transition:background .15s;
-  position:relative;
-}
-.od-field:hover{background:#fafafa}
-.od-field+.od-field{border-top:1px solid var(--borde)}
-.od-icon{
-  width:36px;height:36px;
-  border-radius:50%;
-  background:var(--gris-claro);
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;flex-shrink:0;
-}
-.od-label{font-size:11px;color:var(--gris);margin-bottom:2px;font-weight:500}
-.od-value{
-  font-size:16px;font-weight:700;color:var(--negro);
-}
-.od-value.placeholder{color:#bbb;font-weight:400}
-.od-swap{
-  position:absolute;right:14px;top:50%;transform:translateY(-50%);
-  width:32px;height:32px;
-  background:#fff;border:1.5px solid var(--borde);
-  border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:14px;color:var(--negro);cursor:pointer;
-  box-shadow:0 2px 6px rgba(0,0,0,.08);
-  transition:all .2s;z-index:5;
-}
-.od-swap:hover{background:var(--rojo);color:#fff;border-color:var(--rojo)}
-/* Solo mostrar en el primer campo */
-
-/* Fechas */
-.dates-row{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:10px;margin-bottom:12px;
-}
-.date-field{
-  border:1.5px solid var(--borde);
-  border-radius:12px;padding:14px 16px;
-  cursor:pointer;transition:border-color .2s;
-}
-.date-field:hover{border-color:#aaa}
-.date-field:focus-within{border-color:var(--negro)}
-.date-label{font-size:11px;color:var(--gris);margin-bottom:3px;font-weight:500;display:flex;align-items:center;gap:6px}
-.date-label-icon{font-size:14px}
-.date-value{font-size:15px;font-weight:700;color:var(--negro)}
-.date-input-hidden{
-  width:100%;border:none;background:transparent;
-  font-size:15px;font-weight:700;color:var(--negro);
-  cursor:pointer;
-}
-
-/* Credits checkbox */
-.credits-row{
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:16px;cursor:pointer;
-  padding:4px 0;
-}
-.credits-check{
-  width:20px;height:20px;
-  border:2px solid var(--borde);border-radius:4px;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;transition:all .2s;cursor:pointer;
-}
-.credits-check.checked{
-  background:var(--negro);border-color:var(--negro);
-}
-.credits-check.checked::after{
-  content:'✓';color:#fff;font-size:12px;font-weight:700;
-}
-.credits-label{font-size:14px;color:var(--negro)}
-.credits-label strong{font-weight:700}
-
-/* Botón buscar negro */
-.btn-buscar-negro{
-  width:100%;
-  background:var(--negro);color:#fff;
-  padding:18px;border-radius:14px;
-  font-size:17px;font-weight:700;
-  border:none;cursor:pointer;
-  transition:background .2s,transform .1s;
-  letter-spacing:.01em;
-}
-.btn-buscar-negro:hover{background:#333;transform:scale(.99)}
-.btn-buscar-negro:active{transform:scale(.97)}
-
-/* ══ MENÚ DESPLEGABLE REAL ═══════════════════ */
-.mobile-menu{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,.5);z-index:400;
-}
-.mobile-menu.open{display:block}
-.mobile-menu-panel{
-  position:absolute;top:0;left:0;bottom:0;
-  width:85%;max-width:340px;
-  background:#fff;
-  overflow-y:auto;
-  animation:slideRight .25s ease;
-}
-@keyframes slideRight{from{transform:translateX(-100%)}to{transform:translateX(0)}}
-.mm-header{
-  background:var(--rojo);padding:20px;
-  display:flex;align-items:center;justify-content:space-between;
-}
-.mm-logo{font-size:24px;font-weight:800;color:#fff;font-style:italic;letter-spacing:-.04em}
-.mm-close{color:#fff;font-size:22px;cursor:pointer;padding:4px}
-.mm-section{border-bottom:1px solid var(--borde)}
-.mm-item{
-  padding:16px 20px;font-size:15px;font-weight:500;
-  color:var(--negro);display:flex;align-items:center;justify-content:space-between;
-  cursor:pointer;transition:background .15s;
-}
-.mm-item:hover{background:var(--gris-claro)}
-.mm-item .arr{color:var(--gris);font-size:12px}
-.mm-sub{display:none;background:#fafafa}
-.mm-sub.open{display:block}
-.mm-sub-item{
-  padding:12px 20px 12px 36px;
-  font-size:14px;color:var(--gris);
-  display:flex;align-items:center;gap:10px;
-  cursor:pointer;transition:background .15s;
-  border-bottom:1px solid #f0f0f0;
-}
-.mm-sub-item:hover{background:#f0f0f0;color:var(--negro)}
-.mm-login-btn{
-  margin:20px;
-  background:var(--rojo);color:#fff;
-  padding:14px;border-radius:10px;
-  font-size:15px;font-weight:700;
-  text-align:center;cursor:pointer;
-}
-.mm-lm-btn{
-  margin:0 20px 20px;
-  border:1.5px solid var(--rojo);color:var(--rojo);
-  padding:13px;border-radius:10px;
-  font-size:15px;font-weight:700;
-  text-align:center;cursor:pointer;
-}
-
-/* ══ CONTENIDO PRINCIPAL ═════════════════════ */
-.main{max-width:900px;margin:0 auto;padding:0 20px}
-
-/* ══ SECCIONES ════════════════════════════════ */
-.sec{padding:32px 0}
-.sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.sec-title{font-size:18px;font-weight:800;color:var(--negro)}
-.sec-title span{color:var(--rojo)}
-.see-all{font-size:13px;font-weight:600;color:var(--rojo)}
-
-/* ══ BANNER ROTATIVO ══════════════════════════ */
-.banner-wrap{
-  border-radius:16px;overflow:hidden;
-  position:relative;height:160px;margin-bottom:8px;
-  cursor:pointer;
-}
-.bslide{
-  position:absolute;inset:0;opacity:0;
-  transition:opacity .5s;
-  display:flex;align-items:center;padding:24px 28px;
-}
-.bslide.on{opacity:1}
-.bs-av{background:linear-gradient(135deg,#0D1B3E,#1B3A6B)}
-.bs-red{background:linear-gradient(135deg,#5C0010,#E3001B)}
-.bs-grn{background:linear-gradient(135deg,#0A3020,#1B6B45)}
-.bslide h3{font-size:17px;font-weight:800;color:#fff;margin-bottom:5px;line-height:1.2}
-.bslide p{font-size:12px;color:rgba(255,255,255,.78);margin-bottom:12px;max-width:240px}
-.btn-bs{
-  display:inline-block;background:#fff;color:var(--negro);
-  padding:8px 16px;border-radius:8px;
-  font-size:12px;font-weight:700;
-}
-.bs-emoji{position:absolute;right:24px;top:50%;transform:translateY(-50%);font-size:5rem;opacity:.12}
-.banner-dots{display:flex;justify-content:center;gap:5px;margin-top:8px}
-.bdot{width:6px;height:6px;border-radius:50%;background:#ddd;cursor:pointer;transition:all .2s}
-.bdot.on{background:var(--rojo);width:16px;border-radius:3px}
-
-/* ══ OFERTAS ══════════════════════════════════ */
-.offers-scroll{
-  display:grid;grid-template-columns:repeat(2,1fr);gap:12px;
-}
-@media(min-width:600px){.offers-scroll{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:900px){.offers-scroll{grid-template-columns:repeat(5,1fr)}}
-
-.oc{
-  border:1px solid var(--borde);border-radius:12px;
-  overflow:hidden;cursor:pointer;
-  transition:box-shadow .2s,transform .2s;background:#fff;
-}
-.oc:hover{box-shadow:0 6px 20px rgba(0,0,0,.1);transform:translateY(-2px)}
-.oc-img{height:110px;overflow:hidden;position:relative}
-.oc-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.oc:hover .oc-img img{transform:scale(1.07)}
-.oc-badge{
-  position:absolute;top:7px;left:7px;
-  background:var(--rojo);color:#fff;
-  font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;
-}
-.oc-body{padding:10px 11px}
-.oc-route{font-size:9.5px;color:var(--gris);font-weight:500;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
-.oc-city{font-size:14px;font-weight:700;color:var(--negro);margin-bottom:5px}
-.oc-bottom{display:flex;align-items:flex-end;justify-content:space-between}
-.oc-from-lbl{font-size:9px;color:var(--gris);display:block;margin-bottom:1px}
-.oc-price{font-size:15px;font-weight:800;color:var(--rojo);line-height:1}
-.oc-price sup{font-size:9px;vertical-align:super}
-.oc-fare-tag{font-size:9px;color:var(--gris);background:var(--gris-claro);padding:2px 5px;border-radius:3px}
-
-/* ══ DESTINOS ══════════════════════════════════ */
-.dest-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-@media(min-width:700px){
-  .dest-grid{grid-template-columns:2fr 1fr 1fr;grid-template-rows:190px 190px}
-  .dest-grid .dc:first-child{grid-row:1/3}
-}
-.dc{
-  position:relative;overflow:hidden;
-  border-radius:12px;cursor:pointer;background:#222;
-  height:160px;
-}
-@media(min-width:700px){.dc{height:auto}}
-.dc img{width:100%;height:100%;object-fit:cover;filter:brightness(.72);transition:transform .5s,filter .4s}
-.dc:hover img{transform:scale(1.06);filter:brightness(.55)}
-.dc-info{
-  position:absolute;bottom:0;left:0;right:0;
-  padding:12px 14px;
-  background:linear-gradient(to top,rgba(0,0,0,.8),transparent);
-}
-.dc-country{font-size:9.5px;color:rgba(255,255,255,.65);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
-.dc-city{font-size:clamp(.95rem,2.5vw,1.3rem);font-weight:800;color:#fff;line-height:1.1;margin-bottom:3px}
-.dc-price{font-size:11.5px;color:rgba(255,255,255,.85);font-weight:500}
-.dc-price strong{color:#fff}
-
-/* ══ TARIFAS ══════════════════════════════════ */
-.fares-bg{background:#f8f8f8;padding:32px 20px;margin:0 -20px}
-.fares-grid{
-  display:grid;gap:12px;
-  grid-template-columns:1fr;
-}
-@media(min-width:600px){.fares-grid{grid-template-columns:1fr 1fr}}
-@media(min-width:900px){.fares-grid{grid-template-columns:repeat(4,1fr)}}
-
-.fc{
-  background:#fff;border-radius:12px;padding:20px;
-  border:2px solid var(--borde);
-  transition:border-color .2s,box-shadow .2s;position:relative;
-}
-.fc:hover{border-color:var(--rojo);box-shadow:0 4px 16px rgba(227,0,27,.08)}
-.fc.best{border-color:var(--rojo)}
-.fc-pop{
-  position:absolute;top:-10px;left:50%;transform:translateX(-50%);
-  background:var(--rojo);color:#fff;
-  font-size:10px;font-weight:700;padding:3px 12px;border-radius:10px;white-space:nowrap;
-}
-.fc-name{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--negro);margin-bottom:3px}
-.fc-desc{font-size:12px;color:var(--gris);margin-bottom:12px}
-.fc-list{list-style:none;display:flex;flex-direction:column;gap:7px}
-.fc-list li{font-size:12px;color:var(--negro);display:flex;align-items:flex-start;gap:6px}
-.fc-list li.no{color:#bbb;text-decoration:line-through}
-.fc-btn{
-  width:100%;margin-top:14px;padding:10px;border-radius:8px;
-  font-size:13px;font-weight:700;
-  border:1.5px solid var(--negro);color:var(--negro);background:#fff;
-  cursor:pointer;transition:all .2s;
-}
-.fc.best .fc-btn,.fc-btn:hover{background:var(--negro);color:#fff;border-color:var(--negro)}
-
-/* ══ GESTIÓN ══════════════════════════════════ */
-.mgmt-list{display:flex;flex-direction:column;gap:10px}
-.mg{
-  border:1px solid var(--borde);border-radius:12px;padding:18px 16px;
-  display:flex;align-items:center;gap:14px;cursor:pointer;
-  transition:box-shadow .15s,border-color .15s;background:#fff;
-}
-.mg:hover{box-shadow:0 4px 14px rgba(0,0,0,.07);border-color:#bbb}
-.mg-icon{
-  width:44px;height:44px;background:rgba(227,0,27,.07);
-  border-radius:10px;display:flex;align-items:center;justify-content:center;
-  font-size:1.5rem;flex-shrink:0;
-}
-.mg-info{flex:1}
-.mg-title{font-size:15px;font-weight:700;color:var(--negro);margin-bottom:3px}
-.mg-desc{font-size:12.5px;color:var(--gris);line-height:1.4}
-.mg-arr{color:var(--gris);font-size:14px;flex-shrink:0}
-
-/* ══ LIFEMILES ════════════════════════════════ */
-.lm-card{
-  background:var(--negro);border-radius:16px;
-  padding:24px 20px;margin:32px 0;
-  position:relative;overflow:hidden;
-}
-.lm-card::before{content:'✈';position:absolute;right:10px;top:-10px;font-size:7rem;color:rgba(255,255,255,.04);transform:rotate(-20deg)}
-.lm-card h3{font-size:18px;font-weight:800;color:#fff;margin-bottom:6px}
-.lm-card p{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:16px}
-.btn-lm{
-  background:#C9A227;color:#fff;
-  padding:12px 24px;border-radius:10px;
-  font-size:14px;font-weight:700;
-  border:none;cursor:pointer;
-  transition:background .2s;
-}
-.btn-lm:hover{background:#b5911e}
-
-/* ══ PINK BANNER (como en la foto) ═══════════ */
-.pink-banner{
-  background:linear-gradient(135deg,#D4A0C0,#E8C0D8);
-  border-radius:16px;padding:20px;
-  text-align:center;margin-bottom:24px;
-  cursor:pointer;
-}
-.pink-banner h3{font-size:16px;font-weight:800;color:var(--negro);margin-bottom:4px}
-.pink-banner p{font-size:12px;color:var(--gris)}
-
-/* ══ FOOTER ═══════════════════════════════════ */
-footer{background:var(--negro);color:rgba(255,255,255,.55);padding:40px 20px 80px}
-.foot-logo{font-size:22px;font-weight:800;color:var(--rojo);font-style:italic;letter-spacing:-.04em;margin-bottom:12px}
-.foot-desc{font-size:12.5px;color:rgba(255,255,255,.4);line-height:1.65;margin-bottom:18px;max-width:260px}
-.foot-social{display:flex;gap:8px;margin-bottom:28px}
-.fs{width:32px;height:32px;background:rgba(255,255,255,.08);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:background .2s}
-.fs:hover{background:var(--rojo)}
-.foot-cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px}
-@media(min-width:700px){.foot-cols{grid-template-columns:repeat(4,1fr)}}
-.foot-col h5{font-size:10px;font-weight:700;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
-.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
-.foot-col ul li a{font-size:12.5px;color:rgba(255,255,255,.45);transition:color .15s}
-.foot-col ul li a:hover{color:#fff}
-.foot-bottom{
-  border-top:1px solid rgba(255,255,255,.08);
-  padding-top:20px;
-  font-size:11px;color:rgba(255,255,255,.28);
-  display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;
-}
-.foot-links{display:flex;flex-wrap:wrap;gap:12px}
-.foot-links a{color:rgba(255,255,255,.28);font-size:11px;transition:color .2s}
-.foot-links a:hover{color:rgba(255,255,255,.65)}
-
-/* ══ MODALES ══════════════════════════════════ */
-.modal-bg{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,.6);z-index:500;
-  align-items:flex-end;justify-content:center;
-}
-.modal-bg.open{display:flex;animation:fadeI .2s ease}
-@keyframes fadeI{from{opacity:0}to{opacity:1}}
-.modal-sheet{
-  background:#fff;
-  border-radius:20px 20px 0 0;
-  width:100%;max-width:600px;
-  max-height:92vh;overflow-y:auto;
-  animation:slideUp .25s ease;
-  padding-bottom:20px;
-}
-@media(min-width:600px){
-  .modal-bg{align-items:center}
-  .modal-sheet{border-radius:16px;max-height:88vh}
-}
-@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
-.sheet-handle{width:36px;height:4px;background:#E0E0E0;border-radius:2px;margin:12px auto 0}
-.sheet-head{padding:16px 20px;border-bottom:1px solid var(--borde);display:flex;justify-content:space-between;align-items:center}
-.sheet-head h3{font-size:17px;font-weight:800}
-.sheet-x{width:28px;height:28px;background:var(--gris-claro);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--negro)}
-.sheet-body{padding:16px 20px}
-
-.aviso-strip{background:#FFF8E1;border:1px solid #FFE082;border-radius:8px;padding:10px 14px;font-size:12px;color:#7B5800;margin-bottom:14px;display:flex;gap:8px}
-.chips-row{display:flex;gap:7px;margin-bottom:16px;overflow-x:auto;flex-wrap:wrap}
-.mchip{padding:5px 12px;border:1.5px solid var(--borde);border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;color:var(--negro);white-space:nowrap}
-.mchip.on,.mchip:hover{border-color:var(--negro);color:var(--negro);background:#f0f0f0}
-
-.vrow{
-  border:1.5px solid var(--borde);border-radius:10px;
-  padding:14px;margin-bottom:10px;cursor:pointer;
-  transition:border-color .2s,box-shadow .2s;
-}
-.vrow:hover{border-color:var(--negro);box-shadow:0 3px 12px rgba(0,0,0,.07)}
-.vrow-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.vrow-cities{display:flex;align-items:center;gap:8px}
-.vrow-city{font-size:20px;font-weight:800;color:var(--negro)}
-.vrow-arrow{color:#aaa;font-size:16px}
-.vrow-dur{font-size:11px;color:var(--gris);text-align:center}
-.vrow-times{display:flex;gap:8px;align-items:center;margin-bottom:6px}
-.vrow-time{font-size:13px;color:var(--gris)}
-.vrow-direct{font-size:10px;font-weight:700;color:#2E7D32;background:#E8F5E9;padding:2px 8px;border-radius:10px}
-.vrow-bottom{display:flex;align-items:center;justify-content:space-between}
-.vrow-price{font-size:20px;font-weight:800;color:var(--negro);line-height:1}
-.vrow-price sup{font-size:11px;vertical-align:super}
-.vrow-fare{font-size:11px;color:var(--gris)}
-.btn-pick{
-  background:var(--negro);color:#fff;
-  padding:10px 18px;border-radius:8px;
-  font-size:13px;font-weight:700;
-  border:none;cursor:pointer;transition:background .2s;
-}
-.btn-pick:hover{background:#333}
-
-/* Input oculto */
-.input-orig,.input-dest{
-  position:absolute;inset:0;opacity:0;
-  width:100%;cursor:pointer;z-index:2;
-}
-
-/* ══ MODAL ASIENTOS ════════════════════════════ */
-#modalSeats .modal-sheet{max-width:560px}
-.seat-info-bar{
-  background:linear-gradient(135deg,#0D1B3E,#1B3A6B);
-  border-radius:12px;padding:14px 16px;margin-bottom:16px;
-  display:flex;align-items:center;justify-content:space-between;color:#fff;
-}
-.seat-route-label{font-size:16px;font-weight:800}
-.seat-fare-label{font-size:11px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:20px;font-weight:600}
-.seat-legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;justify-content:center}
-.sl-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--gris)}
-.sl-box{width:16px;height:16px;border-radius:3px;border:1.5px solid}
-.sl-avail{background:#E8F5E9;border-color:#4CAF50}
-.sl-taken{background:#F5F5F5;border-color:#ddd}
-.sl-selected{background:#1A1A1A;border-color:#1A1A1A}
-.sl-business{background:#FFF8E1;border-color:#C9A227}
-
-.plane-cabin{
-  background:#f8f9fb;border-radius:14px;
-  padding:16px 10px;margin-bottom:16px;
-  overflow-x:auto;
-}
-.cabin-label{text-align:center;font-size:10px;font-weight:700;color:var(--gris);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
-.cabin-nose{
-  width:60px;height:28px;border:2px solid #ddd;border-bottom:none;
-  border-radius:30px 30px 0 0;margin:0 auto 0;
-  background:linear-gradient(to bottom,#e8e8e8,#f5f5f5);
-}
-.cabin-body{
-  border:2px solid #ddd;border-top:none;border-bottom:none;
-  padding:4px 0;min-width:280px;max-width:340px;margin:0 auto;
-}
-.seat-col-labels{
-  display:grid;grid-template-columns:28px 1fr 28px 10px 28px 1fr 28px;
-  gap:2px;padding:0 8px;margin-bottom:4px;
-}
-.scl{font-size:9px;font-weight:700;color:#aaa;text-align:center}
-.seat-row{
-  display:grid;
-  grid-template-columns:28px 28px 28px 10px 28px 28px 28px;
-  gap:2px;align-items:center;
-  padding:2px 8px;
-}
-.sr-num{font-size:9px;font-weight:700;color:#aaa;display:flex;align-items:center;justify-content:center}
-.seat{
-  width:26px;height:26px;
-  border-radius:5px 5px 4px 4px;
-  border:1.5px solid;
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  font-size:9px;font-weight:700;
-  transition:all .15s;
-  position:relative;
-}
-.seat.avail{background:#E8F5E9;border-color:#4CAF50;color:#2E7D32}
-.seat.avail:hover{background:#4CAF50;color:#fff;transform:scale(1.12);z-index:2}
-.seat.taken{background:#F5F5F5;border-color:#ddd;color:#ccc;cursor:not-allowed}
-.seat.selected{background:#1A1A1A;border-color:#1A1A1A;color:#fff;transform:scale(1.12)}
-.seat.business-s{background:#FFF8E1;border-color:#C9A227;color:#7B5800}
-.seat.business-s.selected{background:#C9A227;border-color:#C9A227;color:#fff}
-.seat.business-s:hover:not(.taken){background:#C9A227;color:#fff;transform:scale(1.12)}
-.seat.exit-row{border-top-color:var(--rojo) !important;border-top-width:2.5px !important}
-.cabin-tail{
-  width:40px;height:18px;border:2px solid #ddd;border-top:none;
-  border-radius:0 0 20px 20px;margin:0 auto;
-  background:linear-gradient(to top,#e8e8e8,#f5f5f5);
-}
-.seat-aisle{width:10px}
-.seat-extra-info{font-size:10px;color:var(--gris);text-align:center;padding:6px 0}
-
-.seat-selected-bar{
-  background:#f8f8f8;border-radius:10px;padding:12px 14px;
-  margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;
-  border:1.5px solid var(--borde);
-}
-.ssb-label{font-size:12px;color:var(--gris)}
-.ssb-seat{font-size:18px;font-weight:800;color:var(--negro)}
-.ssb-extra{font-size:11px;color:var(--rojo);font-weight:600}
-
-/* ══ MODAL PAGO ════════════════════════════════ */
-#modalPago .modal-sheet{max-width:540px}
-.pago-steps{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--borde);padding-bottom:0}
-.pstep{
-  flex:1;padding:10px 4px;text-align:center;
-  font-size:11px;font-weight:600;color:#bbb;
-  border-bottom:3px solid transparent;margin-bottom:-2px;cursor:pointer;
-  transition:all .2s;
-}
-.pstep.act{color:var(--negro);border-bottom-color:var(--negro)}
-.pstep.done{color:var(--verde)}
-.pstep-num{
-  width:20px;height:20px;border-radius:50%;
-  background:#eee;color:#aaa;
-  font-size:10px;font-weight:800;
-  display:inline-flex;align-items:center;justify-content:center;
-  margin-bottom:3px;
-}
-.pstep.act .pstep-num{background:var(--negro);color:#fff}
-.pstep.done .pstep-num{background:var(--verde);color:#fff}
-
-.pview{display:none}
-.pview.act{display:block}
-
-.presumen{
-  background:linear-gradient(135deg,#0D1B3E,#1B3A6B);
-  border-radius:12px;padding:16px;margin-bottom:20px;color:#fff;
-}
-.presumen-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.presumen-ruta{font-size:18px;font-weight:800}
-.presumen-fare{font-size:10px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:20px}
-.presumen-det{display:flex;gap:16px;flex-wrap:wrap}
-.pdet-item{font-size:12px;color:rgba(255,255,255,.7)}
-.pdet-item strong{color:#fff;display:block;font-size:13px}
-
-.form-group{margin-bottom:14px}
-.form-label{font-size:11px;font-weight:700;color:var(--gris);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;display:flex;align-items:center;gap:6px}
-.form-input{
-  width:100%;padding:13px 14px;
-  border:1.5px solid var(--borde);border-radius:10px;
-  font-size:15px;font-weight:500;
-  font-family:inherit;outline:none;
-  transition:border-color .2s;color:var(--negro);
-}
-.form-input:focus{border-color:var(--negro)}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-
-.card-preview{
-  background:linear-gradient(135deg,#1A1A1A,#333);
-  border-radius:14px;padding:20px;margin-bottom:20px;
-  position:relative;overflow:hidden;min-height:130px;
-}
-.card-preview::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.04)}
-.card-preview::after{content:'';position:absolute;bottom:-30px;left:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.03)}
-.card-chip{width:32px;height:24px;background:linear-gradient(135deg,#C9A227,#F0C040);border-radius:4px;margin-bottom:14px}
-.card-number{font-size:16px;font-weight:600;color:#fff;letter-spacing:.15em;margin-bottom:10px;font-family:monospace}
-.card-bottom{display:flex;justify-content:space-between;align-items:flex-end}
-.card-name-label{font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em}
-.card-name-val{font-size:13px;font-weight:700;color:#fff}
-.card-exp-label{font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;text-align:right}
-.card-exp-val{font-size:13px;font-weight:700;color:#fff}
-.card-network{position:absolute;top:16px;right:16px;font-size:22px}
-
-.metodos-pago{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.mp-btn{
-  border:2px solid var(--borde);border-radius:10px;padding:12px;
-  text-align:center;cursor:pointer;transition:all .2s;
-  font-size:12px;font-weight:600;color:var(--gris);
-}
-.mp-btn:hover,.mp-btn.sel{border-color:var(--negro);color:var(--negro);background:#f8f8f8}
-.mp-icon{font-size:20px;margin-bottom:4px}
-
-.precio-breakdown{
-  background:#f8f8f8;border-radius:10px;padding:14px;margin-bottom:16px;
-}
-.pb-row{display:flex;justify-content:space-between;font-size:13px;color:var(--gris);margin-bottom:7px}
-.pb-row:last-child{margin-bottom:0;border-top:1px solid var(--borde);padding-top:8px;margin-top:8px;color:var(--negro);font-weight:800;font-size:15px}
-.pb-row .label{font-weight:500}
-
-.security-badges{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:10px;margin-bottom:4px}
-.sb{font-size:11px;color:var(--gris);display:flex;align-items:center;gap:4px}
-
-/* ══ MODAL CONFIRMACIÓN ════════════════════════ */
-.confirm-hero{
-  text-align:center;padding:30px 20px;
-  background:linear-gradient(160deg,#E8F5E9,#F1F8FF);
-  border-radius:16px;margin-bottom:20px;
-}
-.confirm-check{
-  width:70px;height:70px;border-radius:50%;
-  background:var(--verde);display:flex;align-items:center;justify-content:center;
-  font-size:36px;color:#fff;margin:0 auto 14px;
-  box-shadow:0 8px 24px rgba(34,197,94,.3);
-  animation:popIn .4s cubic-bezier(.175,.885,.32,1.275);
-}
-@keyframes popIn{
-  0%{transform:scale(0);opacity:0}
-  100%{transform:scale(1);opacity:1}
-}
-.confirm-title{font-size:22px;font-weight:800;color:var(--negro);margin-bottom:6px}
-.confirm-sub{font-size:13px;color:var(--gris);line-height:1.5}
-.confirm-pnr{
-  background:var(--negro);color:#fff;
-  border-radius:10px;padding:14px 20px;
-  margin-bottom:16px;text-align:center;
-}
-.confirm-pnr-label{font-size:10px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
-.confirm-pnr-code{font-size:28px;font-weight:800;letter-spacing:.2em;color:#fff;font-family:monospace}
-.confirm-details{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-.cd-item{background:#f8f8f8;border-radius:8px;padding:10px 12px;text-align:center}
-.cd-item .cd-label{font-size:10px;color:var(--gris);margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
-.cd-item .cd-val{font-size:14px;font-weight:800;color:var(--negro)}
-.btn-boarding{
-  width:100%;background:var(--rojo);color:#fff;
-  padding:16px;border-radius:12px;font-size:16px;font-weight:700;
-  border:none;cursor:pointer;transition:background .2s;margin-bottom:10px;
-}
-.btn-boarding:hover{background:#C0001A}
-.btn-outline-dark{
-  width:100%;background:transparent;color:var(--negro);
-  padding:14px;border-radius:12px;font-size:14px;font-weight:700;
-  border:2px solid var(--negro);cursor:pointer;transition:all .2s;
-}
-.btn-outline-dark:hover{background:var(--negro);color:#fff}
-
-/* ══ MEJORAS VISUALES GENERALES ════════════════ */
-.hero{
-  background:linear-gradient(160deg, #C5DEF0 0%, #A8CADE 30%, #B8D5E8 60%, #D4A8C0 100%) !important;
-}
-.buscador-card{
-  box-shadow:0 8px 40px rgba(0,0,0,.14) !important;
-}
-.navbar{
-  box-shadow:0 1px 12px rgba(0,0,0,.06);
-}
-.vrow-price sup{font-size:11px;vertical-align:super}
-</style>
-</head>
-<body>
-
-<!-- MENÚ LATERAL MÓVIL (exacto al real) -->
-<div class="mobile-menu" id="menuBg" onclick="closeMenu(event)">
-  <div class="mobile-menu-panel">
-    <!-- Logo + X como en el real -->
-    <div style="padding:20px 20px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--borde)">
-      <div style="display:flex;align-items:center;gap:4px">
-        <span style="font-size:24px;font-weight:800;color:var(--rojo);font-style:italic;letter-spacing:-.04em">avianca</span>
-        <svg width="28" height="28" viewBox="0 0 40 40" fill="none"><path d="M8 28 C12 22, 20 18, 30 14 C26 18, 22 22, 20 28 Z" fill="#E3001B"/><path d="M20 28 C22 22, 28 16, 36 10 C32 16, 26 22, 24 28 Z" fill="#E3001B" opacity=".7"/></svg>
-      </div>
-      <span style="font-size:22px;cursor:pointer;color:#333;line-height:1" onclick="document.getElementById('menuBg').classList.remove('open')">×</span>
-    </div>
-
-    <!-- Secciones exactas como en las capturas -->
-    <div class="mm-section">
-      <div class="mm-item" style="font-size:16px;font-weight:500;padding:20px 20px" onclick="document.getElementById('menuBg').classList.remove('open')">
-        Reservar
-      </div>
-    </div>
-    <div class="mm-section">
-      <div class="mm-item" onclick="toggleSub('sub2')">
-        Ofertas y destinos <span class="arr" style="font-size:16px;color:#333">›</span>
-      </div>
-      <div class="mm-sub" id="sub2">
-        <div class="mm-sub-item">🏷️ Ofertas de vuelos</div>
-        <div class="mm-sub-item">🌍 Destinos</div>
-        <div class="mm-sub-item">✈️ Nuevas rutas</div>
-        <div class="mm-sub-item">👥 Reservas de grupos</div>
-        <div class="mm-sub-item">🏨 Reserva de hoteles</div>
-        <div class="mm-sub-item">🚗 Alquiler de autos</div>
-      </div>
-    </div>
-    <div class="mm-section">
-      <div class="mm-item" onclick="toggleSub('sub3')">
-        Tu reserva
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="background:#2196F3;color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px">Check-in</span>
-          <span class="arr" style="font-size:16px;color:#333">›</span>
-        </div>
-      </div>
-      <div class="mm-sub" id="sub3">
-        <div class="mm-sub-item" onclick="abrirCI()">📋 Check-in online</div>
-        <div class="mm-sub-item">🔄 Gestiona tu reserva</div>
-        <div class="mm-sub-item">💺 Business Class</div>
-        <div class="mm-sub-item">💸 Cambios y reembolsos</div>
-        <div class="mm-sub-item">📍 Estado de vuelos</div>
-      </div>
-    </div>
-    <div class="mm-section">
-      <div class="mm-item" onclick="toggleSub('sub4')">
-        Información y ayuda <span class="arr" style="font-size:16px;color:#333">›</span>
-      </div>
-      <div class="mm-sub" id="sub4">
-        <div class="mm-sub-item">🎫 Tipos de tarifas</div>
-        <div class="mm-sub-item">🧳 Equipaje</div>
-        <div class="mm-sub-item">❓ Centro de ayuda</div>
-        <div class="mm-sub-item">📋 Requisitos para viajar</div>
-        <div class="mm-sub-item">🐾 Mascotas a bordo</div>
-      </div>
-    </div>
-    <div class="mm-section">
-      <div class="mm-item" onclick="toggleSub('sub5')">
-        Lifemiles <span class="arr" style="font-size:16px;color:#333">›</span>
-      </div>
-      <div class="mm-sub" id="sub5">
-        <div class="mm-sub-item">🌟 Programa Lifemiles</div>
-        <div class="mm-sub-item">💎 Lifemiles plus</div>
-        <div class="mm-sub-item">🎁 Redime tus millas</div>
-        <div class="mm-sub-item">❤️ Dona tus millas</div>
-      </div>
-    </div>
-
-    <!-- Botones inferiores exactos al real -->
-    <div style="padding:20px;border-top:1px solid var(--borde);margin-top:auto">
-      <button style="width:100%;border:1.5px solid var(--negro);background:#fff;color:var(--negro);padding:14px;border-radius:30px;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px" onclick="alert('Cuenta Lifemiles')">
-        👤 Cuenta Lifemiles
-      </button>
-      <div style="display:flex;align-items:center;gap:10px;padding:10px 0;cursor:pointer;border-top:1px solid var(--borde);padding-top:16px" onclick="alert('Vianca Chat')">
-        <span style="font-size:18px">💬</span>
-        <span style="font-size:15px;font-weight:500;color:var(--negro)">Vianca Chat</span>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;cursor:pointer;border-top:1px solid var(--borde)">
-        <div style="display:flex;align-items:center;gap:10px"><span style="font-size:16px">🌐</span><span style="font-size:15px;font-weight:500">Español</span></div>
-        <span style="font-size:16px;color:#333">›</span>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;cursor:pointer;border-top:1px solid var(--borde)">
-        <div style="display:flex;align-items:center;gap:10px"><span style="font-size:16px">💲</span><span style="font-size:15px;font-weight:500">Colombia (COP)</span></div>
-        <span style="font-size:16px;color:#333">›</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- NAVBAR -->
-<nav class="navbar">
-  <div class="nav-hamburger" onclick="document.getElementById('menuBg').classList.add('open')">☰</div>
-
-  <!-- Logo avianca con pajarito SVG -->
-  <div class="nav-logo">
-    <span class="logo-text-av">avianca</span>
-    <svg class="logo-bird" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 28 C12 22, 20 18, 30 14 C26 18, 22 22, 20 28 Z" fill="#E3001B"/>
-      <path d="M20 28 C22 22, 28 16, 36 10 C32 16, 26 22, 24 28 Z" fill="#E3001B" opacity=".7"/>
-      <path d="M10 32 C16 28, 24 24, 32 18 C28 24, 22 30, 18 32 Z" fill="#E3001B" opacity=".5"/>
-    </svg>
-  </div>
-
-  <div class="nav-right-icons">
-    <button class="nav-btn-login" onclick="window.open('dashboard.html','_blank')" style="background:var(--negro);margin-right:6px">⚙ Admin</button>
-    <button class="nav-btn-login" onclick="alert('Iniciar sesión')">Entrar</button>
-  </div>
-</nav>
-
-<!-- HERO CELESTE + BUSCADOR -->
-<section class="hero">
-  <div class="hero-plane-bg">✈</div>
-
-  <!-- Avión animado SVG -->
-  <div class="plane-anim">
-    <svg width="200" height="62" viewBox="0 0 200 62" fill="none">
-      <ellipse cx="100" cy="30" rx="80" ry="11" fill="white"/>
-      <path d="M180 30 Q198 30 197 30 Q194 25 184 24 Q181 24 180 24Z" fill="white"/>
-      <path d="M180 30 Q198 30 197 30 Q194 35 184 36 Q181 36 180 36Z" fill="white"/>
-      <path d="M22 30 L17 8 Q20 6 23 8 L29 30Z" fill="white"/>
-      <path d="M24 27 L5 19 Q2 16 6 16 L28 25Z" fill="white"/>
-      <path d="M24 33 L5 41 Q2 44 6 44 L28 35Z" fill="white"/>
-      <path d="M118 30 L78 2 Q74 0 72 2 L78 10 L112 30Z" fill="white"/>
-      <path d="M118 30 L78 58 Q74 60 72 58 L78 50 L112 30Z" fill="white"/>
-      <rect x="32" y="26" width="140" height="2.5" fill="#E3001B" rx="1"/>
-      <rect x="134" y="26" width="8" height="6" rx="2" fill="#B8D8F5" opacity=".9"/>
-      <rect x="148" y="26" width="8" height="6" rx="2" fill="#B8D8F5" opacity=".9"/>
-      <rect x="162" y="26" width="8" height="6" rx="2" fill="#B8D8F5" opacity=".85"/>
-      <rect x="120" y="26" width="8" height="6" rx="2" fill="#B8D8F5" opacity=".8"/>
-      <text x="118" y="30" font-family="Arial" font-size="6" font-weight="bold" font-style="italic" fill="#E3001B">avianca</text>
-      <ellipse cx="106" cy="16" rx="14" ry="5" fill="#DCDCDC"/>
-      <ellipse cx="106" cy="44" rx="14" ry="5" fill="#DCDCDC"/>
-    </svg>
-  </div>
-  <div class="plane-trail trail-a"></div>
-  <div class="plane-trail trail-b"></div>
-
-  <div class="hero-content">
-    <!-- Buscador exacto como en la foto -->
-    <div class="buscador-card">
-
-      <!-- Pills Ida y vuelta / Solo ida -->
-      <div class="trip-pills">
-        <button class="trip-pill active" id="pill-rt" onclick="setPill('rt')">
-          <div class="pill-dot"><div class="pill-dot-inner"></div></div>
-          Ida y vuelta
-        </button>
-        <button class="trip-pill" id="pill-ow" onclick="setPill('ow')">
-          <div class="pill-dot"><div class="pill-dot-inner"></div></div>
-          Solo ida
-        </button>
-      </div>
-
-      <!-- Origen / Destino -->
-      <div class="od-box">
-        <div class="od-field" onclick="focusOrig()">
-          <div class="od-icon">🛫</div>
-          <div style="flex:1">
-            <div class="od-label">Origen</div>
-            <div class="od-value" id="orig-display">Miami</div>
-          </div>
-          <button class="od-swap" onclick="doSwap(event)" title="Intercambiar">⇅</button>
-        </div>
-        <div class="od-field" onclick="focusDest()">
-          <div class="od-icon">🛬</div>
-          <div style="flex:1">
-            <div class="od-label">Destino</div>
-            <div class="od-value placeholder" id="dest-display">Destino</div>
-          </div>
-        </div>
-      </div>
-      <!-- Inputs hidden para valores reales -->
-      <input type="text" id="orig-val" value="Miami" style="display:none"/>
-      <input type="text" id="dest-val" value="" style="display:none"/>
-
-      <!-- Fechas -->
-      <div class="dates-row">
-        <div class="date-field">
-          <div class="date-label"><span class="date-label-icon">📅</span> Ida</div>
-          <div class="date-value" id="ida-display">05/03/2026</div>
-          <input type="date" id="ida-val" style="display:none"/>
-        </div>
-        <div class="date-field" id="vuelta-field">
-          <div class="date-label"><span class="date-label-icon">📅</span> Vuelta</div>
-          <div class="date-value" id="vuelta-display">08/03/2026</div>
-          <input type="date" id="vuelta-val" style="display:none"/>
-        </div>
-      </div>
-
-      <!-- Pagar con avianca credits -->
-      <div class="credits-row" onclick="toggleCredits()">
-        <div class="credits-check" id="credits-check"></div>
-        <div class="credits-label">Pagar con <strong>avianca credits</strong></div>
-      </div>
-
-      <!-- Botón negro BUSCAR -->
-      <button class="btn-buscar-negro" onclick="buscar()">Buscar</button>
-    </div>
-  </div>
-</section>
-
-<!-- MAIN -->
-<div class="main">
-
-  <!-- BANNER ROTATIVO -->
-  <div class="sec">
-    <div class="banner-wrap" id="bannerWrap">
-      <div class="bslide bs-av on">
-        <div>
-          <h3>¡Dona tus millas!</h3>
-          <p>Transformemos vidas y ecosistemas una milla a la vez</p>
-          <a href="#" class="btn-bs">Dona ya →</a>
-        </div>
-        <div class="bs-emoji">❤️</div>
-      </div>
-      <div class="bslide bs-red">
-        <div>
-          <h3>Únete a Lifemiles plus</h3>
-          <p>Descuento exclusivo al redimir tiquetes con avianca</p>
-          <a href="#" class="btn-bs">Suscríbete →</a>
-        </div>
-        <div class="bs-emoji">⭐</div>
-      </div>
-      <div class="bslide bs-grn">
-        <div>
-          <h3>¡10.000 millas de bienvenida!</h3>
-          <p>Con tu tarjeta de crédito Avianca Davivienda</p>
-          <a href="#" class="btn-bs">¡Solicítala! →</a>
-        </div>
-        <div class="bs-emoji">💳</div>
-      </div>
-    </div>
-    <div class="banner-dots">
-      <div class="bdot on" onclick="goBanner(0)"></div>
-      <div class="bdot" onclick="goBanner(1)"></div>
-      <div class="bdot" onclick="goBanner(2)"></div>
-    </div>
-  </div>
-
-  <!-- PINK BANNER (como en la foto real) -->
-  <div class="pink-banner" onclick="alert('Más información próximamente')">
-    <h3>🎉 ¡Ofertas especiales esta semana!</h3>
-    <p>Vuelos desde $89.900 · Solo por tiempo limitado</p>
-  </div>
-
-  <!-- OFERTAS -->
-  <section class="sec">
-    <div class="sec-head">
-      <h2 class="sec-title">Ofertas de <span>vuelos</span></h2>
-      <a href="#" class="see-all">Ver todas →</a>
-    </div>
-    <div class="offers-scroll">
-      <div class="oc" onclick="setDestino('San Andrés')">
-        <div class="oc-img"><img src="https://images.unsplash.com/photo-1502941722218-0a537702b741?w=400&q=75" alt="San Andrés" loading="lazy"/><div class="oc-badge">🔥 OFERTA</div></div>
-        <div class="oc-body"><div class="oc-route">BOG → ADZ</div><div class="oc-city">San Andrés</div><div class="oc-bottom"><div><div class="oc-from-lbl">Desde</div><div class="oc-price"><sup>$</sup>218.900</div></div><div class="oc-fare-tag">Basic</div></div></div>
-      </div>
-      <div class="oc" onclick="setDestino('Miami')">
-        <div class="oc-img"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=75" alt="Miami" loading="lazy"/><div class="oc-badge">✨ TOP</div></div>
-        <div class="oc-body"><div class="oc-route">BOG → MIA</div><div class="oc-city">Miami</div><div class="oc-bottom"><div><div class="oc-from-lbl">Desde</div><div class="oc-price"><sup>$</sup>879.900</div></div><div class="oc-fare-tag">Classic</div></div></div>
-      </div>
-      <div class="oc" onclick="setDestino('Medellín')">
-        <div class="oc-img"><img src="https://images.unsplash.com/photo-1599408993754-a5c498523ffe?w=400&q=75" alt="Medellín" loading="lazy"/><div class="oc-badge">💥 BAJO</div></div>
-        <div class="oc-body"><div class="oc-route">BOG → MDE</div><div class="oc-city">Medellín</div><div class="oc-bottom"><div><div class="oc-from-lbl">Desde</div><div class="oc-price"><sup>$</sup>89.900</div></div><div class="oc-fare-tag">Basic</div></div></div>
-      </div>
-      <div class="oc" onclick="setDestino('Madrid')">
-        <div class="oc-img"><img src="https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=400&q=75" alt="Madrid" loading="lazy"/></div>
-        <div class="oc-body"><div class="oc-route">BOG → MAD</div><div class="oc-city">Madrid</div><div class="oc-bottom"><div><div class="oc-from-lbl">Desde</div><div class="oc-price"><sup>$</sup>1.890.000</div></div><div class="oc-fare-tag">Light</div></div></div>
-      </div>
-      <div class="oc" onclick="setDestino('Lima')">
-        <div class="oc-img"><img src="https://images.unsplash.com/photo-1526392060635-9d6019884377?w=400&q=75" alt="Lima" loading="lazy"/></div>
-        <div class="oc-body"><div class="oc-route">BOG → LIM</div><div class="oc-city">Lima</div><div class="oc-bottom"><div><div class="oc-from-lbl">Desde</div><div class="oc-price"><sup>$</sup>449.900</div></div><div class="oc-fare-tag">Classic</div></div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- DESTINOS -->
-  <section class="sec">
-    <div class="sec-head">
-      <h2 class="sec-title">Destinos <span>populares</span></h2>
-      <a href="#" class="see-all">Ver todos →</a>
-    </div>
-    <div class="dest-grid">
-      <div class="dc" onclick="setDestino('Cartagena')"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=75" alt="Cartagena" loading="lazy"/><div class="dc-info"><div class="dc-country">Colombia</div><div class="dc-city">Cartagena</div><div class="dc-price">Desde <strong>$189.900</strong></div></div></div>
-      <div class="dc" onclick="setDestino('Cancún')"><img src="https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?w=500&q=75" alt="Cancún" loading="lazy"/><div class="dc-info"><div class="dc-country">México</div><div class="dc-city">Cancún</div><div class="dc-price">Desde <strong>$720.000</strong></div></div></div>
-      <div class="dc" onclick="setDestino('Nueva York')"><img src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=500&q=75" alt="Nueva York" loading="lazy"/><div class="dc-info"><div class="dc-country">EE.UU.</div><div class="dc-city">Nueva York</div><div class="dc-price">Desde <strong>$1.190.000</strong></div></div></div>
-      <div class="dc" onclick="setDestino('Buenos Aires')"><img src="https://images.unsplash.com/photo-1589909202802-8f4aadce1849?w=500&q=75" alt="Buenos Aires" loading="lazy"/><div class="dc-info"><div class="dc-country">Argentina</div><div class="dc-city">Buenos Aires</div><div class="dc-price">Desde <strong>$980.000</strong></div></div></div>
-    </div>
-  </section>
-
-  <!-- TARIFAS -->
-  <section class="sec">
-    <div class="sec-head">
-      <h2 class="sec-title">Tipos de <span>tarifas</span></h2>
-      <a href="#" class="see-all">Ver condiciones →</a>
-    </div>
-    <div class="fares-bg" style="margin:0 -20px;padding:20px">
-      <div class="fares-grid">
-        <div class="fc"><div class="fc-name">basic</div><div class="fc-desc">Para volar ligero</div><ul class="fc-list"><li>✅ 1 artículo personal</li><li>✅ Check-in web o app</li><li class="no">❌ Maleta de mano</li><li class="no">❌ Equipaje bodega</li><li class="no">❌ Cambios/reembolsos</li></ul><button class="fc-btn" onclick="buscar()">Seleccionar</button></div>
-        <div class="fc best"><div class="fc-pop">⭐ Más elegida</div><div class="fc-name">classic</div><div class="fc-desc">Con maleta incluida</div><ul class="fc-list"><li>✅ 1 artículo personal</li><li>✅ Maleta de mano 10kg</li><li>✅ Equipaje bodega 23kg</li><li>✅ Asientos economy</li><li>✅ Millas LifeMiles</li></ul><button class="fc-btn" onclick="buscar()">Seleccionar</button></div>
-        <div class="fc"><div class="fc-name">flex</div><div class="fc-desc">Con flexibilidad total</div><ul class="fc-list"><li>✅ Maleta de mano 10kg</li><li>✅ Equipaje bodega 23kg</li><li>✅ Asientos plus</li><li>✅ Cambios sin costo</li><li>✅ Reembolso disponible</li></ul><button class="fc-btn" onclick="buscar()">Seleccionar</button></div>
-        <div class="fc"><div class="fc-name">business</div><div class="fc-desc">La mejor experiencia</div><ul class="fc-list"><li>✅ Asiento ejecutivo</li><li>✅ 2 maletas 32kg</li><li>✅ Acceso Lounges</li><li>✅ Abordaje prioritario</li><li>✅ Menú gourmet</li></ul><button class="fc-btn" onclick="buscar()">Seleccionar</button></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- GESTIÓN -->
-  <section class="sec">
-    <div class="sec-head"><h2 class="sec-title">Gestiona tu <span>viaje</span></h2></div>
-    <div class="mgmt-list">
-      <div class="mg" onclick="abrirCI()"><div class="mg-icon">📋</div><div class="mg-info"><div class="mg-title">Check-in online</div><div class="mg-desc">Haz tu check-in hasta 24h antes del vuelo</div></div><span class="mg-arr">›</span></div>
-      <div class="mg"><div class="mg-icon">📍</div><div class="mg-info"><div class="mg-title">Estado del vuelo</div><div class="mg-desc">Consulta en tiempo real el estado de tu vuelo</div></div><span class="mg-arr">›</span></div>
-      <div class="mg"><div class="mg-icon">🧳</div><div class="mg-info"><div class="mg-title">Rastrear equipaje</div><div class="mg-desc">Localiza tu maleta en tiempo real</div></div><span class="mg-arr">›</span></div>
-      <div class="mg"><div class="mg-icon">💸</div><div class="mg-info"><div class="mg-title">Cambios y reembolsos</div><div class="mg-desc">Modifica fechas o solicita reembolso</div></div><span class="mg-arr">›</span></div>
-      <div class="mg"><div class="mg-icon">📱</div><div class="mg-info"><div class="mg-title">App avianca</div><div class="mg-desc">Descarga la app para gestionar todo desde tu celular</div></div><span class="mg-arr">›</span></div>
-    </div>
-  </section>
-
-  <!-- LIFEMILES -->
-  <div class="lm-card">
-    <h3>✨ Programa Lifemiles</h3>
-    <p>Acumula millas en cada vuelo y canjéalas por tiquetes, upgrades a business, hoteles y más de 400 marcas aliadas.</p>
-    <button class="btn-lm">Unirme gratis</button>
-  </div>
-</div>
-
-<!-- FOOTER -->
-<footer>
-  <div class="foot-logo">avianca</div>
-  <div class="foot-desc">La aerolínea más grande de Colombia. Fundada en 1919. Más de 167 rutas en 25 países.</div>
-  <div class="foot-social">
-    <div class="fs">🐦</div><div class="fs">📘</div><div class="fs">▶️</div><div class="fs">📸</div>
-  </div>
-  <div class="foot-cols">
-    <div class="foot-col"><h5>Descubre</h5><ul><li><a href="#">Vuelos baratos</a></li><li><a href="#">Reserva hoteles</a></li><li><a href="#">Alquiler autos</a></li><li><a href="#">Tours</a></li></ul></div>
-    <div class="foot-col"><h5>Tu reserva</h5><ul><li><a href="#">Check-in online</a></li><li><a href="#">Estado del vuelo</a></li><li><a href="#">Cambios</a></li><li><a href="#">Equipaje</a></li></ul></div>
-    <div class="foot-col"><h5>Lifemiles</h5><ul><li><a href="#">Programa</a></li><li><a href="#">Acumular millas</a></li><li><a href="#">Redimir millas</a></li><li><a href="#">Dona millas</a></li></ul></div>
-    <div class="foot-col"><h5>Ayuda</h5><ul><li><a href="#">Centro de ayuda</a></li><li><a href="#">Contáctanos</a></li><li><a href="#">Accesibilidad</a></li><li><a href="#">Legal</a></li></ul></div>
-  </div>
-  <div class="foot-bottom">
-    <span>Copyright © Avianca 2026</span>
-    <div class="foot-links"><a href="#">Privacidad</a><a href="#">Términos</a><a href="#">Cookies</a></div>
-  </div>
-</footer>
-
-<!-- MODAL VUELOS -->
-<div class="modal-bg" id="modalV" onclick="closeSheet('modalV',event)">
-  <div class="modal-sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head">
-      <div>
-        <h3 id="m-tit">Vuelos disponibles</h3>
-        <div style="font-size:12px;color:var(--gris);margin-top:2px" id="m-sub"></div>
-      </div>
-      <div class="sheet-x" onclick="document.getElementById('modalV').classList.remove('open')">✕</div>
-    </div>
-    <div class="sheet-body">
-      <div class="aviso-strip"><span>💡</span><span>Precios en COP por pasajero, incluyen impuestos.</span></div>
-      <div class="chips-row">
-        <div class="mchip on" onclick="selMC(this)">Todos</div>
-        <div class="mchip" onclick="selMC(this)">Basic</div>
-        <div class="mchip" onclick="selMC(this)">Classic</div>
-        <div class="mchip" onclick="selMC(this)">Flex</div>
-        <div class="mchip" onclick="selMC(this)">Business</div>
-      </div>
-      <div id="v-list"></div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL CHECK-IN -->
-<div class="modal-bg" id="modalCI" onclick="closeSheet('modalCI',event)">
-  <div class="modal-sheet" style="max-width:480px">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head">
-      <h3>Check-in online</h3>
-      <div class="sheet-x" onclick="document.getElementById('modalCI').classList.remove('open')">✕</div>
-    </div>
-    <div class="sheet-body">
-      <p style="font-size:13px;color:var(--gris);margin-bottom:16px">Disponible 24 horas antes del vuelo</p>
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div>
-          <div style="font-size:11px;font-weight:700;color:var(--gris);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">Código de reserva (PNR)</div>
-          <div style="position:relative">
-            <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:15px">🎫</span>
-            <input id="ci-pnr" type="text" placeholder="Ej: ABC123" style="width:100%;padding:13px 13px 13px 38px;border:1.5px solid var(--borde);border-radius:10px;font-size:15px;font-weight:600;text-transform:uppercase"/>
-          </div>
-        </div>
-        <div>
-          <div style="font-size:11px;font-weight:700;color:var(--gris);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">Apellido del pasajero</div>
-          <div style="position:relative">
-            <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:15px">👤</span>
-            <input id="ci-ape" type="text" placeholder="Ej: GARCIA" style="width:100%;padding:13px 13px 13px 38px;border:1.5px solid var(--borde);border-radius:10px;font-size:15px;font-weight:600;text-transform:uppercase"/>
-          </div>
-        </div>
-        <button class="btn-buscar-negro" style="margin-top:4px" onclick="doCI()">Continuar check-in →</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL ORIGEN/DESTINO -->
-<div class="modal-bg" id="modalOD" onclick="closeSheet('modalOD',event)">
-  <div class="modal-sheet" style="max-width:480px">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head">
-      <h3 id="od-title">Selecciona origen</h3>
-      <div class="sheet-x" onclick="document.getElementById('modalOD').classList.remove('open')">✕</div>
-    </div>
-    <div class="sheet-body">
-      <div style="position:relative;margin-bottom:16px">
-        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:16px">🔍</span>
-        <input id="od-search" type="text" placeholder="Ciudad o aeropuerto" oninput="filterCities()" style="width:100%;padding:13px 13px 13px 38px;border:1.5px solid var(--borde);border-radius:10px;font-size:15px"/>
-      </div>
-      <div id="cities-list"></div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL SELECCIÓN DE ASIENTOS -->
-<div class="modal-bg" id="modalSeats" onclick="closeSheet('modalSeats',event)">
-  <div class="modal-sheet" style="max-width:560px">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head">
-      <div>
-        <h3>Selecciona tu asiento</h3>
-        <div style="font-size:12px;color:var(--gris);margin-top:2px" id="seat-time-info"></div>
-      </div>
-      <div class="sheet-x" onclick="document.getElementById('modalSeats').classList.remove('open')">✕</div>
-    </div>
-    <div class="sheet-body">
-      <!-- Info barra -->
-      <div class="seat-info-bar">
-        <span class="seat-route-label" id="seat-route-label">BOG → MIA</span>
-        <span class="seat-fare-label" id="seat-fare-label">Classic</span>
-      </div>
-      <!-- Leyenda -->
-      <div class="seat-legend">
-        <div class="sl-item"><div class="sl-box sl-business"></div>Business</div>
-        <div class="sl-item"><div class="sl-box sl-avail"></div>Disponible</div>
-        <div class="sl-item"><div class="sl-box sl-taken"></div>Ocupado</div>
-        <div class="sl-item"><div class="sl-box sl-selected"></div>Seleccionado</div>
-      </div>
-      <!-- Cabina del avión -->
-      <div class="plane-cabin">
-        <div class="cabin-label">✈ AVIANCA · AIRBUS A320</div>
-        <div class="cabin-nose"></div>
-        <div class="cabin-body" id="cabin-body">
-          <!-- Generado por JS -->
-        </div>
-        <div class="cabin-tail"></div>
-      </div>
-      <!-- Asiento seleccionado -->
-      <div class="seat-selected-bar">
-        <div>
-          <div class="ssb-label">Asiento seleccionado</div>
-          <div class="ssb-seat" id="ssb-seat">—</div>
-        </div>
-        <div style="text-align:right">
-          <div class="ssb-extra" id="ssb-extra">Selecciona un asiento</div>
-          <div style="font-size:11px;color:var(--gris)" id="ssb-class">—</div>
-        </div>
-      </div>
-      <button class="btn-buscar-negro" id="btn-continuar-pago" onclick="abrirPago()" style="opacity:.4;pointer-events:none">
-        Continuar al pago →
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL PAGO -->
-<div class="modal-bg" id="modalPago" onclick="closeSheet('modalPago',event)">
-  <div class="modal-sheet" style="max-width:540px">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head">
-      <h3>Completar reserva</h3>
-      <div class="sheet-x" onclick="document.getElementById('modalPago').classList.remove('open')">✕</div>
-    </div>
-    <div class="sheet-body">
-      <!-- Pasos -->
-      <div class="pago-steps">
-        <div class="pstep act" id="ps1" onclick="goPasoStep(1)">
-          <div class="pstep-num">1</div><br>Pasajero
-        </div>
-        <div class="pstep" id="ps2" onclick="goPasoStep(2)">
-          <div class="pstep-num">2</div><br>Pago
-        </div>
-        <div class="pstep" id="ps3" onclick="goPasoStep(3)">
-          <div class="pstep-num">3</div><br>Confirmar
-        </div>
-      </div>
-
-      <!-- PASO 1: Datos pasajero -->
-      <div class="pview act" id="pview1">
-        <div class="presumen" id="pago-resumen">
-          <div class="presumen-top">
-            <span class="presumen-ruta" id="p-ruta">BOG → MIA</span>
-            <span class="presumen-fare" id="p-fare">Classic</span>
-          </div>
-          <div class="presumen-det">
-            <div class="pdet-item"><span>Fecha</span><strong id="p-fecha">—</strong></div>
-            <div class="pdet-item"><span>Asiento</span><strong id="p-asiento">—</strong></div>
-            <div class="pdet-item"><span>Horario</span><strong id="p-horario">—</strong></div>
-            <div class="pdet-item"><span>Precio</span><strong id="p-precio">—</strong></div>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="form-label">👤 Nombres</div>
-          <input class="form-input" id="pax-name" type="text" placeholder="Ej: JUAN CAMILO" oninput="this.value=this.value.toUpperCase()"/>
-        </div>
-        <div class="form-group">
-          <div class="form-label">👤 Apellidos</div>
-          <input class="form-input" id="pax-lastname" type="text" placeholder="Ej: GARCIA REYES" oninput="this.value=this.value.toUpperCase()"/>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <div class="form-label">🪪 Tipo doc.</div>
-            <select class="form-input" id="pax-doctype" style="cursor:pointer">
-              <option>Cédula</option>
-              <option>Pasaporte</option>
-              <option>Tarjeta ID</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <div class="form-label">🔢 Número</div>
-            <input class="form-input" id="pax-doc" type="text" placeholder="12345678"/>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <div class="form-label">📅 Fecha de nacimiento</div>
-            <input class="form-input" id="pax-dob" type="date"/>
-          </div>
-          <div class="form-group">
-            <div class="form-label">⚧ Género</div>
-            <select class="form-input" id="pax-gen" style="cursor:pointer">
-              <option>Masculino</option>
-              <option>Femenino</option>
-              <option>Prefiero no decir</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="form-label">📧 Correo electrónico</div>
-          <input class="form-input" id="pax-email" type="email" placeholder="correo@ejemplo.com"/>
-        </div>
-        <div class="form-group">
-          <div class="form-label">📱 Teléfono / WhatsApp</div>
-          <input class="form-input" id="pax-phone" type="tel" placeholder="+57 300 000 0000"/>
-        </div>
-        <button class="btn-buscar-negro" onclick="irPaso2()">Continuar →</button>
-      </div>
-
-      <!-- PASO 2: Método de pago -->
-      <div class="pview" id="pview2">
-        <div class="precio-breakdown">
-          <div class="pb-row"><span class="label">Tiquete base</span><span id="pb-base">—</span></div>
-          <div class="pb-row"><span class="label">Impuestos (19%)</span><span id="pb-imp">—</span></div>
-          <div class="pb-row"><span class="label">Tasas aeroportuarias</span><span>$42.500</span></div>
-          <div class="pb-row"><span class="label">Total a pagar</span><span id="pb-total">—</span></div>
-        </div>
-
-        <div class="form-group">
-          <div class="form-label">💳 Método de pago</div>
-          <div class="metodos-pago">
-            <div class="mp-btn sel" id="mp-card" onclick="selMetodo('card')"><div class="mp-icon">💳</div>Tarjeta crédito/débito</div>
-            <div class="mp-btn" id="mp-pse" onclick="selMetodo('pse')"><div class="mp-icon">🏦</div>PSE / Transferencia</div>
-            <div class="mp-btn" id="mp-efecty" onclick="selMetodo('efecty')"><div class="mp-icon">💵</div>Efecty / Baloto</div>
-            <div class="mp-btn" id="mp-nequi" onclick="selMetodo('nequi')"><div class="mp-icon">📲</div>Nequi / Daviplata</div>
-          </div>
-        </div>
-
-        <!-- Formulario tarjeta -->
-        <div id="form-card">
-          <div class="card-preview" id="card-preview">
-            <div class="card-chip"></div>
-            <div class="card-number" id="cp-num">•••• •••• •••• ••••</div>
-            <div class="card-bottom">
-              <div><div class="card-name-label">Titular</div><div class="card-name-val" id="cp-name">NOMBRE APELLIDO</div></div>
-              <div><div class="card-exp-label">Vence</div><div class="card-exp-val" id="cp-exp">MM/AA</div></div>
-            </div>
-            <div class="card-network" id="cp-net">💳</div>
-          </div>
-          <div class="form-group">
-            <div class="form-label">Número de tarjeta</div>
-            <input class="form-input" id="cc-num" type="text" maxlength="19" placeholder="0000 0000 0000 0000" oninput="fmtCard(this)" style="letter-spacing:.1em;font-family:monospace"/>
-          </div>
-          <div class="form-group">
-            <div class="form-label">Nombre en la tarjeta</div>
-            <input class="form-input" id="cc-name" type="text" placeholder="JUAN GARCIA" oninput="document.getElementById('cp-name').textContent=this.value.toUpperCase()||'NOMBRE APELLIDO';this.value=this.value.toUpperCase()"/>
-          </div>
-          <div class="form-row-3">
-            <div class="form-group" style="grid-column:1/3">
-              <div class="form-label">Fecha de vencimiento</div>
-              <input class="form-input" id="cc-exp" type="text" maxlength="5" placeholder="MM/AA" oninput="fmtExp(this)"/>
-            </div>
-            <div class="form-group">
-              <div class="form-label">CVV</div>
-              <input class="form-input" id="cc-cvv" type="text" maxlength="4" placeholder="•••"/>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="form-label">Cuotas</div>
-            <select class="form-input" style="cursor:pointer">
-              <option>1 cuota sin intereses</option>
-              <option>3 cuotas</option>
-              <option>6 cuotas</option>
-              <option>12 cuotas</option>
-              <option>24 cuotas</option>
-            </select>
-          </div>
-          <div class="security-badges">
-            <div class="sb">🔒 Pago seguro SSL</div>
-            <div class="sb">🛡️ Datos encriptados</div>
-            <div class="sb">✅ PCI DSS</div>
-          </div>
-        </div>
-
-        <!-- Formulario PSE -->
-        <div id="form-pse" style="display:none">
-          <div class="form-group">
-            <div class="form-label">Banco</div>
-            <select class="form-input" style="cursor:pointer">
-              <option>Bancolombia</option>
-              <option>Davivienda</option>
-              <option>BBVA Colombia</option>
-              <option>Banco de Bogotá</option>
-              <option>Banco Popular</option>
-              <option>Nequi</option>
-              <option>Otro banco</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <div class="form-label">Tipo de cuenta</div>
-            <select class="form-input" style="cursor:pointer"><option>Cuenta de ahorros</option><option>Cuenta corriente</option></select>
-          </div>
-          <div style="background:#EEF7FF;border-radius:8px;padding:12px;font-size:12px;color:#1565C0;margin-bottom:14px">
-            🏦 Serás redirigido al portal seguro de tu banco para completar el pago.
-          </div>
-        </div>
-
-        <!-- Formulario Efecty -->
-        <div id="form-efecty" style="display:none">
-          <div style="background:#FFF8E1;border-radius:8px;padding:14px;font-size:13px;color:#7B5800;margin-bottom:14px;line-height:1.6">
-            💵 <strong>Pago en efectivo</strong><br>
-            Recibirás un código de pago a tu correo. Tienes 24 horas para pagar en cualquier punto Efecty o Baloto.
-          </div>
-        </div>
-
-        <!-- Formulario Nequi -->
-        <div id="form-nequi" style="display:none">
-          <div class="form-group">
-            <div class="form-label">📱 Número de celular Nequi/Daviplata</div>
-            <input class="form-input" type="tel" placeholder="+57 300 000 0000"/>
-          </div>
-          <div style="background:#F3E5F5;border-radius:8px;padding:12px;font-size:12px;color:#6A1B9A;margin-bottom:14px">
-            📲 Recibirás una notificación push en la app para aprobar el pago.
-          </div>
-        </div>
-
-        <div style="display:flex;gap:10px;margin-top:4px">
-          <button class="btn-outline-dark" style="flex:0 0 auto;width:auto;padding:14px 20px" onclick="goPasoStep(1)">← Volver</button>
-          <button class="btn-buscar-negro" onclick="irPaso3()">Pagar ahora 🔒</button>
-        </div>
-      </div>
-
-      <!-- PASO 3: Confirmación -->
-      <div class="pview" id="pview3">
-        <div class="confirm-hero">
-          <div class="confirm-check">✓</div>
-          <div class="confirm-title">¡Reserva confirmada!</div>
-          <div class="confirm-sub" id="conf-sub">Tu vuelo ha sido reservado exitosamente.<br>Te enviamos los detalles a tu correo.</div>
-        </div>
-        <div class="confirm-pnr">
-          <div class="confirm-pnr-label">Código de reserva (PNR)</div>
-          <div class="confirm-pnr-code" id="conf-pnr">—</div>
-        </div>
-        <div class="confirm-details" id="conf-details"></div>
-        <button class="btn-boarding" onclick="alert('📱 Descargando pase de abordar en PDF...\n\nEn producción real se generaría el boarding pass.')">📋 Descargar pase de abordar</button>
-        <button class="btn-outline-dark" onclick="document.getElementById('modalPago').classList.remove('open')">Volver al inicio</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-const CITIES=[
-  {name:'Bogotá',code:'BOG',country:'Colombia',flag:'🇨🇴'},
-  {name:'Medellín',code:'MDE',country:'Colombia',flag:'🇨🇴'},
-  {name:'Cartagena',code:'CTG',country:'Colombia',flag:'🇨🇴'},
-  {name:'Cali',code:'CLO',country:'Colombia',flag:'🇨🇴'},
-  {name:'Barranquilla',code:'BAQ',country:'Colombia',flag:'🇨🇴'},
-  {name:'San Andrés',code:'ADZ',country:'Colombia',flag:'🇨🇴'},
-  {name:'Miami',code:'MIA',country:'Estados Unidos',flag:'🇺🇸'},
-  {name:'Nueva York',code:'JFK',country:'Estados Unidos',flag:'🇺🇸'},
-  {name:'Orlando',code:'MCO',country:'Estados Unidos',flag:'🇺🇸'},
-  {name:'Madrid',code:'MAD',country:'España',flag:'🇪🇸'},
-  {name:'Barcelona',code:'BCN',country:'España',flag:'🇪🇸'},
-  {name:'Lima',code:'LIM',country:'Perú',flag:'🇵🇪'},
-  {name:'Buenos Aires',code:'EZE',country:'Argentina',flag:'🇦🇷'},
-  {name:'Cancún',code:'CUN',country:'México',flag:'🇲🇽'},
-  {name:'Ciudad de México',code:'MEX',country:'México',flag:'🇲🇽'},
-  {name:'Santiago',code:'SCL',country:'Chile',flag:'🇨🇱'},
-];
-
-let odMode='orig'; // 'orig' o 'dest'
-
-/* ── FECHAS ── */
-function fmtDate(d){
-  const dd=String(d.getDate()).padStart(2,'0');
-  const mm=String(d.getMonth()+1).padStart(2,'0');
-  const yyyy=d.getFullYear();
-  return `${dd}/${mm}/${yyyy}`;
-}
-const hoy=new Date();
-const d1=new Date(hoy); d1.setDate(hoy.getDate()+3);
-const d2=new Date(hoy); d2.setDate(hoy.getDate()+6);
-document.getElementById('ida-display').textContent=fmtDate(d1);
-document.getElementById('vuelta-display').textContent=fmtDate(d2);
-
-/* ── PILLS ── */
-function setPill(v){
-  document.getElementById('pill-rt').classList.toggle('active',v==='rt');
-  document.getElementById('pill-ow').classList.toggle('active',v==='ow');
-  document.getElementById('vuelta-field').style.opacity=v==='ow'?'0.4':'1';
-  document.getElementById('vuelta-field').style.pointerEvents=v==='ow'?'none':'auto';
-}
-
-/* ── SWAP ── */
-function doSwap(e){
-  e.stopPropagation();
-  const ov=document.getElementById('orig-val').value;
-  const dv=document.getElementById('dest-val').value;
-  document.getElementById('orig-val').value=dv;
-  document.getElementById('dest-val').value=ov;
-  document.getElementById('orig-display').textContent=dv||'Origen';
-  document.getElementById('orig-display').className='od-value'+(dv?'':' placeholder');
-  document.getElementById('dest-display').textContent=ov||'Destino';
-  document.getElementById('dest-display').className='od-value'+(ov?'':' placeholder');
-}
-
-/* ── MODAL ORIGEN/DESTINO ── */
-function focusOrig(){odMode='orig';document.getElementById('od-title').textContent='Selecciona origen';filterCities();document.getElementById('od-search').value='';document.getElementById('modalOD').classList.add('open')}
-function focusDest(){odMode='dest';document.getElementById('od-title').textContent='Selecciona destino';filterCities();document.getElementById('od-search').value='';document.getElementById('modalOD').classList.add('open')}
-
-function filterCities(){
-  const q=document.getElementById('od-search').value.toLowerCase();
-  const filtered=CITIES.filter(c=>c.name.toLowerCase().includes(q)||c.code.toLowerCase().includes(q)||c.country.toLowerCase().includes(q));
-  document.getElementById('cities-list').innerHTML=filtered.map(c=>`
-    <div onclick="selectCity('${c.name}','${c.code}')" style="padding:14px 4px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;cursor:pointer;border-radius:6px;transition:background .1s" onmouseover="this.style.background='#fafafa'" onmouseout="this.style.background='transparent'">
-      <span style="font-size:22px">${c.flag}</span>
-      <div>
-        <div style="font-size:15px;font-weight:700;color:var(--negro)">${c.name} <span style="font-size:12px;font-weight:500;color:var(--gris)">(${c.code})</span></div>
-        <div style="font-size:12px;color:var(--gris)">${c.country}</div>
-      </div>
-    </div>`).join('');
-}
-
-function selectCity(name,code){
-  if(odMode==='orig'){
-    document.getElementById('orig-val').value=`${name} (${code})`;
-    document.getElementById('orig-display').textContent=name;
-    document.getElementById('orig-display').className='od-value';
-  } else {
-    document.getElementById('dest-val').value=`${name} (${code})`;
-    document.getElementById('dest-display').textContent=name;
-    document.getElementById('dest-display').className='od-value';
-  }
-  document.getElementById('modalOD').classList.remove('open');
-}
-
-/* ── CREDITS ── */
-let creditsOn=false;
-function toggleCredits(){creditsOn=!creditsOn;document.getElementById('credits-check').className='credits-check'+(creditsOn?' checked':'')}
-
-/* ── BANNER AUTO ── */
-let bc=0;
-const bslides=document.querySelectorAll('.bslide');
-const bdots=document.querySelectorAll('.bdot');
-function goBanner(n){bslides[bc].classList.remove('on');bdots[bc].classList.remove('on');bc=n;bslides[bc].classList.add('on');bdots[bc].classList.add('on')}
-setInterval(()=>goBanner((bc+1)%bslides.length),4500);
-
-/* ── MENÚ ── */
-function toggleSub(id){const el=document.getElementById(id);el.classList.toggle('open')}
-function closeMenu(e){if(e.target===document.getElementById('menuBg'))document.getElementById('menuBg').classList.remove('open')}
-
-/* ── VUELOS ── */
-const FLIGHTS=[
-  {sal:'05:30',ll:'07:50',dur:'2h 20m',p:'$218.900',fare:'Basic'},
-  {sal:'08:00',ll:'10:20',dur:'2h 20m',p:'$289.900',fare:'Classic'},
-  {sal:'11:15',ll:'13:35',dur:'2h 20m',p:'$349.900',fare:'Flex'},
-  {sal:'14:30',ll:'16:50',dur:'2h 20m',p:'$279.900',fare:'Classic'},
-  {sal:'17:45',ll:'20:05',dur:'2h 20m',p:'$199.900',fare:'Basic'},
-  {sal:'20:00',ll:'22:20',dur:'2h 20m',p:'$1.890.000',fare:'Business'},
-];
-
-function buscar(){
-  const orig=document.getElementById('orig-val').value||document.getElementById('orig-display').textContent;
-  const dest=document.getElementById('dest-val').value||document.getElementById('dest-display').textContent;
-  if(!dest||dest==='Destino'){focusDest();return}
-  const co=orig.match(/\(([^)]+)\)/)?.[1]||orig.substring(0,3).toUpperCase();
-  const cd=dest.match(/\(([^)]+)\)/)?.[1]||dest.substring(0,3).toUpperCase();
-  document.getElementById('m-tit').textContent=`${co} → ${cd}`;
-  document.getElementById('m-sub').textContent=`${document.getElementById('ida-display').textContent} · ${FLIGHTS.length} vuelos`;
-  document.getElementById('v-list').innerHTML=FLIGHTS.map(v=>`
-    <div class="vrow" onclick="pickFlight('${v.p}','${v.fare}','${v.sal}','${v.ll}','${v.dur}')">
-      <div class="vrow-top">
-        <div class="vrow-cities"><div class="vrow-city">${co}</div><div class="vrow-arrow"> ──✈── </div><div class="vrow-city">${cd}</div></div>
-        <div class="vrow-price"><sup>$</sup>${v.p.replace('$','')}</div>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div><div class="vrow-times"><span class="vrow-time">${v.sal} → ${v.ll}</span><span class="vrow-direct">Directo</span></div><div class="vrow-fare">${v.fare} · ${v.dur}</div></div>
-        <button class="btn-pick">Seleccionar</button>
-      </div>
-    </div>`).join('');
-  document.getElementById('modalV').classList.add('open');
-}
-
-function pickFlight(p,f,sal,ll,dur){
-  selFlight={precio:p,fare:f,sal,ll,dur};
-  // Poblar resumen en modal asientos
-  const co=document.getElementById('orig-val').value||'BOG';
-  const cd=document.getElementById('dest-val').value||'DEST';
-  const c1=co.match(/\(([^)]+)\)/)?.[1]||co.substring(0,3).toUpperCase();
-  const c2=cd.match(/\(([^)]+)\)/)?.[1]||cd.substring(0,3).toUpperCase();
-  selFlight.c1=c1; selFlight.c2=c2;
-  document.getElementById('seat-route-label').textContent=`${c1} → ${c2}`;
-  document.getElementById('seat-fare-label').textContent=f;
-  document.getElementById('seat-time-info').textContent=`${sal} → ${ll} · ${dur}`;
-  // Reset asiento
-  selFlight.asiento=null;
-  document.getElementById('ssb-seat').textContent='—';
-  document.getElementById('ssb-extra').textContent='Selecciona un asiento';
-  document.querySelectorAll('.seat.selected').forEach(s=>s.classList.remove('selected'));
-  document.getElementById('modalV').classList.remove('open');
-  document.getElementById('modalSeats').classList.add('open');
-}
-
-function setDestino(c){
-  document.getElementById('dest-val').value=c;
-  document.getElementById('dest-display').textContent=c;
-  document.getElementById('dest-display').className='od-value';
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-/* ── CHECK-IN ── */
-function abrirCI(){document.getElementById('menuBg').classList.remove('open');document.getElementById('modalCI').classList.add('open')}
-function doCI(){
-  const pnr=document.getElementById('ci-pnr').value.trim();
-  const ape=document.getElementById('ci-ape').value.trim();
-  if(!pnr||!ape){alert('Ingresa el código de reserva y el apellido.');return}
-  alert(`🔍 Buscando reserva ${pnr.toUpperCase()} — ${ape.toUpperCase()}\n\nEn la versión con backend real cargarías tu vuelo y podrías seleccionar asiento y descargar el pase de abordar.`);
-  document.getElementById('modalCI').classList.remove('open');
-}
-
-/* ── CHIPS ── */
-function selMC(el){document.querySelectorAll('.mchip').forEach(c=>c.classList.remove('on'));el.classList.add('on')}
-
-/* ── CERRAR SHEETS ── */
-function closeSheet(id,e){if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open')}
-
-/* Inicializar lista ciudades */
-filterCities();
-
-/* ════════════════════════════════════════════════
-   SELECCIÓN DE ASIENTOS
-════════════════════════════════════════════════ */
-let selFlight={};
-const TAKEN_SEATS=['1A','1C','2B','2D','3A','3F','4B','4E','5C','5D','6A','6F','7B','7C','8A','8E','9D','10B','10F','11A','11C','12B','12E','13C','13D','14A','14F','15B','15D','16C','17A','17E','18B','18F','19D','20A','20C'];
-
-function buildCabin(){
-  const body=document.getElementById('cabin-body');
-  const cols=['A','B','C','D','E','F'];
-  let html=`<div class="seat-col-labels"><div class="scl"></div><div class="scl">A</div><div class="scl">B</div><div class="scl seat-aisle"></div><div class="scl">D</div><div class="scl">E</div><div class="scl">F</div></div>`;
-  for(let r=1;r<=25;r++){
-    const isBiz=r<=4;
-    const isExit=r===12||r===13;
-    html+=`<div class="seat-row">`;
-    html+=`<div class="sr-num">${r}</div>`;
-    ['A','B','C'].forEach((c,ci)=>{
-      if(ci===2){html+=`<div class="seat-aisle"></div>`;}
-      const sid=`${r}${c}`;
-      const taken=TAKEN_SEATS.includes(sid);
-      const cls=taken?'taken':(isBiz?'business-s':'avail')+(isExit?' exit-row':'');
-      html+=`<div class="seat ${cls}" id="s-${sid}" onclick="pickSeat('${sid}','${isBiz}','${isExit}')" title="${sid}">${c}</div>`;
-    });
-    ['D','E','F'].forEach((c,ci)=>{
-      const sid=`${r}${c}`;
-      const taken=TAKEN_SEATS.includes(sid);
-      const cls=taken?'taken':(isBiz?'business-s':'avail')+(isExit?' exit-row':'');
-      html+=`<div class="seat ${cls}" id="s-${sid}" onclick="pickSeat('${sid}','${isBiz}','${isExit}')" title="${sid}">${c}</div>`;
-    });
-    html+=`</div>`;
-    if(isExit) html+=`<div class="seat-extra-info" style="color:var(--rojo);font-weight:600">🚪 Fila de salida de emergencia</div>`;
-  }
-  body.innerHTML=html;
-}
-buildCabin();
-
-function pickSeat(sid,isBiz,isExit){
-  const el=document.getElementById('s-'+sid);
-  if(el.classList.contains('taken')) return;
-  // Deselect prev
-  if(selFlight.asiento){
-    const prev=document.getElementById('s-'+selFlight.asiento);
-    if(prev){
-      prev.classList.remove('selected');
-      prev.classList.add(prev.classList.contains('business-s')?'business-s':'avail');
+#!/usr/bin/env python3
+"""
+╔══════════════════════════════════════════════════════════╗
+║         AVIANCA DASHBOARD BOT - Telegram                 ║
+║  Bot completo: Dashboard + Pagos + Quejas + Historial    ║
+╚══════════════════════════════════════════════════════════╝
+
+⚠️  SEGURIDAD URGENTE:
+    El token anterior fue expuesto. Haz esto AHORA:
+    1. Abre @BotFather en Telegram
+    2. Escribe /revoke
+    3. Selecciona tu bot
+    4. Genera token nuevo y pégalo en BOT_TOKEN
+
+Tu CHAT_ID: 8114050673 (ya configurado)
+
+Instalar: pip install python-telegram-bot schedule
+Ejecutar:  python avianca_bot.py
+"""
+
+import asyncio, logging, random, schedule, time, threading
+from datetime import datetime
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import (
+    Application, CommandHandler, CallbackQueryHandler,
+    MessageHandler, filters, ContextTypes, ConversationHandler
+)
+
+# ════════════════════════════════════════════════
+#  CONFIGURACION - CAMBIA EL TOKEN DESPUES DE REVOCAR
+# ════════════════════════════════════════════════
+BOT_TOKEN = "PEGA_AQUI_TU_NUEVO_TOKEN"
+CHAT_ID   = "8114050673"
+# ════════════════════════════════════════════════
+
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Estados ConversationHandler
+(PAGO_USUARIO, PAGO_PIN, PAGO_CLAVE, PAGO_CONFIRM,
+ QUEJA_TIPO, QUEJA_PNR, QUEJA_DESC, QUEJA_CONFIRM) = range(8)
+
+# ────────────────────────────────────────────────
+#  BASE DE DATOS EN MEMORIA
+# ────────────────────────────────────────────────
+RESERVAS = [
+    {"pnr":"AV4X8K2","ruta":"BOG -> MIA","pasajero":"GARCIA, Juan",   "fecha":"05/03/2026","tarifa":"Classic", "precio":879900,  "estado":"Confirmado","asiento":"14C","email":"juan@email.com"},
+    {"pnr":"AV9M2L1","ruta":"BOG -> MAD","pasajero":"RODRIGUEZ, Maria","fecha":"07/03/2026","tarifa":"Business","precio":3890000, "estado":"Confirmado","asiento":"3A", "email":"maria@email.com"},
+    {"pnr":"AV3K7P5","ruta":"MDE -> ADZ","pasajero":"TORRES, Carlos",  "fecha":"05/03/2026","tarifa":"Basic",  "precio":218900,  "estado":"Pendiente", "asiento":"--", "email":"carlos@email.com"},
+    {"pnr":"AV1Q9R3","ruta":"BOG -> LIM","pasajero":"MARTINEZ, Ana",   "fecha":"06/03/2026","tarifa":"Flex",   "precio":649900,  "estado":"Confirmado","asiento":"22F","email":"ana@email.com"},
+    {"pnr":"AV6W4N8","ruta":"BOG -> MIA","pasajero":"LOPEZ, Pedro",    "fecha":"05/03/2026","tarifa":"Classic","precio":879900,  "estado":"Embarque",  "asiento":"18B","email":"pedro@email.com"},
+    {"pnr":"AV8B1D4","ruta":"CTG -> BOG","pasajero":"DIAZ, Roberto",   "fecha":"05/03/2026","tarifa":"Basic",  "precio":189900,  "estado":"Cancelado", "asiento":"--", "email":"roberto@email.com"},
+    {"pnr":"AV2T5M7","ruta":"BOG -> NYC","pasajero":"SANCHEZ, Laura",  "fecha":"08/03/2026","tarifa":"Business","precio":2890000,"estado":"Confirmado","asiento":"2C", "email":"laura@email.com"},
+]
+
+VUELOS = [
+    {"num":"AV204","ruta":"BOG -> MIA","sal":"08:00","arr":"12:30","pct":62,"demora":"+45min"},
+    {"num":"AV312","ruta":"BOG -> MAD","sal":"01:30","arr":"17:45","pct":88,"demora":""},
+    {"num":"AV523","ruta":"MDE -> BOG","sal":"09:15","arr":"10:05","pct":40,"demora":""},
+    {"num":"AV811","ruta":"BOG -> MIA","sal":"14:30","arr":"19:00","pct":0, "demora":""},
+    {"num":"AV102","ruta":"BOG -> LIM","sal":"07:00","arr":"10:30","pct":75,"demora":""},
+    {"num":"AV445","ruta":"CTG -> BOG","sal":"10:00","arr":"11:10","pct":55,"demora":""},
+]
+
+TRANSACCIONES = [
+    {"ref":"TXN-8841","pnr":"AV4X8K2","metodo":"Bancolombia PSE","monto":879900, "hora":"09:14","estado":"Aprobado", "usuario":"102****50"},
+    {"ref":"TXN-8840","pnr":"AV9M2L1","metodo":"Visa credito",   "monto":3890000,"hora":"08:52","estado":"Aprobado", "usuario":"789****21"},
+    {"ref":"TXN-8839","pnr":"AV3K7P5","metodo":"Nequi",          "monto":218900, "hora":"08:31","estado":"Pendiente","usuario":"300****78"},
+    {"ref":"TXN-8838","pnr":"AV1Q9R3","metodo":"Bancolombia PSE","monto":649900, "hora":"08:10","estado":"Aprobado", "usuario":"112****33"},
+    {"ref":"TXN-8835","pnr":"AV8B1D4","metodo":"Efecty",         "monto":189900, "hora":"06:48","estado":"Rechazado","usuario":"445****66"},
+]
+
+QUEJAS = [
+    {"id":"QR-001","pnr":"AV204",  "tipo":"Demora",    "desc":"Vuelo demorado 3h sin compensacion", "fecha":"01/03/2026","estado":"En proceso","prioridad":"Alta"},
+    {"id":"QR-002","pnr":"AV8B1D4","tipo":"Reembolso", "desc":"Cancelaron mi vuelo y no devuelven dinero","fecha":"28/02/2026","estado":"Pendiente","prioridad":"Alta"},
+    {"id":"QR-003","pnr":"AV312",  "tipo":"Equipaje",  "desc":"Maleta llego danada",                "fecha":"27/02/2026","estado":"Resuelto", "prioridad":"Media"},
+    {"id":"QR-004","pnr":"AV523",  "tipo":"Servicio",  "desc":"Mal trato del personal en embarque", "fecha":"26/02/2026","estado":"En proceso","prioridad":"Media"},
+]
+
+# Historial dinamico (se llena cuando el bot procesa pagos)
+HISTORIAL_PAGOS = []
+
+# Sesiones activas de pago por usuario
+sesiones = {}
+
+# ────────────────────────────────────────────────
+#  UTILIDADES
+# ────────────────────────────────────────────────
+def fmt(n):
+    s = f"{n:,}".replace(",",".")
+    return f"${s}"
+
+def hora():
+    return datetime.now().strftime("%H:%M:%S")
+
+def fecha_hora():
+    return datetime.now().strftime("%d/%m/%Y %H:%M")
+
+def barra(pct, l=10):
+    f = int(pct/100*l)
+    return "=" * f + "-" * (l-f)
+
+def gen_ref():
+    return "TXN-" + str(random.randint(9000,9999))
+
+def clave_dinamica():
+    return str(random.randint(100000,999999))
+
+def mask(txt):
+    if len(txt) <= 5: return txt[:2] + "***"
+    return txt[:3] + "*"*(len(txt)-5) + txt[-2:]
+
+# ────────────────────────────────────────────────
+#  TECLADOS
+# ────────────────────────────────────────────────
+def kb_menu():
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("Resumen",   callback_data="resumen"),
+         InlineKeyboardButton("Vuelos",    callback_data="vuelos")],
+        [InlineKeyboardButton("Reservas",  callback_data="reservas"),
+         InlineKeyboardButton("Pagos",     callback_data="pagos")],
+        [InlineKeyboardButton("Historial", callback_data="historial"),
+         InlineKeyboardButton("Quejas",    callback_data="quejas")],
+        [InlineKeyboardButton("Alertas",   callback_data="alertas")],
+    ])
+
+def kb_volver():
+    return InlineKeyboardMarkup([[InlineKeyboardButton("Menu principal", callback_data="menu")]])
+
+def kb_pagos():
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("Pagar con Bancolombia /pagar", callback_data="info_pagar")],
+        [InlineKeyboardButton("Ver transacciones", callback_data="txn_lista")],
+        [InlineKeyboardButton("Menu", callback_data="menu")],
+    ])
+
+def kb_reservas():
+    btns = [[InlineKeyboardButton(f"{r['pnr']} | {r['ruta']}", callback_data=f"res_{r['pnr']}")] for r in RESERVAS]
+    btns.append([InlineKeyboardButton("Menu", callback_data="menu")])
+    return InlineKeyboardMarkup(btns)
+
+def kb_quejas():
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("Ver quejas activas",  callback_data="quejas_lista")],
+        [InlineKeyboardButton("Registrar queja /queja", callback_data="info_queja")],
+        [InlineKeyboardButton("Historial quejas",    callback_data="hist_quejas")],
+        [InlineKeyboardButton("Menu", callback_data="menu")],
+    ])
+
+def kb_historial():
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("Historial de pagos",    callback_data="hist_pagos")],
+        [InlineKeyboardButton("Historial de reservas", callback_data="hist_reservas")],
+        [InlineKeyboardButton("Historial de quejas",   callback_data="hist_quejas")],
+        [InlineKeyboardButton("Menu", callback_data="menu")],
+    ])
+
+TIPOS_QUEJA = ["Demora","Cancelacion","Equipaje","Reembolso","Servicio","Overbooking","Otro"]
+
+# ────────────────────────────────────────────────
+#  MENSAJES
+# ────────────────────────────────────────────────
+def txt_start():
+    return (
+        "AVIANCA - Panel de Control\n"
+        "==========================\n"
+        f"{fecha_hora()}\n\n"
+        "Bienvenido al Dashboard Bot.\n"
+        "Reservas, vuelos, pagos y quejas\n"
+        "al alcance de un mensaje.\n\n"
+        "Selecciona una opcion:"
+    )
+
+def txt_resumen():
+    res = random.randint(1200,1400)
+    ing = random.randint(3800,4600)*1000
+    return (
+        "RESUMEN GENERAL\n"
+        "==========================\n"
+        f"Hora: {hora()}\n\n"
+        f"Reservas hoy:      {res:,}\n"
+        f"Vuelos activos:    47\n"
+        f"Ingresos hoy:      {fmt(ing)} COP\n"
+        f"Vuelos demorados:  3\n"
+        f"Pagos aprobados:   142 txn\n"
+        f"Pendientes CI:     8\n"
+        f"Quejas abiertas:   {len([q for q in QUEJAS if q['estado']!='Resuelto'])}\n"
+        f"Pagos via bot:     {len(HISTORIAL_PAGOS)}\n\n"
+        f"Tendencia: +12% vs ayer\n"
+        f"Top metodo: Bancolombia 42%"
+    )
+
+def txt_vuelos():
+    txt = "VUELOS EN VIVO\n==========================\n\n"
+    for v in VUELOS:
+        bar = barra(v["pct"])
+        dem = f" {v['demora']}" if v["demora"] else ""
+        estado = f"DEMORADO{dem}" if v["demora"] else "A TIEMPO" if v["pct"]>0 else "EN TIERRA"
+        txt += (
+            f"{v['num']} | {v['ruta']}\n"
+            f"Sal:{v['sal']} Arr:{v['arr']} | {estado}\n"
+            f"[{bar}] {v['pct']}%\n\n"
+        )
+    txt += "A tiempo:4  Demorados:1  Tierra:1"
+    return txt
+
+def txt_detalle_res(pnr):
+    r = next((x for x in RESERVAS if x["pnr"]==pnr), None)
+    if not r: return "Reserva no encontrada."
+    est_icon = {"Confirmado":"OK","Pendiente":"PENDIENTE","Embarque":"EMBARQUE","Cancelado":"CANCELADO"}.get(r["estado"],r["estado"])
+    return (
+        f"DETALLE RESERVA\n"
+        f"==========================\n"
+        f"PNR:      {r['pnr']}\n"
+        f"Ruta:     {r['ruta']}\n"
+        f"Pasajero: {r['pasajero']}\n"
+        f"Fecha:    {r['fecha']}\n"
+        f"Asiento:  {r['asiento']}\n"
+        f"Tarifa:   {r['tarifa']}\n"
+        f"Precio:   {fmt(r['precio'])} COP\n"
+        f"Estado:   {est_icon}\n"
+        f"Email:    {r['email']}"
+    )
+
+def txt_pagos():
+    aprobado = sum(t["monto"] for t in TRANSACCIONES if t["estado"]=="Aprobado")
+    return (
+        "MODULO DE PAGOS\n"
+        "==========================\n\n"
+        f"Aprobados hoy:  {fmt(aprobado)} COP\n"
+        f"Pendientes:     $284.900 COP\n"
+        f"Rechazados:     $189.900 COP\n\n"
+        "Distribucion:\n"
+        "  Bancolombia PSE: 42%\n"
+        "  Tarjeta:         31%\n"
+        "  Nequi:           18%\n"
+        "  Efecty:           9%\n\n"
+        "Para pagar escribe /pagar"
+    )
+
+def txt_txn():
+    txt = "TRANSACCIONES\n==========================\n\n"
+    for t in TRANSACCIONES:
+        est = {"Aprobado":"OK","Pendiente":"PEND","Rechazado":"RECH"}.get(t["estado"],t["estado"])
+        txt += (
+            f"[{est}] {t['ref']} | {t['hora']}\n"
+            f"  {t['metodo']}\n"
+            f"  PNR:{t['pnr']} | {fmt(t['monto'])}\n"
+            f"  Usuario:{t['usuario']}\n\n"
+        )
+    return txt
+
+def txt_alertas():
+    return (
+        "ALERTAS OPERATIVAS\n"
+        "==========================\n\n"
+        "[ROJO]  AV204 demorado 45min - BOG\n"
+        "        Condiciones climaticas\n\n"
+        "[AMARI] AV811 BOG-MIA al 95%\n"
+        "        Solo 8 sillas disponibles\n\n"
+        "[AMARI] 18 pasajeros sin CI AV523\n"
+        "        Cierre en 40 minutos\n\n"
+        "[ROJO]  Pago TXN-8835 rechazado\n"
+        "        PNR AV8B1D4 en riesgo\n\n"
+        "[VERDE] AV312 llego 10min antes OK"
+    )
+
+def txt_quejas_lista():
+    txt = "QUEJAS Y RECLAMOS\n==========================\n\n"
+    for q in QUEJAS:
+        est = {"En proceso":"PROCESO","Pendiente":"PEND","Resuelto":"OK"}.get(q["estado"],q["estado"])
+        txt += (
+            f"[{q['prioridad']}] {q['id']} - {q['tipo']}\n"
+            f"  PNR: {q['pnr']}\n"
+            f"  {q['desc']}\n"
+            f"  Fecha:{q['fecha']} | {est}\n\n"
+        )
+    return txt
+
+def txt_hist_pagos():
+    if not HISTORIAL_PAGOS:
+        return (
+            "HISTORIAL DE PAGOS\n"
+            "==========================\n\n"
+            "No hay pagos procesados aun.\n\n"
+            "Usa /pagar para realizar un pago."
+        )
+    txt = "HISTORIAL DE PAGOS\n==========================\n\n"
+    for p in HISTORIAL_PAGOS[-10:]:
+        txt += (
+            f"OK {p['ref']} | {p['fecha']} {p['hora']}\n"
+            f"  Usuario:  {p['usuario']}\n"
+            f"  PNR:      {p['pnr']} | {p['ruta']}\n"
+            f"  Monto:    {fmt(p['monto'])} COP\n"
+            f"  Metodo:   Bancolombia PSE\n\n"
+        )
+    return txt
+
+def txt_hist_reservas():
+    txt = "HISTORIAL RESERVAS\n==========================\n\n"
+    for r in RESERVAS:
+        txt += f"[{r['estado'][:4]}] {r['pnr']} | {r['ruta']}\n  {r['pasajero']} | {r['fecha']}\n\n"
+    return txt
+
+def txt_hist_quejas():
+    res = len([q for q in QUEJAS if q["estado"]=="Resuelto"])
+    abi = len(QUEJAS) - res
+    return (
+        f"HISTORIAL QUEJAS\n==========================\n\n"
+        f"Total: {len(QUEJAS)} | Resueltas:{res} | Abiertas:{abi}\n\n"
+    ) + txt_quejas_lista()
+
+# ════════════════════════════════════════════════
+#  FLUJO DE PAGO - 4 PASOS
+# ════════════════════════════════════════════════
+async def cmd_pagar(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    uid = update.effective_user.id
+    res = next((r for r in RESERVAS if r["estado"]=="Pendiente"), RESERVAS[0])
+    sesiones[uid] = {
+        "pnr": res["pnr"], "ruta": res["ruta"],
+        "monto": res["precio"], "intentos_pin": 0,
+        "intentos_clave": 0, "clave": None, "usuario": None,
     }
-  }
-  el.classList.remove('avail','business-s');
-  el.classList.add('selected');
-  selFlight.asiento=sid;
-  const row=parseInt(sid);
-  let clase='Economy';
-  let extra='';
-  if(isBiz==='true'){clase='Business Class';extra='+$450.000'}
-  else if(isExit==='true'){clase='Fila de salida';extra='+$80.000'}
-  else if(row<=10){clase='Economy Plus';extra='+$55.000'}
-  else{extra='Incluido'}
-  document.getElementById('ssb-seat').textContent=sid;
-  document.getElementById('ssb-extra').textContent=extra;
-  document.getElementById('ssb-class').textContent=clase;
-  // Habilitar botón continuar
-  document.getElementById('btn-continuar-pago').style.opacity='1';
-  document.getElementById('btn-continuar-pago').style.pointerEvents='auto';
-}
+    await update.message.reply_text(
+        "BANCOLOMBIA PSE - PAGO SEGURO\n"
+        "==========================\n\n"
+        "PASO 1 de 4 - Identificacion\n\n"
+        f"Vuelo:  {res['ruta']}\n"
+        f"PNR:    {res['pnr']}\n"
+        f"Monto:  {fmt(res['precio'])} COP\n\n"
+        "Ingresa tu numero de usuario\n"
+        "o cedula de Bancolombia:\n\n"
+        "Escribe /cancelar para salir"
+    )
+    return PAGO_USUARIO
 
-/* ════════════════════════════════════════════════
-   PAGO
-════════════════════════════════════════════════ */
-let pasoActual=1;
-let metodoSel='card';
+async def paso_usuario(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    uid = update.effective_user.id
+    txt = update.message.text.strip()
+    if not txt.isdigit() or len(txt) < 6:
+        await update.message.reply_text("Numero invalido (min 6 digitos). Intenta de nuevo:")
+        return PAGO_USUARIO
+    sesiones[uid]["usuario"] = txt
+    sesiones[uid]["usuario_mask"] = mask(txt)
+    await update.message.reply_text(
+        "BANCOLOMBIA PSE - PAGO SEGURO\n"
+        "==========================\n\n"
+        "PASO 2 de 4 - PIN\n\n"
+        f"Usuario: {mask(txt)} [OK]\n\n"
+        "Ingresa tu PIN de 4 digitos:\n"
+        "(Ej: 1234)\n\n"
+        "Tienes 3 intentos\n"
+        "El PIN no se almacena"
+    )
+    return PAGO_PIN
 
-function abrirPago(){
-  // Poblar resumen
-  document.getElementById('p-ruta').textContent=`${selFlight.c1} → ${selFlight.c2}`;
-  document.getElementById('p-fare').textContent=selFlight.fare;
-  document.getElementById('p-fecha').textContent=document.getElementById('ida-display').textContent;
-  document.getElementById('p-asiento').textContent=selFlight.asiento||'—';
-  document.getElementById('p-horario').textContent=`${selFlight.sal} → ${selFlight.ll}`;
-  document.getElementById('p-precio').textContent=selFlight.precio;
-  // Breakdown precios
-  const baseNum=parseInt(selFlight.precio.replace(/\D/g,''));
-  const imp=Math.round(baseNum*.19);
-  const total=baseNum+imp+42500;
-  document.getElementById('pb-base').textContent=fmtPeso(baseNum);
-  document.getElementById('pb-imp').textContent=fmtPeso(imp);
-  document.getElementById('pb-total').textContent=fmtPeso(total);
-  // Resetear pasos
-  goPasoStep(1);
-  document.getElementById('modalSeats').classList.remove('open');
-  document.getElementById('modalPago').classList.add('open');
-}
+async def paso_pin(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    uid = update.effective_user.id
+    pin = update.message.text.strip()
+    ses = sesiones.get(uid, {})
+    if not pin.isdigit() or len(pin) != 4:
+        ses["intentos_pin"] = ses.get("intentos_pin",0) + 1
+        rest = 3 - ses["intentos_pin"]
+        if rest <= 0:
+            sesiones.pop(uid, None)
+            await update.message.reply_text(
+                "SESION BLOQUEADA\n\n"
+                "Agotaste los 3 intentos de PIN.\n"
+                "Usa /pagar para intentar de nuevo.",
+                reply_markup=kb_volver()
+            )
+            return ConversationHandler.END
+        await update.message.reply_text(f"PIN invalido - debe ser 4 digitos.\nIntentos restantes: {rest}")
+        return PAGO_PIN
 
-function fmtPeso(n){return '$'+n.toLocaleString('es-CO')}
+    # PIN OK - generar clave dinamica
+    clave = clave_dinamica()
+    ses["clave"] = clave
+    ses["intentos_clave"] = 0
+    await update.message.reply_text(
+        "BANCOLOMBIA PSE - PAGO SEGURO\n"
+        "==========================\n\n"
+        "PASO 3 de 4 - Clave Dinamica\n\n"
+        "PIN: **** [VERIFICADO]\n\n"
+        "Enviamos un codigo de 6 digitos\n"
+        "a tu celular: *** *** **78\n\n"
+        f"Tu clave dinamica es: {clave}\n"
+        "(En produccion llega por SMS)\n\n"
+        "Expira en 5 minutos\n"
+        "NO compartas este codigo\n\n"
+        "Ingresala aqui:"
+    )
+    return PAGO_CLAVE
 
-function goPasoStep(n){
-  pasoActual=n;
-  [1,2,3].forEach(i=>{
-    const ps=document.getElementById('ps'+i);
-    const pv=document.getElementById('pview'+i);
-    ps.classList.remove('act','done');
-    pv.classList.remove('act');
-    if(i<n) ps.classList.add('done');
-    if(i===n){ps.classList.add('act');pv.classList.add('act');}
-  });
-}
+async def paso_clave(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    uid   = update.effective_user.id
+    clave = update.message.text.strip()
+    ses   = sesiones.get(uid, {})
+    if not clave.isdigit() or len(clave) != 6:
+        await update.message.reply_text("La clave debe ser de 6 digitos. Intenta de nuevo:")
+        return PAGO_CLAVE
+    if clave != ses.get("clave"):
+        ses["intentos_clave"] = ses.get("intentos_clave",0) + 1
+        rest = 3 - ses["intentos_clave"]
+        if rest <= 0:
+            sesiones.pop(uid, None)
+            await update.message.reply_text(
+                "CLAVE INCORRECTA 3 VECES\n\n"
+                "Transaccion cancelada por seguridad.\n"
+                "Usa /pagar para intentar de nuevo.",
+                reply_markup=kb_volver()
+            )
+            return ConversationHandler.END
+        await update.message.reply_text(f"Clave incorrecta. Intentos restantes: {rest}")
+        return PAGO_CLAVE
 
-function irPaso2(){
-  const name=document.getElementById('pax-name').value.trim();
-  const email=document.getElementById('pax-email').value.trim();
-  if(!name||!email){
-    document.getElementById('pax-name').style.borderColor=!name?'var(--rojo)':'var(--borde)';
-    document.getElementById('pax-email').style.borderColor=!email?'var(--rojo)':'var(--borde)';
-    return;
-  }
-  goPasoStep(2);
-}
+    # Clave OK - mostrar resumen
+    await update.message.reply_text(
+        "BANCOLOMBIA PSE - PAGO SEGURO\n"
+        "==========================\n\n"
+        "PASO 4 de 4 - Confirmar pago\n\n"
+        "---  RESUMEN  ---\n"
+        f"Vuelo:   {ses['ruta']}\n"
+        f"PNR:     {ses['pnr']}\n"
+        f"Usuario: {ses['usuario_mask']}\n"
+        f"Banco:   Bancolombia PSE\n"
+        f"Monto:   {fmt(ses['monto'])} COP\n"
+        "-----------------\n\n"
+        "Para confirmar escribe:  SI\n"
+        "Para cancelar escribe:   NO"
+    )
+    return PAGO_CONFIRM
 
-function irPaso3(){
-  if(metodoSel==='card'){
-    const num=document.getElementById('cc-num').value.replace(/\s/g,'');
-    const exp=document.getElementById('cc-exp').value;
-    const cvv=document.getElementById('cc-cvv').value;
-    if(num.length<16||!exp.includes('/')||cvv.length<3){
-      alert('Por favor completa los datos de tarjeta correctamente.');
-      return;
+async def paso_confirmar(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    uid = update.effective_user.id
+    rsp = update.message.text.strip().upper()
+    ses = sesiones.get(uid, {})
+
+    if rsp not in ("SI","S","YES","Y","1"):
+        sesiones.pop(uid, None)
+        await update.message.reply_text("Pago cancelado por el usuario.", reply_markup=kb_volver())
+        return ConversationHandler.END
+
+    # PAGO APROBADO
+    ref  = gen_ref()
+    h    = hora()
+    reg  = {
+        "ref": ref, "hora": h,
+        "fecha": datetime.now().strftime("%d/%m/%Y"),
+        "usuario": ses.get("usuario_mask","--"),
+        "pnr": ses["pnr"], "ruta": ses["ruta"],
+        "monto": ses["monto"], "estado": "Aprobado",
     }
-  }
-  // Generar PNR random
-  const pnr='AV'+(Math.random().toString(36).substring(2,8).toUpperCase());
-  document.getElementById('conf-pnr').textContent=pnr;
-  document.getElementById('conf-sub').textContent=
-    `Tu vuelo ${selFlight.c1} → ${selFlight.c2} ha sido reservado.\nRecibirás la confirmación en ${document.getElementById('pax-email').value||'tu correo'}.`;
-  document.getElementById('conf-details').innerHTML=`
-    <div class="cd-item"><div class="cd-label">Ruta</div><div class="cd-val">${selFlight.c1} → ${selFlight.c2}</div></div>
-    <div class="cd-item"><div class="cd-label">Asiento</div><div class="cd-val">${selFlight.asiento||'—'}</div></div>
-    <div class="cd-item"><div class="cd-label">Salida</div><div class="cd-val">${selFlight.sal}</div></div>
-    <div class="cd-item"><div class="cd-label">Tarifa</div><div class="cd-val">${selFlight.fare}</div></div>
-  `;
-  goPasoStep(3);
-}
+    HISTORIAL_PAGOS.append(reg)
 
-function selMetodo(m){
-  metodoSel=m;
-  ['card','pse','efecty','nequi'].forEach(x=>{
-    document.getElementById('mp-'+x).classList.toggle('sel',x===m);
-    document.getElementById('form-'+x).style.display=x===m?'block':'none';
-  });
-}
+    # Actualizar estado reserva
+    for r in RESERVAS:
+        if r["pnr"] == ses["pnr"]:
+            r["estado"] = "Confirmado"
+            break
 
-/* Formateo tarjeta */
-function fmtCard(el){
-  let v=el.value.replace(/\D/g,'').substring(0,16);
-  el.value=v.replace(/(.{4})/g,'$1 ').trim();
-  document.getElementById('cp-num').textContent=el.value.padEnd(19,'•').substring(0,19)||'•••• •••• •••• ••••';
-  // Detectar red
-  const net=v[0]==='4'?'VISA 💳':v[0]==='5'?'MC 💳':v.substring(0,2)==='34'||v.substring(0,2)==='37'?'AMEX 💳':'💳';
-  document.getElementById('cp-net').textContent=net;
-}
-function fmtExp(el){
-  let v=el.value.replace(/\D/g,'');
-  if(v.length>=3) v=v.substring(0,2)+'/'+v.substring(2,4);
-  el.value=v;
-  document.getElementById('cp-exp').textContent=el.value||'MM/AA';
-}
-</script>
-</body>
-</html>
+    sesiones.pop(uid, None)
+    await update.message.reply_text(
+        "==========================\n"
+        "    PAGO APROBADO  OK\n"
+        "==========================\n\n"
+        f"Banco:      Bancolombia PSE\n"
+        f"Referencia: {ref}\n"
+        f"Hora:       {h}\n"
+        f"Usuario:    {reg['usuario']}\n"
+        f"Vuelo:      {ses['ruta']}\n"
+        f"PNR:        {ses['pnr']}\n"
+        f"Monto:      {fmt(ses['monto'])} COP\n\n"
+        "Comprobante enviado a tu correo.\n"
+        "Tu reserva fue confirmada.\n"
+        "==========================",
+        reply_markup=kb_volver()
+    )
+    return ConversationHandler.END
+
+async def pago_cancelar(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    sesiones.pop(update.effective_user.id, None)
+    await update.message.reply_text("Operacion cancelada.", reply_markup=kb_menu())
+    return ConversationHandler.END
+
+# ════════════════════════════════════════════════
+#  FLUJO DE QUEJAS - 4 PASOS
+# ════════════════════════════════════════════════
+async def cmd_queja(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton(t, callback_data=f"qt_{t}")] for t in TIPOS_QUEJA
+    ])
+    await update.message.reply_text(
+        "NUEVA QUEJA / RECLAMO\n"
+        "==========================\n\n"
+        "Paso 1: Selecciona el tipo:",
+        reply_markup=kb
+    )
+    return QUEJA_TIPO
+
+async def queja_tipo_cb(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    await update.callback_query.answer()
+    tipo = update.callback_query.data.replace("qt_","")
+    ctx.user_data["qt"] = tipo
+    await update.callback_query.message.reply_text(
+        f"Tipo: {tipo} [OK]\n\n"
+        "Paso 2: Ingresa el PNR o numero de vuelo\n"
+        "(Escribe NINGUNO si no aplica):"
+    )
+    return QUEJA_PNR
+
+async def queja_pnr_txt(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    ctx.user_data["qpnr"] = update.message.text.strip().upper()
+    await update.message.reply_text(
+        f"PNR: {ctx.user_data['qpnr']} [OK]\n\n"
+        "Paso 3: Describe tu queja en detalle\n"
+        "(Max 500 caracteres):"
+    )
+    return QUEJA_DESC
+
+async def queja_desc_txt(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    ctx.user_data["qdesc"] = update.message.text.strip()[:500]
+    tipo = ctx.user_data.get("qt","--")
+    pnr  = ctx.user_data.get("qpnr","--")
+    desc = ctx.user_data["qdesc"]
+    await update.message.reply_text(
+        "RESUMEN DE TU QUEJA\n"
+        "==========================\n\n"
+        f"Tipo:  {tipo}\n"
+        f"PNR:   {pnr}\n"
+        f"Desc:  {desc}\n\n"
+        "Confirmas el registro?\n"
+        "Escribe SI o NO:"
+    )
+    return QUEJA_CONFIRM
+
+async def queja_confirmar_txt(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    rsp = update.message.text.strip().upper()
+    if rsp not in ("SI","S","YES","Y","1"):
+        await update.message.reply_text("Queja cancelada.", reply_markup=kb_volver())
+        return ConversationHandler.END
+
+    qid   = f"QR-{random.randint(100,999)}"
+    tipo  = ctx.user_data.get("qt","--")
+    pnr   = ctx.user_data.get("qpnr","--")
+    desc  = ctx.user_data.get("qdesc","--")
+    fecha = datetime.now().strftime("%d/%m/%Y")
+    QUEJAS.append({
+        "id":qid,"pnr":pnr,"tipo":tipo,"desc":desc,
+        "fecha":fecha,"estado":"Pendiente","prioridad":"Media"
+    })
+    await update.message.reply_text(
+        "==========================\n"
+        "  QUEJA REGISTRADA OK\n"
+        "==========================\n\n"
+        f"Numero de caso: {qid}\n"
+        f"Tipo:  {tipo}\n"
+        f"PNR:   {pnr}\n"
+        f"Fecha: {fecha}\n"
+        f"Estado: Pendiente\n\n"
+        "Te contactaremos en 3 dias habiles.\n"
+        "Guarda tu numero de caso.",
+        reply_markup=kb_volver()
+    )
+    return ConversationHandler.END
+
+# ────────────────────────────────────────────────
+#  HANDLERS DE COMANDOS
+# ────────────────────────────────────────────────
+async def cmd_start(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(txt_start(), reply_markup=kb_menu())
+
+async def cmd_ayuda(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "COMANDOS DISPONIBLES\n"
+        "==========================\n"
+        "/start     - Menu principal\n"
+        "/resumen   - KPIs del dashboard\n"
+        "/vuelos    - Vuelos en vivo\n"
+        "/reservas  - Lista de reservas\n"
+        "/pagos     - Modulo de pagos\n"
+        "/pagar     - Pagar Bancolombia PSE\n"
+        "/queja     - Registrar queja\n"
+        "/historial - Historial completo\n"
+        "/alertas   - Alertas operativas\n"
+        "/test      - Enviar alerta de prueba\n"
+        "/cancelar  - Cancelar operacion\n"
+        "/ayuda     - Esta lista",
+        reply_markup=kb_menu()
+    )
+
+async def cmd_test(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Enviando alerta de prueba...")
+    await enviar_alerta(ctx.application)
+
+async def cmd_cancelar(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    sesiones.pop(update.effective_user.id, None)
+    ctx.user_data.clear()
+    await update.message.reply_text("Operacion cancelada.", reply_markup=kb_menu())
+    return ConversationHandler.END
+
+# ────────────────────────────────────────────────
+#  HANDLER BOTONES
+# ────────────────────────────────────────────────
+async def btn_handler(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    q    = update.callback_query
+    data = q.data
+    await q.answer()
+
+    mapa = {
+        "menu":          (txt_start,        kb_menu),
+        "resumen":       (txt_resumen,       kb_menu),
+        "vuelos":        (txt_vuelos,        kb_volver),
+        "pagos":         (txt_pagos,         kb_pagos),
+        "txn_lista":     (txt_txn,           kb_volver),
+        "alertas":       (txt_alertas,       kb_volver),
+        "hist_pagos":    (txt_hist_pagos,    kb_volver),
+        "hist_reservas": (txt_hist_reservas, kb_volver),
+        "hist_quejas":   (txt_hist_quejas,   kb_volver),
+    }
+
+    if data in mapa:
+        fn, kbfn = mapa[data]
+        await q.edit_message_text(fn(), reply_markup=kbfn())
+
+    elif data == "reservas":
+        await q.edit_message_text("Selecciona una reserva:", reply_markup=kb_reservas())
+
+    elif data == "quejas":
+        await q.edit_message_text("QUEJAS Y RECLAMOS\n\nSelecciona:", reply_markup=kb_quejas())
+
+    elif data == "quejas_lista":
+        await q.edit_message_text(txt_quejas_lista(), reply_markup=kb_volver())
+
+    elif data == "historial":
+        await q.edit_message_text("HISTORIAL\n\nSelecciona el tipo:", reply_markup=kb_historial())
+
+    elif data == "info_pagar":
+        await q.edit_message_text(
+            "Para iniciar el pago seguro\ncon Bancolombia PSE escribe:\n\n/pagar",
+            reply_markup=kb_volver()
+        )
+
+    elif data == "info_queja":
+        await q.edit_message_text(
+            "Para registrar una queja escribe:\n\n/queja",
+            reply_markup=kb_volver()
+        )
+
+    elif data.startswith("res_"):
+        pnr = data.replace("res_","")
+        kb_det = InlineKeyboardMarkup([
+            [InlineKeyboardButton("Pagar este vuelo -> /pagar", callback_data="info_pagar")],
+            [InlineKeyboardButton("Menu", callback_data="menu")],
+        ])
+        await q.edit_message_text(txt_detalle_res(pnr), reply_markup=kb_det)
+
+    elif data.startswith("qt_"):
+        tipo = data.replace("qt_","")
+        ctx.user_data["qt"] = tipo
+        await q.message.reply_text(
+            f"Tipo: {tipo}\n\n"
+            "Ingresa el PNR o numero de vuelo\n"
+            "(Escribe NINGUNO si no aplica):"
+        )
+        return QUEJA_PNR
+
+# ════════════════════════════════════════════════
+#  ALERTAS AUTOMATICAS
+# ════════════════════════════════════════════════
+MSGS_ALERTA = [
+    "ALERTA ROJA\nVuelo AV204 demorado 45min en BOG.\nPasajeros en sala de espera.",
+    "ATENCION\nAV811 BOG-MIA al 95% de capacidad.\nSolo 8 sillas disponibles.",
+    "ATENCION\n18 pasajeros sin check-in AV523.\nCierre de puerta en 40 minutos.",
+    f"ALERTA ROJA\nPago rechazado TXN-8835.\nPNR AV8B1D4 en riesgo de cancelacion.",
+    "INFO\nAV312 BOG-MAD llego con 10 min de anticipacion.",
+    f"INFO\nNueva reserva Business BOG-NYC.\nMonto: {fmt(2890000)} COP",
+]
+
+async def enviar_alerta(app, idx=None):
+    if idx is None:
+        idx = random.randint(0, len(MSGS_ALERTA)-1)
+    msg = (
+        f"ALERTA AVIANCA DASHBOARD\n"
+        f"==========================\n"
+        f"Hora: {hora()}\n\n"
+        f"{MSGS_ALERTA[idx]}\n\n"
+        f"Notificacion automatica"
+    )
+    try:
+        await app.bot.send_message(
+            chat_id=CHAT_ID, text=msg,
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("Ver Dashboard", callback_data="resumen")
+            ]])
+        )
+    except Exception as e:
+        logger.error(f"Error alerta: {e}")
+
+async def reporte_diario(app):
+    msg = (
+        f"REPORTE DIARIO AVIANCA\n"
+        f"==========================\n"
+        f"Fecha: {datetime.now().strftime('%d/%m/%Y')}\n\n"
+        f"Vuelos operados:       {random.randint(80,100)}\n"
+        f"A tiempo:              {random.randint(88,96)}%\n"
+        f"Pasajeros:             {random.randint(8000,12000):,}\n\n"
+        f"Ingresos del dia:      {fmt(random.randint(3500,5000)*1000)} COP\n"
+        f"Reservas nuevas:       {random.randint(1100,1500):,}\n"
+        f"Pagos aprobados:       {random.randint(130,160)}\n"
+        f"Pagos via bot:         {len(HISTORIAL_PAGOS)}\n\n"
+        f"Vuelos demorados:      {random.randint(1,5)}\n"
+        f"Pagos rechazados:      {random.randint(2,6)}\n"
+        f"Quejas registradas:    {len(QUEJAS)}\n\n"
+        f"Reporte automatico - {hora()}"
+    )
+    try:
+        await app.bot.send_message(chat_id=CHAT_ID, text=msg, reply_markup=kb_volver())
+    except Exception as e:
+        logger.error(f"Error reporte: {e}")
+
+def run_scheduler(app):
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    schedule.every(20).minutes.do(lambda: loop.run_until_complete(enviar_alerta(app)))
+    schedule.every().day.at("23:59").do(lambda: loop.run_until_complete(reporte_diario(app)))
+    logger.info("Scheduler activo: alertas c/20min + reporte 23:59")
+    while True:
+        schedule.run_pending()
+        time.sleep(30)
+
+# ════════════════════════════════════════════════
+#  MAIN
+# ════════════════════════════════════════════════
+def main():
+    print("=" * 50)
+    print("  AVIANCA DASHBOARD BOT - Iniciando...")
+    print("=" * 50)
+    if "PEGA_AQUI" in BOT_TOKEN:
+        print("\nERROR: Configura BOT_TOKEN con tu nuevo token")
+        print("Primero revoca el anterior en @BotFather\n")
+        return
+
+    app = Application.builder().token(BOT_TOKEN).build()
+
+    # ConversationHandler pago
+    pago_h = ConversationHandler(
+        entry_points=[CommandHandler("pagar", cmd_pagar)],
+        states={
+            PAGO_USUARIO: [MessageHandler(filters.TEXT & ~filters.COMMAND, paso_usuario)],
+            PAGO_PIN:     [MessageHandler(filters.TEXT & ~filters.COMMAND, paso_pin)],
+            PAGO_CLAVE:   [MessageHandler(filters.TEXT & ~filters.COMMAND, paso_clave)],
+            PAGO_CONFIRM: [MessageHandler(filters.TEXT & ~filters.COMMAND, paso_confirmar)],
+        },
+        fallbacks=[CommandHandler("cancelar", pago_cancelar)],
+        allow_reentry=True,
+    )
+
+    # ConversationHandler queja
+    queja_h = ConversationHandler(
+        entry_points=[CommandHandler("queja", cmd_queja)],
+        states={
+            QUEJA_TIPO:    [CallbackQueryHandler(queja_tipo_cb, pattern="^qt_")],
+            QUEJA_PNR:     [MessageHandler(filters.TEXT & ~filters.COMMAND, queja_pnr_txt)],
+            QUEJA_DESC:    [MessageHandler(filters.TEXT & ~filters.COMMAND, queja_desc_txt)],
+            QUEJA_CONFIRM: [MessageHandler(filters.TEXT & ~filters.COMMAND, queja_confirmar_txt)],
+        },
+        fallbacks=[CommandHandler("cancelar", pago_cancelar)],
+        allow_reentry=True,
+    )
+
+    app.add_handler(pago_h)
+    app.add_handler(queja_h)
+    app.add_handler(CommandHandler("start",     cmd_start))
+    app.add_handler(CommandHandler("ayuda",     cmd_ayuda))
+    app.add_handler(CommandHandler("cancelar",  cmd_cancelar))
+    app.add_handler(CommandHandler("test",      cmd_test))
+    app.add_handler(CommandHandler("resumen",   lambda u,c: u.message.reply_text(txt_resumen(), reply_markup=kb_volver())))
+    app.add_handler(CommandHandler("vuelos",    lambda u,c: u.message.reply_text(txt_vuelos(),  reply_markup=kb_volver())))
+    app.add_handler(CommandHandler("reservas",  lambda u,c: u.message.reply_text("Selecciona:", reply_markup=kb_reservas())))
+    app.add_handler(CommandHandler("pagos",     lambda u,c: u.message.reply_text(txt_pagos(),   reply_markup=kb_pagos())))
+    app.add_handler(CommandHandler("historial", lambda u,c: u.message.reply_text("HISTORIAL\nSelecciona:", reply_markup=kb_historial())))
+    app.add_handler(CommandHandler("alertas",   lambda u,c: u.message.reply_text(txt_alertas(), reply_markup=kb_volver())))
+    app.add_handler(CallbackQueryHandler(btn_handler))
+
+    threading.Thread(target=run_scheduler, args=(app,), daemon=True).start()
+
+    print(f"  Chat ID: {CHAT_ID}")
+    print("  Flujo pago: 4 pasos (usuario->PIN->clave->confirm)")
+    print("  Historial de pagos: activo en memoria")
+    print("  Quejas: registro y consulta activos")
+    print("  Alertas: cada 20 min automaticas")
+    print("  Reporte diario: 23:59")
+    print("  Escribe /start en Telegram para comenzar")
+    print("=" * 50)
+
+    app.run_polling(allowed_updates=Update.ALL_TYPES)
+
+if __name__ == "__main__":
+    main()
