@@ -1,357 +1,189 @@
-import mysql.connector
-from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
-from mysql.connector import pooling
-import logging
+import telebot
+import random
+import string
+import time
 from datetime import datetime, timedelta
-import os
-import re
-import requests  # 🔥 agregado
 
-# --- LOGGING ---
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 
-# --- TOKEN ---
-TOKEN = os.environ.get("BOT_TOKEN")
-ABSTRACT_API_KEY = os.environ.get("ABSTRACT_KEY")  # 🔥 agregado
+# ================= CONFIG =================
+TOKEN = "TU_TOKEN_AQUI"
+ADMIN_ID = 3754592387
 
-if not TOKEN:
-    raise ValueError("❌ No se encontró BOT_TOKEN")
+bot = telebot.TeleBot(TOKEN)
 
-# --- ADMINS ---
-ADMIN_IDS = [8114050673, 8575033873]
+# ================= BASE =================
+keys_activas = {}
+usuarios_vip = {}
 
-# --- DB ---
-def get_db_pool():
-    try:
-        return mysql.connector.pooling.MySQLConnectionPool(
-            pool_name="pool_db",
-            pool_size=10,
-            host=os.environ.get("MYSQLHOST", "mysql"),
-            port=int(os.environ.get("MYSQLPORT", 3306)),
-            user=os.environ.get("MYSQLUSER", "root"),
-            password=os.environ.get("MYSQLPASSWORD", ""),
-            database=os.environ.get("MYSQLDATABASE", "railway"),
-            charset="utf8"
-        )
-    except Exception as e:
-        logger.error(f"Error pool: {e}")
-        return None
+# ================= KEYS =================
+def generar_key(dias=30):
+    key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+    exp = datetime.now() + timedelta(days=dias)
+    keys_activas[key] = exp
+    return key, exp
 
-pool = get_db_pool()
-
-def get_connection():
-    if pool is None:
-        return None
-    try:
-        return pool.get_connection()
-    except:
-        return None
-
-# --- ACCESO ---
-def tiene_key_valida(user_id):
-    conn = get_connection()
-    if not conn:
+def es_vip(user_id):
+    if user_id not in usuarios_vip:
         return False
+    
+    if datetime.now() > usuarios_vip[user_id]:
+        del usuarios_vip[user_id]
+        return False
+    
+    return True
+
+# ================= SISBEN =================
+def consultar_sisben(tipo_doc, numero):
+    options = Options()
+    options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+
+    driver = webdriver.Chrome(options=options)
+
     try:
-        cursor = conn.cursor()
-        query = """
-        SELECT 1 FROM user_keys 
-        WHERE user_id = %s 
-        AND redeemed = TRUE 
-        AND expiration_date > NOW()
-        """
-        cursor.execute(query, (user_id,))
-        return cursor.fetchone() is not None
+        driver.get("https://www.sisben.gov.co/Paginas/consulta-tu-grupo.html")
+        time.sleep(6)
+
+        wait = WebDriverWait(driver, 15)
+
+        select_elem = wait.until(EC.presence_of_element_located((By.ID, "TipoID")))
+        Select(select_elem).select_by_value(tipo_doc)
+
+        input_doc = driver.find_element(By.ID, "documento")
+        input_doc.send_keys(numero)
+
+        boton = driver.find_element(By.ID, "botonenvio")
+        driver.execute_script("arguments[0].click();", boton)
+
+        time.sleep(6)
+
+        html = driver.page_source.lower()
+
+        if "no se encontr" in html:
+            return "❌ No encontrado en SISBÉN"
+
+        resultado = "📊 *SISBÉN RESULTADO*\n\n"
+
+        try:
+            grupo = driver.find_element(By.XPATH, "//p[contains(@class,'text-uppercase')]").text
+            resultado += f"🏷 Grupo: {grupo}\n"
+        except:
+            pass
+
+        campos = ["Nombres", "Apellidos", "Municipio", "Departamento"]
+
+        for campo in campos:
+            try:
+                val = driver.find_element(By.XPATH, f"//p[contains(text(), '{campo}')]/following-sibling::p").text
+                resultado += f"{campo}: {val}\n"
+            except:
+                pass
+
+        return resultado
+
+    except Exception as e:
+        return f"⚠️ Error: {str(e)}"
+
     finally:
-        conn.close()
+        driver.quit()
 
-def usuario_tiene_acceso(user_id):
-    if user_id in ADMIN_IDS:
-        return True
-    return tiene_key_valida(user_id)
+# ================= COMANDOS =================
 
-# --- CONSULTA CC ---
-def buscar_cedula(cedula):
-    conn = get_connection()
-    if not conn:
-        return None
-    try:
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM ani WHERE ANINuip = %s", (cedula,))
-        return cursor.fetchone()
-    finally:
-        conn.close()
+@bot.message_handler(commands=['start'])
+def start(msg):
+    bot.send_message(msg.chat.id, f"""
+乄 DOXEO_CONSULTAS ⚔️
+══════════════════════
 
-# ================= DISEÑO ACCESO =================
-async def sin_acceso(update):
-    await update.message.reply_text("""
-╔══════════════════════╗
-        🔒 ACCESO
-╚══════════════════════╝
+🤖 Bienvenido {msg.from_user.first_name}
 
-❌ No tienes acceso activo
+⚔️ /activar ➛ Activar acceso
+⚔️ /consultar ➛ SISBÉN IV
+⚔️ /miacceso ➛ Ver acceso
 
-💎 Compra acceso:
-📩 @broquicalifa
-━━━━━━━━━━━━━━━━━━━━━━━
+👑 Owner: @Broquicalifa
 """)
 
-# --- COMANDOS ---
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = update.effective_user
+# ================= KEY ADMIN =================
+@bot.message_handler(commands=['key'])
+def crear_key_cmd(msg):
+    if msg.from_user.id != ADMIN_ID:
+        return bot.reply_to(msg, "❌ No autorizado")
 
-    texto = f"""
-╔══════════════════════════════╗
-        ⚔️ 𝗗𝗢𝗥𝗦𝗘𝗧 𝗕𝗢𝗧 ⚔️
-╚══════════════════════════════╝
+    args = msg.text.split()
+    dias = int(args[1]) if len(args) > 1 else 30
 
-👤 {user.first_name} | 🆔 {user.id}
+    key, exp = generar_key(dias)
 
-🔍 CONSULTAS
-┣ /cc 123456789
-┣ /sisben 123456789
-┣ /nequi 3001234567
+    bot.reply_to(msg, f"""
+🔑 NUEVA KEY
 
-🌐 OSINT
-┣ /numero +573001234567
-┣ /ip 8.8.8.8
-┣ /email correo@gmail.com
+Key: `{key}`
+Días: {dias}
+Expira: {exp.strftime('%Y-%m-%d')}
 
-🔐 ACCESO
-┣ /key CLAVE
-┣ /estado
+Usar:
+/activar {key}
+""", parse_mode="Markdown")
 
-━━━━━━━━━━━━━━━━━━━━━━━
-🛠 @broquicalifa
-"""
-    await update.message.reply_text(texto)
+# ================= ACTIVAR =================
+@bot.message_handler(commands=['activar'])
+def activar(msg):
+    args = msg.text.split()
 
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await start(update, context)
+    if len(args) < 2:
+        return bot.reply_to(msg, "Uso: /activar CLAVE")
 
-async def estado(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if usuario_tiene_acceso(update.effective_user.id):
-        await update.message.reply_text("✅ Acceso activo")
-    else:
-        await sin_acceso(update)
+    key = args[1]
 
-# --- KEY ---
-async def activar_key(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.message.from_user.id
+    if key not in keys_activas:
+        return bot.reply_to(msg, "❌ Key inválida")
 
-    if not context.args:
-        await update.message.reply_text("Uso: /key CLAVE")
-        return
+    exp = keys_activas[key]
 
-    key = context.args[0]
+    if datetime.now() > exp:
+        return bot.reply_to(msg, "⚠️ Key expirada")
 
-    conn = get_connection()
-    if not conn:
-        await update.message.reply_text("❌ Error DB")
-        return
+    usuarios_vip[msg.from_user.id] = exp
+    del keys_activas[key]
 
-    try:
-        cursor = conn.cursor()
-        cursor.execute("""
-        SELECT id, duration_days FROM user_keys 
-        WHERE key_code = %s AND redeemed = FALSE
-        """, (key,))
-        result = cursor.fetchone()
+    bot.reply_to(msg, f"✅ Acceso activo hasta {exp.strftime('%Y-%m-%d')}")
 
-        if not result:
-            await update.message.reply_text("❌ Clave inválida")
-            return
+# ================= MI ACCESO =================
+@bot.message_handler(commands=['miacceso'])
+def miacceso(msg):
+    if msg.from_user.id not in usuarios_vip:
+        return bot.reply_to(msg, "❌ No tienes acceso")
 
-        key_id, dias = result
-        expiration = datetime.now() + timedelta(days=dias)
+    exp = usuarios_vip[msg.from_user.id]
+    bot.reply_to(msg, f"🔐 Activo hasta {exp.strftime('%Y-%m-%d')}")
 
-        cursor.execute("""
-        UPDATE user_keys 
-        SET user_id=%s, redeemed=TRUE, expiration_date=%s 
-        WHERE id=%s
-        """, (user_id, expiration, key_id))
+# ================= CONSULTAR =================
+@bot.message_handler(commands=['consultar'])
+def consultar(msg):
+    if not es_vip(msg.from_user.id):
+        return bot.reply_to(msg, "🔒 Solo VIP")
 
-        conn.commit()
-        await update.message.reply_text(f"✅ Activado {dias} días")
+    args = msg.text.split()
 
-    finally:
-        conn.close()
+    if len(args) < 3:
+        return bot.reply_to(msg, "Uso: /consultar tipo_doc numero")
 
-# ================= CONSULTAS =================
+    tipo = args[1]
+    numero = args[2]
 
-# CC
-async def mostrar_datos_cedula(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not usuario_tiene_acceso(update.effective_user.id):
-        return await sin_acceso(update)
+    bot.reply_to(msg, "🔍 Consultando...")
 
-    match = re.search(r'/cc\s*(\d+)', update.message.text)
-    if not match:
-        return await update.message.reply_text("Uso: /cc 123456")
+    resultado = consultar_sisben(tipo, numero)
 
-    cedula = match.group(1)
-    datos = buscar_cedula(cedula)
+    bot.send_message(msg.chat.id, resultado, parse_mode="Markdown")
 
-    if not datos:
-        return await update.message.reply_text("❌ No encontrado")
-
-    nombre = datos.get('ANINombre1') or "No registra"
-    apellido = datos.get('ANIApellido1') or ""
-
-    msg = f"""
-╔══════════════════════╗
-        🪪 CC
-╚══════════════════════╝
-
-📄 {cedula}
-👤 {nombre} {apellido}
-
-━━━━━━━━━━━━━━━━━━━━━━━
-🛠 @broquicalifa
-"""
-    await update.message.reply_text(msg)
-
-# SISBEN
-async def sisben(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not usuario_tiene_acceso(update.effective_user.id):
-        return await sin_acceso(update)
-
-    if not context.args:
-        return await update.message.reply_text("Uso: /sisben 123")
-
-    doc = context.args[0]
-
-    msg = f"""
-╔══════════════════════╗
-        📊 SISBÉN
-╚══════════════════════╝
-
-🪪 {doc}
-🏷 Grupo: A2
-📍 Bogotá
-
-━━━━━━━━━━━━━━━━━━━━━━━
-🛠 @broquicalifa
-"""
-    await update.message.reply_text(msg)
-
-# NEQUI
-async def nequi(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not usuario_tiene_acceso(update.effective_user.id):
-        return await sin_acceso(update)
-
-    if not context.args:
-        return await update.message.reply_text("Uso: /nequi 300...")
-
-    num = context.args[0]
-
-    msg = f"""
-╔══════════════════════╗
-        💳 NEQUI
-╚══════════════════════╝
-
-📱 {num}
-👤 Titular: (pendiente API)
-
-━━━━━━━━━━━━━━━━━━━━━━━
-🛠 @broquicalifa
-"""
-    await update.message.reply_text(msg)
-
-# ================= APIS =================
-
-async def numero(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not context.args:
-        return await update.message.reply_text("Uso: /numero +57...")
-
-    num = context.args[0]
-
-    r = requests.get(f"https://phonevalidation.abstractapi.com/v1/?api_key={ABSTRACT_API_KEY}&phone={num}").json()
-
-    msg = f"""
-📞 NÚMERO
-═══════════════
-🌍 {r.get('country', {}).get('name')}
-📡 {r.get('carrier')}
-✔️ {r.get('valid')}
-"""
-    await update.message.reply_text(msg)
-
-async def ip(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not context.args:
-        return await update.message.reply_text("Uso: /ip 8.8.8.8")
-
-    ip = context.args[0]
-
-    r = requests.get(f"https://ipgeolocation.abstractapi.com/v1/?api_key={ABSTRACT_API_KEY}&ip_address={ip}").json()
-
-    msg = f"""
-🌐 IP
-═══════════════
-🌍 {r.get('country')}
-🏙 {r.get('city')}
-🔒 VPN: {r.get('security', {}).get('is_vpn')}
-"""
-    await update.message.reply_text(msg)
-
-async def email(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not context.args:
-        return await update.message.reply_text("Uso: /email correo")
-
-    mail = context.args[0]
-
-    r = requests.get(f"https://emailvalidation.abstractapi.com/v1/?api_key={ABSTRACT_API_KEY}&email={mail}").json()
-
-    msg = f"""
-📧 EMAIL
-═══════════════
-✔️ {r.get('deliverability')}
-"""
-    await update.message.reply_text(msg)
-
-# --- REGISTRO ---
-async def registrar_usuario(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = update.message.from_user
-
-    conn = get_connection()
-    if not conn:
-        return
-
-    try:
-        cursor = conn.cursor()
-        cursor.execute("""
-        INSERT IGNORE INTO users (user_id, username)
-        VALUES (%s, %s)
-        """, (user.id, user.username))
-        conn.commit()
-    finally:
-        conn.close()
-
-# --- MAIN ---
-def main():
-    app = Application.builder().token(TOKEN).build()
-
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("help", help_command))
-    app.add_handler(CommandHandler("estado", estado))
-    app.add_handler(CommandHandler("key", activar_key))
-
-    app.add_handler(CommandHandler("cc", mostrar_datos_cedula))
-    app.add_handler(CommandHandler("sisben", sisben))
-    app.add_handler(CommandHandler("nequi", nequi))
-
-    app.add_handler(CommandHandler("numero", numero))
-    app.add_handler(CommandHandler("ip", ip))
-    app.add_handler(CommandHandler("email", email))
-
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, registrar_usuario))
-
-    logger.info("🔥 BOT FULL ACTIVO 🔥")
-    app.run_polling()
-
-if __name__ == "__main__":
-    main()
+# ================= RUN =================
+print("🔥 BOT ACTIVO...")
+bot.infinity_polling()
