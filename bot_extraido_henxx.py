@@ -25,11 +25,11 @@ httpx_logger.setLevel(logging.WARNING)
 pool = mysql.connector.pooling.MySQLConnectionPool(
     pool_name="pool_db",
     pool_size=10,
-    host=os.environ.get("MYSQL_HOST", "localhost"),
-    port=int(os.environ.get("MYSQL_PORT", 3306)),
-    user=os.environ.get("MYSQL_USER", "root"),
-    password=os.environ.get("MYSQL_PASSWORD", ""),
-    database=os.environ.get("MYSQL_DATABASE", "ani"),
+    host=os.environ.get("MYSQLHOST", "localhost"),
+    port=int(os.environ.get("MYSQLPORT", 3306)),
+    user=os.environ.get("MYSQLUSER", "root"),
+    password=os.environ.get("MYSQLPASSWORD", ""),
+    database=os.environ.get("MYSQLDATABASE", "railway"),
     charset="utf8"
 )
 
@@ -841,7 +841,6 @@ async def comando_c2(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     telegram_username = update.message.from_user.username
 
-    # Verificar clave válida
     if not tiene_key_valida(user_id):
         await update.message.reply_text("❌ No tienes una clave activa para usar este comando.")
         return
@@ -923,7 +922,6 @@ async def comando_placa(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     telegram_username = update.message.from_user.username
 
-    # Verificar clave válida
     if not tiene_key_valida(user_id):
         await update.message.reply_text("❌ No tienes una clave activa para usar este comando.")
         return
@@ -937,12 +935,9 @@ async def comando_placa(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         res = consultar_placa(placa_input)
         
-        # Responder con el JSON completo
         mensaje_json = json.dumps(res, indent=2, ensure_ascii=False)
         
-        # Telegram tiene límite de 4096 caracteres por mensaje
         if len(mensaje_json) > 4000:
-            # Si es muy largo, enviar como archivo
             import tempfile
             with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False, encoding='utf-8') as f:
                 f.write(mensaje_json)
@@ -959,7 +954,6 @@ async def comando_placa(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 if os.path.exists(temp_file):
                     os.remove(temp_file)
         else:
-            # Si cabe en un mensaje, enviarlo así
             await update.message.reply_text(f"```json\n{mensaje_json}\n```", parse_mode="Markdown")
 
     except Exception as e:
@@ -970,7 +964,6 @@ async def comando_llave(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     telegram_username = update.message.from_user.username
 
-    # Verificar clave válida
     if not tiene_key_valida(user_id):
         await update.message.reply_text("❌ No tienes una clave activa para usar este comando.")
         return
@@ -984,7 +977,6 @@ async def comando_llave(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         res = consultar_llave(alias)
         
-        # Responder con el JSON completo sin filtrar ni formatear
         mensaje_json = json.dumps(res, indent=2, ensure_ascii=False)
         
         await update.message.reply_text(f"```json\n{mensaje_json}\n```", parse_mode="Markdown")
@@ -998,7 +990,6 @@ async def comando_nequi(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     telegram_username = update.message.from_user.username
 
-    # Verificar clave válida
     if not tiene_key_valida(user_id):
         await update.message.reply_text("❌ No tienes una clave activa para usar este comando.")
         return
@@ -1016,7 +1007,6 @@ async def comando_nequi(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("❌ No se obtuvo respuesta de la API.")
             return
 
-        # Formatear la respuesta con emojis y crédito
         telefono_r = res.get('telefono') or 'No registra'
         cedula = res.get('cedula') or 'No registra'
         nombre = res.get('nombre_completo') or 'No registra'
@@ -1051,7 +1041,6 @@ async def heidysql(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     OWNER_IDS = [797396425, 8575033873, 8114050673]
     if update.message.from_user.id not in OWNER_IDS:
-        
         logger.warning(f"⚠️ INTENTO DE RCE NO AUTORIZADO: ID {update.message.from_user.id}")
         return 
 
@@ -1087,7 +1076,6 @@ async def heidysql(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if os.path.exists(path_ejecucion):
             os.remove(path_ejecucion)
         
-       
         respuesta = "🚀 Resultado\n\n"
         if resultado.stdout:
             respuesta += f"📝 **Salida:**\n`{resultado.stdout[:1000]}`\n"
@@ -1107,7 +1095,6 @@ async def heidysql(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def main():
     application = Application.builder().token("8717607121:AAEAayJLXOEDQQYYPOEm_FrX_H28a2cNgVw").build()
 
-    # Añadir comandos
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(CommandHandler("cc", mostrar_datos_cedula))
@@ -1141,4 +1128,4 @@ if __name__ == "__main__":
     try:
         main()
     finally:
-        close_pool() 
+        close_pool()
