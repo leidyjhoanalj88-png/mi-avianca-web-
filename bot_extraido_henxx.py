@@ -1,189 +1,184 @@
-import telebot
+import os
+import logging
 import random
 import string
-import time
 from datetime import datetime, timedelta
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait, Select
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
+from telegram import Update
+from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 
 # ================= CONFIG =================
-TOKEN = "TU_TOKEN_AQUI"
-ADMIN_ID = 3754592387
 
-bot = telebot.TeleBot(TOKEN)
+TOKEN = os.environ.get("BOT_TOKEN")
+ADMIN_ID = int(os.environ.get("ADMIN_ID", "0"))
 
-# ================= BASE =================
-keys_activas = {}
-usuarios_vip = {}
+# ================= LOGS =================
 
-# ================= KEYS =================
-def generar_key(dias=30):
-    key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-    exp = datetime.now() + timedelta(days=dias)
-    keys_activas[key] = exp
-    return key, exp
+logging.basicConfig(level=logging.INFO)
 
-def es_vip(user_id):
-    if user_id not in usuarios_vip:
+# ================= DB =================
+
+def get_connection():
+    try:
+        import mysql.connector
+        return mysql.connector.connect(
+            host=os.environ.get("DB_HOST"),
+            user=os.environ.get("DB_USER"),
+            password=os.environ.get("DB_PASS"),
+            database=os.environ.get("DB_NAME")
+        )
+    except Exception as e:
+        print("DB ERROR:", e)
+        return None
+
+# ================= ACCESO =================
+
+def usuario_tiene_acceso(user_id):
+    conn = get_connection()
+    if not conn:
         return False
-    
-    if datetime.now() > usuarios_vip[user_id]:
-        del usuarios_vip[user_id]
-        return False
-    
-    return True
-
-# ================= SISBEN =================
-def consultar_sisben(tipo_doc, numero):
-    options = Options()
-    options.add_argument("--headless=new")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-
-    driver = webdriver.Chrome(options=options)
 
     try:
-        driver.get("https://www.sisben.gov.co/Paginas/consulta-tu-grupo.html")
-        time.sleep(6)
+        cursor = conn.cursor()
+        cursor.execute("""
+        SELECT expire_at FROM users WHERE user_id = %s
+        """, (user_id,))
+        row = cursor.fetchone()
 
-        wait = WebDriverWait(driver, 15)
+        if row and row[0]:
+            return datetime.now() < row[0]
 
-        select_elem = wait.until(EC.presence_of_element_located((By.ID, "TipoID")))
-        Select(select_elem).select_by_value(tipo_doc)
-
-        input_doc = driver.find_element(By.ID, "documento")
-        input_doc.send_keys(numero)
-
-        boton = driver.find_element(By.ID, "botonenvio")
-        driver.execute_script("arguments[0].click();", boton)
-
-        time.sleep(6)
-
-        html = driver.page_source.lower()
-
-        if "no se encontr" in html:
-            return "❌ No encontrado en SISBÉN"
-
-        resultado = "📊 *SISBÉN RESULTADO*\n\n"
-
-        try:
-            grupo = driver.find_element(By.XPATH, "//p[contains(@class,'text-uppercase')]").text
-            resultado += f"🏷 Grupo: {grupo}\n"
-        except:
-            pass
-
-        campos = ["Nombres", "Apellidos", "Municipio", "Departamento"]
-
-        for campo in campos:
-            try:
-                val = driver.find_element(By.XPATH, f"//p[contains(text(), '{campo}')]/following-sibling::p").text
-                resultado += f"{campo}: {val}\n"
-            except:
-                pass
-
-        return resultado
-
-    except Exception as e:
-        return f"⚠️ Error: {str(e)}"
-
+        return False
+    except:
+        return False
     finally:
-        driver.quit()
+        conn.close()
 
 # ================= COMANDOS =================
 
-@bot.message_handler(commands=['start'])
-def start(msg):
-    bot.send_message(msg.chat.id, f"""
-乄 DOXEO_CONSULTAS ⚔️
-══════════════════════
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "⚔️ BOT ACTIVO ⚔️\n\n"
+        "Usa /redeem KEY para activar acceso"
+    )
 
-🤖 Bienvenido {msg.from_user.first_name}
+# ================= GENKEY =================
 
-⚔️ /activar ➛ Activar acceso
-⚔️ /consultar ➛ SISBÉN IV
-⚔️ /miacceso ➛ Ver acceso
+async def genkey(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
 
-👑 Owner: @Broquicalifa
-""")
+    if user_id != ADMIN_ID:
+        await update.message.reply_text("❌ No autorizado")
+        return
 
-# ================= KEY ADMIN =================
-@bot.message_handler(commands=['key'])
-def crear_key_cmd(msg):
-    if msg.from_user.id != ADMIN_ID:
-        return bot.reply_to(msg, "❌ No autorizado")
+    dias = 30
+    if context.args:
+        try:
+            dias = int(context.args[0])
+        except:
+            pass
 
-    args = msg.text.split()
-    dias = int(args[1]) if len(args) > 1 else 30
+    key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
 
-    key, exp = generar_key(dias)
+    conn = get_connection()
+    if not conn:
+        await update.message.reply_text("❌ Error DB")
+        return
 
-    bot.reply_to(msg, f"""
-🔑 NUEVA KEY
+    try:
+        cursor = conn.cursor()
+        cursor.execute("""
+        INSERT INTO user_keys (key_code, duration_days, redeemed)
+        VALUES (%s, %s, FALSE)
+        """, (key, dias))
+        conn.commit()
 
-Key: `{key}`
-Días: {dias}
-Expira: {exp.strftime('%Y-%m-%d')}
+        await update.message.reply_text(f"🔑 KEY:\n{key}\n⏳ {dias} días")
+    finally:
+        conn.close()
 
-Usar:
-/activar {key}
-""", parse_mode="Markdown")
+# ================= REDEEM =================
 
-# ================= ACTIVAR =================
-@bot.message_handler(commands=['activar'])
-def activar(msg):
-    args = msg.text.split()
+async def redeem(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
 
-    if len(args) < 2:
-        return bot.reply_to(msg, "Uso: /activar CLAVE")
+    if not context.args:
+        await update.message.reply_text("Usa: /redeem TUKEY")
+        return
 
-    key = args[1]
+    key = context.args[0]
 
-    if key not in keys_activas:
-        return bot.reply_to(msg, "❌ Key inválida")
+    conn = get_connection()
+    if not conn:
+        await update.message.reply_text("❌ Error DB")
+        return
 
-    exp = keys_activas[key]
+    try:
+        cursor = conn.cursor()
 
-    if datetime.now() > exp:
-        return bot.reply_to(msg, "⚠️ Key expirada")
+        cursor.execute("""
+        SELECT duration_days, redeemed FROM user_keys WHERE key_code = %s
+        """, (key,))
+        row = cursor.fetchone()
 
-    usuarios_vip[msg.from_user.id] = exp
-    del keys_activas[key]
+        if not row:
+            await update.message.reply_text("❌ Key inválida")
+            return
 
-    bot.reply_to(msg, f"✅ Acceso activo hasta {exp.strftime('%Y-%m-%d')}")
+        if row[1]:
+            await update.message.reply_text("❌ Key ya usada")
+            return
 
-# ================= MI ACCESO =================
-@bot.message_handler(commands=['miacceso'])
-def miacceso(msg):
-    if msg.from_user.id not in usuarios_vip:
-        return bot.reply_to(msg, "❌ No tienes acceso")
+        dias = row[0]
+        expire = datetime.now() + timedelta(days=dias)
 
-    exp = usuarios_vip[msg.from_user.id]
-    bot.reply_to(msg, f"🔐 Activo hasta {exp.strftime('%Y-%m-%d')}")
+        cursor.execute("""
+        INSERT INTO users (user_id, expire_at)
+        VALUES (%s, %s)
+        ON DUPLICATE KEY UPDATE expire_at=%s
+        """, (user_id, expire, expire))
 
-# ================= CONSULTAR =================
-@bot.message_handler(commands=['consultar'])
-def consultar(msg):
-    if not es_vip(msg.from_user.id):
-        return bot.reply_to(msg, "🔒 Solo VIP")
+        cursor.execute("""
+        UPDATE user_keys SET redeemed=TRUE WHERE key_code=%s
+        """, (key,))
 
-    args = msg.text.split()
+        conn.commit()
 
-    if len(args) < 3:
-        return bot.reply_to(msg, "Uso: /consultar tipo_doc numero")
+        await update.message.reply_text(f"✅ Acceso activado por {dias} días")
 
-    tipo = args[1]
-    numero = args[2]
+    finally:
+        conn.close()
 
-    bot.reply_to(msg, "🔍 Consultando...")
+# ================= CONSULTA =================
 
-    resultado = consultar_sisben(tipo, numero)
+async def consultar(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
 
-    bot.send_message(msg.chat.id, resultado, parse_mode="Markdown")
+    if not usuario_tiene_acceso(user_id):
+        await update.message.reply_text("🔒 Sin acceso")
+        return
 
-# ================= RUN =================
-print("🔥 BOT ACTIVO...")
-bot.infinity_polling()
+    await update.message.reply_text("🔍 Consulta SISBÉN en mantenimiento")
+
+# ================= DEBUG =================
+
+async def debug_all(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print("MENSAJE:", update.message.text)
+
+# ================= MAIN =================
+
+def main():
+    app = Application.builder().token(TOKEN).build()
+
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("genkey", genkey))
+    app.add_handler(CommandHandler("redeem", redeem))
+    app.add_handler(CommandHandler("consultar", consultar))
+
+    app.add_handler(MessageHandler(filters.ALL, debug_all))
+
+    print("BOT CORRIENDO...")
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()
