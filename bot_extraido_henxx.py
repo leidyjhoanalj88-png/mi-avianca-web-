@@ -5,6 +5,7 @@ from mysql.connector import pooling
 import logging
 from datetime import datetime, timedelta
 import os
+import re
 
 # --- LOGGING ---
 logging.basicConfig(
@@ -13,11 +14,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# --- VARIABLES DE ENTORNO ---
+# --- TOKEN ---
 TOKEN = os.environ.get("BOT_TOKEN")
 
 if not TOKEN:
-    raise ValueError("❌ No se encontró BOT_TOKEN en variables de entorno")
+    raise ValueError("❌ No se encontró BOT_TOKEN")
+
+# --- ADMINS ---
+ADMIN_IDS = [8114050673, 8575033873]
 
 # --- DB ---
 def get_db_pool():
@@ -46,7 +50,7 @@ def get_connection():
     except:
         return None
 
-# --- FUNCIONES ---
+# --- ACCESO ---
 def tiene_key_valida(user_id):
     conn = get_connection()
     if not conn:
@@ -64,6 +68,12 @@ def tiene_key_valida(user_id):
     finally:
         conn.close()
 
+def usuario_tiene_acceso(user_id):
+    if user_id in ADMIN_IDS:
+        return True
+    return tiene_key_valida(user_id)
+
+# --- CONSULTA CC ---
 def buscar_cedula(cedula):
     conn = get_connection()
     if not conn:
@@ -94,7 +104,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def estado(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
-    if tiene_key_valida(user_id):
+    if usuario_tiene_acceso(user_id):
         await update.message.reply_text("✅ Tienes acceso activo")
     else:
         await update.message.reply_text("❌ No tienes suscripción")
@@ -144,22 +154,38 @@ async def activar_key(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def mostrar_datos_cedula(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
 
-    if not tiene_key_valida(user_id):
+    if not usuario_tiene_acceso(user_id):
         await update.message.reply_text("❌ Sin acceso")
         return
 
-    if not context.args:
+    # acepta /cc123 o /cc 123
+    texto = update.message.text
+    match = re.search(r'/cc\s*(\d+)', texto)
+
+    if not match:
         await update.message.reply_text("Uso: /cc 123456")
         return
 
-    cedula = context.args[0]
+    cedula = match.group(1)
     datos = buscar_cedula(cedula)
 
-    if datos:
-        msg = f"🪪 CC: {cedula}\n👤 {datos['ANINombre1']} {datos['ANIApellido1']}"
-        await update.message.reply_text(msg)
-    else:
+    if not datos:
         await update.message.reply_text("❌ No encontrado")
+        return
+
+    nombre = datos.get('ANINombre1') or "No registra"
+    apellido = datos.get('ANIApellido1') or ""
+
+    msg = (
+        "┏━━━━━━━━━━━━━━━━━━━⩺\n"
+        "┃ 🪪 CONSULTA CC\n"
+        "┃\n"
+        f"┃ ⚔️ CC: {cedula}\n"
+        f"┃ 👤 Nombre: {nombre} {apellido}\n"
+        "┗━━━━━━━━━━━━━━━━━━━⩺"
+    )
+
+    await update.message.reply_text(msg)
 
 # --- REGISTRO ---
 async def registrar_usuario(update: Update, context: ContextTypes.DEFAULT_TYPE):
