@@ -1,0 +1,1 @@
+worker: python3.11 bot_extraido_henxx.py
