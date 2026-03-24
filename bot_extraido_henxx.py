@@ -3,7 +3,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 from mysql.connector import pooling
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 
 # --- LOGGING ---
@@ -12,6 +12,12 @@ logging.basicConfig(
     level=logging.INFO
 )
 logger = logging.getLogger(__name__)
+
+# --- VARIABLES DE ENTORNO ---
+TOKEN = os.environ.get("BOT_TOKEN")
+
+if not TOKEN:
+    raise ValueError("❌ No se encontró BOT_TOKEN en variables de entorno")
 
 # --- DB ---
 def get_db_pool():
@@ -70,7 +76,6 @@ def buscar_cedula(cedula):
         conn.close()
 
 # --- COMANDOS ---
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("⚔️ BOT ACTIVO ⚔️\nUsa /help")
 
@@ -84,7 +89,6 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 🔐 ACCESO
 /key <clave>
 /estado
-
 """
     await update.message.reply_text(texto)
 
@@ -106,12 +110,12 @@ async def activar_key(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     conn = get_connection()
     if not conn:
+        await update.message.reply_text("❌ Error DB")
         return
 
     try:
         cursor = conn.cursor()
 
-        # verificar key disponible
         cursor.execute("""
         SELECT id, duration_days FROM user_keys 
         WHERE key_code = %s AND redeemed = FALSE
@@ -125,7 +129,6 @@ async def activar_key(update: Update, context: ContextTypes.DEFAULT_TYPE):
         key_id, dias = result
         expiration = datetime.now() + timedelta(days=dias)
 
-        # activar
         cursor.execute("""
         UPDATE user_keys 
         SET user_id=%s, redeemed=TRUE, expiration_date=%s 
@@ -158,7 +161,7 @@ async def mostrar_datos_cedula(update: Update, context: ContextTypes.DEFAULT_TYP
     else:
         await update.message.reply_text("❌ No encontrado")
 
-# --- REGISTRO USUARIO ---
+# --- REGISTRO ---
 async def registrar_usuario(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.message.from_user
 
@@ -178,7 +181,6 @@ async def registrar_usuario(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # --- MAIN ---
 def main():
-    TOKEN = "TU_TOKEN_AQUI"
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
