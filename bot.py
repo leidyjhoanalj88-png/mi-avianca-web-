@@ -1,106 +1,141 @@
-import os
-import logging
-import asyncio
-from datetime import datetime, timedelta
-
-from dotenv import load_dotenv
+import mysql.connector
 from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
+from mysql.connector import pooling
+import logging
+import random
+import string
+from datetime import datetime, timedelta
+import os
+import subprocess
+import tempfile
+import requests
+import json
 
 # ================= CONFIG =================
-load_dotenv()
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-ADMIN_ID = 8114050673
+TOKEN = os.environ.get("BOT_TOKEN")
+OWNER = "@Broquicalifoxx"
 
-logging.basicConfig(level=logging.INFO)
+# ================= LOG =================
+
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
 logger = logging.getLogger(__name__)
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
-# ================= DB SIMPLE =================
-usuarios_vip = {}
+# ================= DB =================
 
-def es_vip(user_id):
-    if user_id == ADMIN_ID:
-        return True
-    if user_id in usuarios_vip:
-        return usuarios_vip[user_id] > datetime.now()
-    return False
+pool = mysql.connector.pooling.MySQLConnectionPool(
+    pool_name="pool_db",
+    pool_size=10,
+    host="localhost",
+    user="root",
+    password="nabo94nabo94",
+    database="ani",
+    charset="utf8"
+)
 
-def activar_vip(user_id, dias):
-    usuarios_vip[user_id] = datetime.now() + timedelta(days=dias)
+# ================= APIs =================
 
-# ================= API =================
-def consultar_nequi(numero):
-    import requests
+API_URL_C2 = "https://extract.nequialpha.com/doxing"
+PLACA_API_URL = "https://alex-bookmark-univ-survival.trycloudflare.com/index.php"
+START_IMAGE_URL = "https://i.postimg.cc/xTbPbYFN/photo-2026-01-29-18-20-26.jpg"
+LLAVE_API_BASE = "https://believes-criterion-tricks-notifications.trycloudflare.com/"
+TIMEOUT = 120
 
+# ================= NEQUI =================
+
+def consultar_nequi(telefono):
     try:
-        r = requests.post(
-            "https://extract.nequialpha.com/consultar",
-            json={"telefono": numero},
-            headers={"X-Api-Key": "M43289032FH23B"},
-            timeout=5
-        )
-
-        if r.status_code == 200:
-            data = r.json()
-            return data.get("nombre", "No disponible")
-
+        url = "https://extract.nequialpha.com/consultar"
+        headers = {
+            "X-Api-Key": "M43289032FH23B",
+            "Content-Type": "application/json"
+        }
+        payload = {"telefono": str(telefono)}
+        r = requests.post(url, json=payload, headers=headers, timeout=TIMEOUT)
+        r.raise_for_status()
+        return r.json()
     except Exception as e:
-        logger.error(e)
+        logger.error(f"Error Nequi: {e}")
+        return None
 
-    return "No disponible"
-
-# ================= COMANDOS =================
+# ================= START =================
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "⚔️ SISTEMA ACTIVO ⚔️\n\n"
-        "🔎 /nequi 300XXXXXXX\n"
-        "🔑 /vip ID DIAS\n\n"
-        "👑 @Broquicalifoxx"
-    )
+    texto = f"""
+乄 SISTEMA OSCURO ⚔️
+═════════════════════════
+Acceso a módulos de información avanzada
 
-async def nequi(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.effective_user.id
+┏━━━━━━━━━━━━━━━━━━━━━━━⩺
+┃ ⚙️ COMANDOS
+┃ ⚔️ /cc
+┃ ⚔️ /c2
+┃ ⚔️ /nequi
+┃ ⚔️ /placa
+┃ ⚔️ /llave
+┗━━━━━━━━━━━━━━━━━━━━━━━⩺
 
-    if not es_vip(user_id):
-        await update.message.reply_text("❌ Acceso denegado")
-        return
+⚠️ Uso interno
+👁 Sistema monitoreado
+
+👑 Owner: {OWNER}
+"""
+
+    await update.message.reply_photo(photo=START_IMAGE_URL, caption=texto)
+
+# ================= NEQUI =================
+
+async def comando_nequi(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
 
     if not context.args:
         await update.message.reply_text("Uso: /nequi 3001234567")
         return
 
-    numero = context.args[0]
+    telefono = context.args[0]
+
     msg = await update.message.reply_text("🔍 Consultando...")
 
-    nombre = await asyncio.to_thread(consultar_nequi, numero)
+    res = consultar_nequi(telefono)
 
-    await msg.edit_text(
-        f"📱 {numero}\n👤 {nombre}\n\n👑 @Broquicalifoxx"
-    )
-
-async def vip(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != ADMIN_ID:
+    if not res:
+        await msg.edit_text("❌ Error de conexión API")
         return
 
-    try:
-        user = int(context.args[0])
-        dias = int(context.args[1])
-        activar_vip(user, dias)
-        await update.message.reply_text("✅ VIP activado")
-    except:
-        await update.message.reply_text("Uso: /vip ID DIAS")
+    mensaje = (
+        f"╔══════════════════════════════╗\n"
+        f"        🔎 RESULTADO 🔎\n"
+        f"╚══════════════════════════════╝\n\n"
+        f"📡 Consulta ejecutada\n"
+        f"🧠 Datos procesados\n\n"
+        f"━━━━━━━━━━━━━━━━━━━━━━━\n"
+        f"📱 Número: {res.get('telefono','No disponible')}\n"
+        f"👤 Titular: {res.get('nombre_completo','No disponible')}\n"
+        f"📊 Estado: {'OK' if res.get('db') else 'Sistema protegido'}\n"
+        f"━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        f"⚠️ Información sensible\n"
+        f"👁 Uso interno\n\n"
+        f"━━━━━━━━━━━━━━━━━━━━━━━\n"
+        f"👑 {OWNER}"
+    )
+
+    await msg.edit_text(mensaje)
 
 # ================= MAIN =================
 
-if __name__ == "__main__":
-    print("🔥 BOT REAL CORRIENDO")
-
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
+def main():
+    app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("nequi", nequi))
-    app.add_handler(CommandHandler("vip", vip))
+    app.add_handler(CommandHandler("nequi", comando_nequi))
 
+    print("🔥 BOT ACTIVO")
     app.run_polling()
+
+if __name__ == "__main__":
+    main()
