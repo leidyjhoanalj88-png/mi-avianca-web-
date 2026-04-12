@@ -12,7 +12,7 @@
     --bg: #030305;
     --panel: rgba(10, 10, 20, 0.9);
     --border: #222;
-    --text: #00ff41; /* Color terminal clásico */
+    --text: #00ff41;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
@@ -36,7 +36,6 @@ body::before {
     pointer-events: none;
 }
 
-/* HEADER / STATUS */
 .status-bar {
     background: #000;
     padding: 10px 5%;
@@ -49,7 +48,6 @@ body::before {
 .blink { animation: blinker 1s linear infinite; color: var(--danger); }
 @keyframes blinker { 50% { opacity: 0; } }
 
-/* HERO */
 .terminal-hero {
     padding: 60px 5%;
     text-align: center;
@@ -64,7 +62,6 @@ body::before {
     color: #fff;
 }
 
-/* SECCIONES */
 .container {
     padding: 40px 5%;
     max-width: 1200px;
@@ -86,7 +83,7 @@ body::before {
 }
 
 .panel::before {
-    content: "SYSTEM_LOG_V1.0";
+    content: "DATA_NODE_V2.0";
     position: absolute;
     top: -10px; left: 15px;
     background: var(--bg);
@@ -100,10 +97,9 @@ h2 {
     margin-bottom: 20px;
     border-bottom: 1px solid var(--primary);
     display: inline-block;
+    color: #fff;
 }
 
-/* LISTAS */
-.cmd-list { list-style: none; }
 .cmd-item {
     padding: 8px 0;
     border-bottom: 1px solid rgba(0, 255, 65, 0.1);
@@ -112,14 +108,14 @@ h2 {
 }
 .cmd-item span { color: var(--primary); font-weight: bold; }
 
-/* SERVICIOS ESPECIALES */
 .service-item {
     font-size: 0.85rem;
     margin-bottom: 5px;
     color: #ccc;
 }
 
-/* BOTONES */
+.highlight { color: var(--primary); font-weight: bold; }
+
 .btn {
     display: block;
     width: 100%;
@@ -132,6 +128,7 @@ h2 {
     font-weight: bold;
     margin-top: 20px;
     transition: 0.3s;
+    text-transform: uppercase;
 }
 
 .btn:hover {
@@ -140,78 +137,98 @@ h2 {
     box-shadow: 0 0 20px var(--primary);
 }
 
+.bank-tag {
+    background: rgba(168, 85, 247, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    margin-right: 5px;
+}
+
 footer {
     text-align: center;
     padding: 60px;
     font-size: 0.7rem;
-    color: var(--muted);
 }
+
+.footer-line { color: #00ff41; margin-top: 10px; font-weight: bold; }
 </style>
 </head>
 <body>
 
 <div class="status-bar">
-    <div>SISTEMA: <span style="color:var(--primary)">O P E R A T I V O</span></div>
-    <div class="blink">● ENLACE ENCRIPTADO</div>
+    <div>SISTEMA: <span style="color:var(--primary)">COL 🌐 OPERATIVO</span></div>
+    <div class="blink">● ENCRYPTED SESSION</div>
     <div>RED: DEEP WEB CLOUD</div>
 </div>
 
 <header class="terminal-hero">
-    <h1>💀 DOXX - DATA 💀</h1>
-    <p>BIENVENIDO AL INFRAMUNDO</p>
-    <p style="font-size: 0.8rem; margin-top: 10px; color: #666;">LA HERRAMIENTA DEFINITIVA PARA EL RASTREO NACIONAL</p>
+    <h1>💀 ANÓNIMOS DATA 💀</h1>
+    <p>INFRAESTRUCTURA AVANZADA DE GESTIÓN FINANCIERA</p>
+    <p style="font-size: 0.8rem; margin-top: 15px; color: #999; max-width: 700px; margin-left: auto; margin-right: auto;">
+        Contamos con la tecnología más avanzada del mercado para la gestión de saldos y movimientos. 
+        Herramientas idénticas a las reales, optimizadas para máxima fluidez en iOS y Android.
+    </p>
 </header>
 
 <div class="container">
     <div class="grid">
         
         <div class="panel">
-            <h2>⚔️ CONSULTAS DISPONIBLES</h2>
+            <h2>🏦 ENTIDADES DISPONIBLES</h2>
             <div class="cmd-list">
-                <div class="cmd-item">/cc <span>INVESTIGA v1</span></div>
-                <div class="cmd-item">/c1 <span>SALUD TOTAL</span></div>
-                <div class="cmd-item">/c2 <span>INVESTIGA v2</span></div>
-                <div class="cmd-item">/nombres <span>INVESTIGA v3</span></div>
-                <div class="cmd-item">/nequi <span>CONSULTA NEQUI</span></div>
-                <div class="cmd-item">/placa <span>CONSULTA PLACA</span></div>
-                <div class="cmd-item">/cedulas <span>CONSULTA CÉDULA</span></div>
-                <div class="cmd-item">/consultar <span>SISBEN</span></div>
-                <div class="cmd-item">/adres <span>ADRES SALUD</span></div>
+                <div class="cmd-item" style="flex-direction: column; align-items: flex-start; gap: 5px;">
+                    <div style="width: 100%; display: flex; justify-content: space-between;">
+                        <span>NEQUI PRO</span> <div class="bank-tag">iOS / ANDROID</div>
+                    </div>
+                    <p style="font-size: 0.7rem; color: #888;">QR Scan, Generación de Comprobantes, Reflejo de Saldo Automático.</p>
+                </div>
+                <div class="cmd-item" style="flex-direction: column; align-items: flex-start; gap: 5px;">
+                    <div style="width: 100%; display: flex; justify-content: space-between;">
+                        <span>BANCOLOMBIA PREMIUM</span> <div class="bank-tag">iOS / ANDROID</div>
+                    </div>
+                    <p style="font-size: 0.7rem; color: #888;">Interfaz 100% automática actualizada a la última versión bancaria.</p>
+                </div>
+                <div class="cmd-item" style="flex-direction: column; align-items: flex-start; gap: 5px;">
+                    <div style="width: 100%; display: flex; justify-content: space-between;">
+                        <span>DAVIPLATA ELITE</span> <div class="bank-tag">iOS / ANDROID</div>
+                    </div>
+                    <p style="font-size: 0.7rem; color: #888;">Sistema de notificaciones integrado y reflejo de movimientos reales.</p>
+                </div>
             </div>
-            <a href="https://t.me/AnonimosSupport_bot" class="btn">ACCEDER A TERMINAL</a>
+            <a href="https://t.me/AnonimosSupport_bot" class="btn">GESTIÓN CENTRALIZADA</a>
         </div>
 
         <div class="panel">
-            <h2>🔎 SERVICIOS DE INTELIGENCIA</h2>
-            <div class="service-item">📲 Recuperación: FB / IG / SC</div>
-            <div class="service-item">📲 Intercepción: WhatsApp</div>
-            <div class="service-item">📲 Acceso: Gmail / Yahoo</div>
-            <div class="service-item">📲 Localización: Torres / IP</div>
-            <div class="service-item">📲 Financiero: ETH / Recuperación</div>
-            <div class="service-item">📲 Móvil: Hack Android / Espionaje</div>
-            <div class="service-item">📲 Red: Hack WiFi / Crack Software</div>
-            <div class="service-item">📲 Desbloqueo: iPhone Bypass</div>
+            <h2>🔎 INTELIGENCIA & DOXX</h2>
+            <div class="service-item">➜ <span class="highlight">CONSULTAS:</span> ADRES, SISBEN, NEQUI, PLACAS</div>
+            <div class="service-item">➜ <span class="highlight">HACKING:</span> FB, IG, WhatsApp, Gmail</div>
+            <div class="service-item">➜ <span class="highlight">RASTREO:</span> Ubicación de Torres, IP, WiFi</div>
+            <div class="service-item">➜ <span class="highlight">FINANCIERO:</span> Recuperación ETH y Dinero</div>
+            <div class="service-item">➜ <span class="highlight">SISTEMAS:</span> Desbloqueo iPhone, Hack Android</div>
+            <p style="margin-top: 20px; font-size: 0.75rem; color: var(--primary);">GARANTÍA REAL: Organización con proyección internacional.</p>
             <a href="https://t.me/AnonimosSupport_bot" class="btn">SOLICITAR SERVICIO</a>
         </div>
 
         <div class="panel" style="border-color: var(--danger);">
-            <h2 style="color: var(--danger); border-color: var(--danger);">💀 APKs & SOFTWARE</h2>
+            <h2 style="color: var(--danger); border-color: var(--danger);">💀 SOFTWARE & APKs</h2>
             <div class="service-item">💾 APK Saldo Fantasma (N / B / D)</div>
-            <div class="service-item">💾 Interfaz de Control Remoto</div>
-            <div class="service-item">💾 Scripts de Inyección SQL</div>
-            <div class="service-item">💾 Bypass Biométrico v4.2</div>
-            <p style="margin-top: 20px; font-size: 0.7rem; color: var(--danger);">* Software de uso restringido bajo licencia.</p>
-            <a href="https://t.me/AnonimosSupport_bot" class="btn" style="border-color: var(--danger); color: var(--danger);">DESCARGAR PANEL</a>
+            <div class="service-item">💾 Interfaz de Control Remoto v4.2</div>
+            <div class="service-item">💾 Scripts de Inyección SQL & Bypass</div>
+            <p style="margin-top: 15px; font-size: 0.75rem; color: #ccc;">
+                <span style="color:var(--danger)">●</span> Soporte 24/7 en servidores de alta velocidad.<br>
+                <span style="color:var(--danger)">●</span> Únicas aplicaciones operativas en dispositivos <span class="highlight" style="color:#fff">Apple (iOS)</span>.
+            </p>
+            <a href="https://t.me/AnonimosSupport_bot" class="btn" style="border-color: var(--danger); color: var(--danger);">ADQUIRIR LICENCIA</a>
         </div>
 
     </div>
 </div>
 
 <footer>
-    <p>▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰</p>
-    <p>SISTEMA CARGADO... BY ANÓNIMOS DATA</p>
-    <p>ONLY FOR THE STRONG</p>
-    <p>@AnonimosSupport_bot</p>
+    <p>▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰⩺ ANÓNIMOS DATA ⩹▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰</p>
+    <div class="footer-line">SISTEMA CARGADO... ONLY FOR THE STRONG</div>
+    <p style="margin-top: 10px; color: #555;">@AnonimosSupport_bot</p>
 </footer>
 
 </body>
