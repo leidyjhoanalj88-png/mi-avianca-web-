@@ -3,232 +3,215 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ANÓNIMOS DATA | Infraestructura de Red</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<title>ANÓNIMOS DATA | DEEP WEB CLOUD</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root {
     --primary: #A855F7;
-    --accent: #6366F1;
+    --danger: #ef4444;
     --bg: #030305;
-    --card: rgba(15, 15, 25, 0.7);
-    --border: rgba(255, 255, 255, 0.08);
-    --text: #F9FAFB;
-    --muted: #9CA3AF;
+    --panel: rgba(10, 10, 20, 0.9);
+    --border: #222;
+    --text: #00ff41; /* Color terminal clásico */
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
 
 body {
     background-color: var(--bg);
     color: var(--text);
-    font-family: 'Inter', sans-serif;
-    line-height: 1.6;
+    font-family: 'Space Mono', monospace;
     overflow-x: hidden;
 }
 
-/* Fondo Tecnológico */
-.grid-bg {
+/* EFECTO SCANLINE */
+body::before {
+    content: " ";
+    display: block;
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-image: radial-gradient(circle at 2px 2px, rgba(168, 85, 247, 0.05) 1px, transparent 0);
-    background-size: 40px 40px;
-    z-index: -1;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 200;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
 }
 
-/* Navegación Corporativa */
-nav {
+/* HEADER / STATUS */
+.status-bar {
+    background: #000;
+    padding: 10px 5%;
+    border-bottom: 2px solid var(--primary);
+    font-size: 0.8rem;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 20px 10%;
-    background: rgba(3, 3, 5, 0.8);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0; z-index: 100;
 }
 
-.brand {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    letter-spacing: 2px;
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    background: linear-gradient(90deg, #fff, var(--primary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+.blink { animation: blinker 1s linear infinite; color: var(--danger); }
+@keyframes blinker { 50% { opacity: 0; } }
 
-/* Hero Section */
-.hero {
-    padding: 100px 10% 60px;
+/* HERO */
+.terminal-hero {
+    padding: 60px 5%;
     text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.terminal-hero h1 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(2rem, 10vw, 4rem);
+    text-shadow: 0 0 20px var(--primary);
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+/* SECCIONES */
+.container {
+    padding: 40px 5%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.hero h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(2.5rem, 8vw, 4rem);
-    font-weight: 700;
-    margin-bottom: 20px;
-    letter-spacing: -1px;
-}
-
-.hero p {
-    color: var(--muted);
-    font-size: 1.1rem;
-    max-width: 600px;
-    margin: 0 auto 40px;
-}
-
-/* Botones de Acción */
-.cta-group {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-}
-
-.btn {
-    padding: 12px 30px;
-    border-radius: 6px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-}
-
-.btn-primary {
-    background: var(--primary);
-    color: white;
-    box-shadow: 0 10px 20px rgba(168, 85, 247, 0.2);
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(168, 85, 247, 0.4);
-}
-
-/* Panel de Servicios */
-.services {
-    padding: 60px 10%;
+.grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
 }
 
-.service-card {
-    background: var(--card);
+.panel {
+    background: var(--panel);
     border: 1px solid var(--border);
-    padding: 40px;
-    border-radius: 12px;
-    transition: border 0.3s;
+    padding: 25px;
+    position: relative;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.1);
 }
 
-.service-card:hover {
-    border-color: var(--primary);
-}
-
-.service-card h3 {
-    font-family: 'Space Grotesk', sans-serif;
-    margin-bottom: 15px;
-    font-size: 1.3rem;
+.panel::before {
+    content: "SYSTEM_LOG_V1.0";
+    position: absolute;
+    top: -10px; left: 15px;
+    background: var(--bg);
+    padding: 0 10px;
+    font-size: 0.7rem;
     color: var(--primary);
 }
 
-/* Tabla de Tarifas */
-.pricing-table {
+h2 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--primary);
+    display: inline-block;
+}
+
+/* LISTAS */
+.cmd-list { list-style: none; }
+.cmd-item {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0, 255, 65, 0.1);
+    display: flex;
+    justify-content: space-between;
+}
+.cmd-item span { color: var(--primary); font-weight: bold; }
+
+/* SERVICIOS ESPECIALES */
+.service-item {
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+    color: #ccc;
+}
+
+/* BOTONES */
+.btn {
+    display: block;
     width: 100%;
+    padding: 15px;
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
     margin-top: 20px;
-    border-collapse: collapse;
+    transition: 0.3s;
 }
 
-.pricing-table td {
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    font-size: 0.9rem;
-}
-
-.price {
-    text-align: right;
-    font-weight: 700;
-    color: #fff;
+.btn:hover {
+    background: var(--primary);
+    color: #000;
+    box-shadow: 0 0 20px var(--primary);
 }
 
 footer {
-    padding: 60px 10% 40px;
     text-align: center;
-    border-top: 1px solid var(--border);
-    margin-top: 100px;
-}
-
-.footer-text {
-    font-size: 0.8rem;
+    padding: 60px;
+    font-size: 0.7rem;
     color: var(--muted);
-    letter-spacing: 1px;
-}
-
-@media (max-width: 768px) {
-    .cta-group { flex-direction: column; }
 }
 </style>
 </head>
 <body>
 
-<div class="grid-bg"></div>
+<div class="status-bar">
+    <div>SISTEMA: <span style="color:var(--primary)">O P E R A T I V O</span></div>
+    <div class="blink">● ENLACE ENCRIPTADO</div>
+    <div>RED: DEEP WEB CLOUD</div>
+</div>
 
-<nav>
-    <div class="brand">Anónimos Data</div>
-    <a href="https://t.me/AnonimosSupport_bot" class="btn btn-primary" style="padding: 8px 15px; font-size: 0.7rem;">Acceso Terminal</a>
-</nav>
-
-<header class="hero">
-    <h1>Soluciones en <span style="color: var(--primary);">Infraestructura</span></h1>
-    <p>Procesamiento de datos avanzado y sistemas de mensajería transaccional para el mercado colombiano.</p>
-    <div class="cta-group">
-        <a href="https://t.me/AnonimosSupport_bot" class="btn btn-primary">Adquirir Licencia</a>
-        <a href="https://t.me/AnonimosSupport_bot" class="btn" style="border: 1px solid var(--border);">Documentación</a>
-    </div>
+<header class="terminal-hero">
+    <h1>💀 DOXX - DATA 💀</h1>
+    <p>BIENVENIDO AL INFRAMUNDO</p>
+    <p style="font-size: 0.8rem; margin-top: 10px; color: #666;">LA HERRAMIENTA DEFINITIVA PARA EL RASTREO NACIONAL</p>
 </header>
 
-<section class="services">
-    <div class="service-card">
-        <h3>Mensajería SMS</h3>
-        <p style="color: var(--muted); margin-bottom: 20px;">Protocolo de notificación directa con alta tasa de entrega.</p>
-        <table class="pricing-table">
-            <tr><td>Pack Básico (100)</td><td class="price">$10.000</td></tr>
-            <tr><td>Pack Estándar (200)</td><td class="price">$20.000</td></tr>
-            <tr><td>Pack Premium (500)</td><td class="price">$50.000</td></tr>
-        </table>
-    </div>
-
-    <div class="service-card">
-        <h3>Sistemas Operativos</h3>
-        <p style="color: var(--muted); margin-bottom: 20px;">Software especializado para plataformas iOS y Android.</p>
-        <table class="pricing-table">
-            <tr><td>Suscripción Mensual</td><td class="price">$25.000</td></tr>
-            <tr><td>Licencia Trimestral</td><td class="price">$55.000</td></tr>
-            <tr><td>Soporte Prioritario</td><td class="price">INCLUIDO</td></tr>
-        </table>
-    </div>
-
-    <div class="service-card">
-        <h3>Data Analysis</h3>
-        <p style="color: var(--muted); margin-bottom: 20px;">Consultas en bases de datos institucionales y verificación de perfiles.</p>
-        <div style="margin-top: 20px; font-size: 0.8rem; color: var(--primary);">
-            ➜ Acceso a ADRES / SISBEN / DB Privadas
+<div class="container">
+    <div class="grid">
+        
+        <div class="panel">
+            <h2>⚔️ CONSULTAS DISPONIBLES</h2>
+            <div class="cmd-list">
+                <div class="cmd-item">/cc <span>INVESTIGA v1</span></div>
+                <div class="cmd-item">/c1 <span>SALUD TOTAL</span></div>
+                <div class="cmd-item">/c2 <span>INVESTIGA v2</span></div>
+                <div class="cmd-item">/nombres <span>INVESTIGA v3</span></div>
+                <div class="cmd-item">/nequi <span>CONSULTA NEQUI</span></div>
+                <div class="cmd-item">/placa <span>CONSULTA PLACA</span></div>
+                <div class="cmd-item">/cedulas <span>CONSULTA CÉDULA</span></div>
+                <div class="cmd-item">/consultar <span>SISBEN</span></div>
+                <div class="cmd-item">/adres <span>ADRES SALUD</span></div>
+            </div>
+            <a href="https://t.me/AnonimosSupport_bot" class="btn">ACCEDER A TERMINAL</a>
         </div>
+
+        <div class="panel">
+            <h2>🔎 SERVICIOS DE INTELIGENCIA</h2>
+            <div class="service-item">📲 Recuperación: FB / IG / SC</div>
+            <div class="service-item">📲 Intercepción: WhatsApp</div>
+            <div class="service-item">📲 Acceso: Gmail / Yahoo</div>
+            <div class="service-item">📲 Localización: Torres / IP</div>
+            <div class="service-item">📲 Financiero: ETH / Recuperación</div>
+            <div class="service-item">📲 Móvil: Hack Android / Espionaje</div>
+            <div class="service-item">📲 Red: Hack WiFi / Crack Software</div>
+            <div class="service-item">📲 Desbloqueo: iPhone Bypass</div>
+            <a href="https://t.me/AnonimosSupport_bot" class="btn">SOLICITAR SERVICIO</a>
+        </div>
+
+        <div class="panel" style="border-color: var(--danger);">
+            <h2 style="color: var(--danger); border-color: var(--danger);">💀 APKs & SOFTWARE</h2>
+            <div class="service-item">💾 APK Saldo Fantasma (N / B / D)</div>
+            <div class="service-item">💾 Interfaz de Control Remoto</div>
+            <div class="service-item">💾 Scripts de Inyección SQL</div>
+            <div class="service-item">💾 Bypass Biométrico v4.2</div>
+            <p style="margin-top: 20px; font-size: 0.7rem; color: var(--danger);">* Software de uso restringido bajo licencia.</p>
+            <a href="https://t.me/AnonimosSupport_bot" class="btn" style="border-color: var(--danger); color: var(--danger);">DESCARGAR PANEL</a>
+        </div>
+
     </div>
-</section>
+</div>
 
 <footer>
-    <div class="footer-text">
-        DEPARTAMENTO DE OPERACIONES DIGITALES<br>
-        ANÓNIMOS DATA © 2026<br>
-        CANAL OFICIAL: @AnonimosSupport_bot
-    </div>
+    <p>▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰</p>
+    <p>SISTEMA CARGADO... BY ANÓNIMOS DATA</p>
+    <p>ONLY FOR THE STRONG</p>
+    <p>@AnonimosSupport_bot</p>
 </footer>
 
 </body>
