@@ -3,146 +3,232 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Proyecto Broquicalifox 🔥</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<title>ANÓNIMOS DATA | Infraestructura de Red</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --p:#8B5CF6;--p2:#A78BFA;--pk:#F472B6;
-  --bg:#07070D;--card:#0F0F1A;--card2:#13131F;
-  --bor:rgba(139,92,246,0.15);--bor2:rgba(139,92,246,0.3);
-  --tx:#E2E0F0;--mu:#6B6890;--mu2:#9490B8;
+:root {
+    --primary: #A855F7;
+    --accent: #6366F1;
+    --bg: #030305;
+    --card: rgba(15, 15, 25, 0.7);
+    --border: rgba(255, 255, 255, 0.08);
+    --text: #F9FAFB;
+    --muted: #9CA3AF;
 }
-body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;font-size:14px;overflow-x:hidden}
 
-/* GLOW BG */
-.glow{position:fixed;pointer-events:none;z-index:0;border-radius:50%;filter:blur(80px);opacity:0.12}
-.glow1{top:-100px;left:-100px;width:500px;height:500px;background:var(--p)}
-.glow2{bottom:0;right:-100px;width:400px;height:400px;background:var(--pk)}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* NAV */
-nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:rgba(7,7,13,0.9);backdrop-filter:blur(166px);border-bottom:1px solid var(--bor)}
-.logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.95rem;background:linear-gradient(135deg,var(--p2),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-cta{background:linear-gradient(135deg,var(--p),var(--pk));color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;text-decoration:none}
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
 
-/* HERO */
-.hero{position:relative;z-index:1;padding:48px 20px 36px;max-width:600px;margin:0 auto;text-align:center}
-.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(139,92,246,0.1);border:1px solid var(--bor2);color:var(--p2);font-size:0.72rem;font-weight:500;padding:4px 12px;border-radius:20px;margin-bottom:20px;text-transform:uppercase}
-.hero h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.1;margin-bottom:12px}
-.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--p2),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:var(--mu2);font-size:0.9rem;margin-bottom:28px}
+/* Fondo Tecnológico */
+.grid-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: radial-gradient(circle at 2px 2px, rgba(168, 85, 247, 0.05) 1px, transparent 0);
+    background-size: 40px 40px;
+    z-index: -1;
+}
 
-.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.btn-p{background:linear-gradient(135deg,var(--p),var(--pk));color:#fff;padding:10px 22px;border-radius:8px;font-size:0.82rem;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;box-shadow:0 4px 20px rgba(139,92,246,0.3)}
-.btn-o{background:transparent;color:var(--tx);border:1px solid var(--bor2);padding:10px 22px;border-radius:8px;font-size:0.82rem;font-weight:500;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+/* Navegación Corporativa */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10%;
+    background: rgba(3, 3, 5, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0; z-index: 100;
+}
 
-/* SECTION */
-.sec{position:relative;z-index:1;padding:40px 20px;max-width:800px;margin:0 auto}
-.sec-h{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.1rem;margin-bottom:4px}
-.sec-s{color:var(--mu);font-size:0.8rem;margin-bottom:24px}
+.brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #fff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-/* GRID */
-.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-.card{background:var(--card);border:1px solid var(--bor);border-radius:12px;padding:20px;transition:0.3s}
-.card:hover{border-color:var(--bor2);transform:translateY(-3px)}
+/* Hero Section */
+.hero {
+    padding: 100px 10% 60px;
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-/* TABLE */
-table{width:100%;border-collapse:collapse;margin-top:16px}
-th{color:var(--mu);font-size:0.7rem;text-transform:uppercase;padding:12px;text-align:left;border-bottom:1px solid var(--bor)}
-td{padding:12px;border-bottom:1px solid rgba(139,92,246,0.05);font-size:0.85rem}
-.tc-p{color:var(--p2);font-weight:600}
-.tc-s{color:var(--pk);font-weight:700}
+.hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+}
 
-footer{text-align:center;padding:30px;color:var(--mu);font-size:0.75rem;border-top:1px solid var(--bor)}
+.hero p {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 40px;
+}
+
+/* Botones de Acción */
+.cta-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn {
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 10px 20px rgba(168, 85, 247, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(168, 85, 247, 0.4);
+}
+
+/* Panel de Servicios */
+.services {
+    padding: 60px 10%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.service-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 40px;
+    border-radius: 12px;
+    transition: border 0.3s;
+}
+
+.service-card:hover {
+    border-color: var(--primary);
+}
+
+.service-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    color: var(--primary);
+}
+
+/* Tabla de Tarifas */
+.pricing-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.pricing-table td {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.9rem;
+}
+
+.price {
+    text-align: right;
+    font-weight: 700;
+    color: #fff;
+}
+
+footer {
+    padding: 60px 10% 40px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    margin-top: 100px;
+}
+
+.footer-text {
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+    .cta-group { flex-direction: column; }
+}
 </style>
 </head>
 <body>
 
-<div class="glow glow1"></div>
-<div class="glow glow2"></div>
+<div class="grid-bg"></div>
 
 <nav>
-  <div class="logo">Broquicalifox 🔥</div>
-  <a href="https://t.me/Broquicalifoxx" target="_blank" class="nav-cta">ADM</a>
+    <div class="brand">Anónimos Data</div>
+    <a href="https://t.me/AnonimosSupport_bot" class="btn btn-primary" style="padding: 8px 15px; font-size: 0.7rem;">Acceso Terminal</a>
 </nav>
 
-<div class="hero">
-  <div class="badge">✦ Tecnología de Poder · 2026</div>
-  <h1>Proyecto <em>Broquicalifox</em></h1>
-  <p>Software avanzado de comprobantes, servicio SMS real y Dox Consultas especializado.</p>
-  <div class="btns">
-    <a href="https://t.me/nequibanco" target="_blank" class="btn-p">🤖 Bot Comprobantes</a>
-    <a href="https://t.me/Broquicalifoxx" target="_blank" class="btn-o">🔍 Dox Consultas</a>
-  </div>
-</div>
+<header class="hero">
+    <h1>Soluciones en <span style="color: var(--primary);">Infraestructura</span></h1>
+    <p>Procesamiento de datos avanzado y sistemas de mensajería transaccional para el mercado colombiano.</p>
+    <div class="cta-group">
+        <a href="https://t.me/AnonimosSupport_bot" class="btn btn-primary">Adquirir Licencia</a>
+        <a href="https://t.me/AnonimosSupport_bot" class="btn" style="border: 1px solid var(--border);">Documentación</a>
+    </div>
+</header>
 
-<div class="sec">
-  <div class="sec-h">📲 Servicio SMS Real</div>
-  <div class="sec-s">Notifica transferencias con mensajes de texto directos</div>
-  <div class="grid2">
-    <div class="card" style="border-left: 4px solid var(--p);">
-      <h3>¿Cómo funciona?</h3>
-      <p style="font-size:0.8rem; margin-top:8px; color:var(--mu2);">El bot envía un SMS real al destinatario confirmando la transacción. Máxima credibilidad.</p>
-      <ul style="font-size:0.75rem; margin-top:10px; color:var(--p2); list-style:none;">
-        <li>• Usuarios ADM: SMS Ilimitados ✅</li>
-        <li>• Usuarios VIP: Compra por paquetes</li>
-      </ul>
+<section class="services">
+    <div class="service-card">
+        <h3>Mensajería SMS</h3>
+        <p style="color: var(--muted); margin-bottom: 20px;">Protocolo de notificación directa con alta tasa de entrega.</p>
+        <table class="pricing-table">
+            <tr><td>Pack Básico (100)</td><td class="price">$10.000</td></tr>
+            <tr><td>Pack Estándar (200)</td><td class="price">$20.000</td></tr>
+            <tr><td>Pack Premium (500)</td><td class="price">$50.000</td></tr>
+        </table>
     </div>
-    <div class="card">
-      <table style="margin-top:0">
-        <thead><tr><th>Paquete</th><th>Precio</th></tr></thead>
-        <tbody>
-          <tr><td>100 SMS</td><td class="tc-s">$10.000</td></tr>
-          <tr><td>200 SMS</td><td class="tc-s">$20.000</td></tr>
-          <tr><td>500 SMS</td><td class="tc-s">$50.000</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
 
-<div class="sec">
-  <div class="sec-h">🔑 Bot de Comprobantes</div>
-  <div class="sec-s">Planes mensuales y herramientas especiales</div>
-  <div class="grid2">
-    <div class="card">
-      <h3>Lista de Precios Bot</h3>
-      <table>
-        <tbody>
-          <tr><td>Suscripción 1 Mes</td><td class="tc-p">$25.000</td></tr>
-          <tr><td>Suscripción 2 Meses</td><td class="tc-p">$45.000</td></tr>
-          <tr><td>Suscripción 3 Meses</td><td class="tc-p">$55.000</td></tr>
-        </tbody>
-      </table>
+    <div class="service-card">
+        <h3>Sistemas Operativos</h3>
+        <p style="color: var(--muted); margin-bottom: 20px;">Software especializado para plataformas iOS y Android.</p>
+        <table class="pricing-table">
+            <tr><td>Suscripción Mensual</td><td class="price">$25.000</td></tr>
+            <tr><td>Licencia Trimestral</td><td class="price">$55.000</td></tr>
+            <tr><td>Soporte Prioritario</td><td class="price">INCLUIDO</td></tr>
+        </table>
     </div>
-    <div class="card">
-      <h3>Funciones Pro</h3>
-      <p style="font-size:0.8rem; color:var(--mu2); margin-top:8px;">Acceso a herramientas exclusivas del mercado colombiano:</p>
-      <div style="margin-top:10px;">
-        <span class="tag" style="background:rgba(139,92,246,0.1); padding:4px 8px; border-radius:4px; font-size:0.7rem; color:var(--p2);">🔑 Llave Bre B</span>
-        <span class="tag" style="background:rgba(244,114,182,0.1); padding:4px 8px; border-radius:4px; font-size:0.7rem; color:var(--pk); margin-left:5px;">🟣 Transfiya</span>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div class="sec">
-  <div class="sec-h">🏛️ Dox Consultas & APKs</div>
-  <div class="sec-s">Bases de datos y Software iOS/Android</div>
-  <div class="grid2">
-    <div class="card">
-      <h3>Consultas DB</h3>
-      <p style="font-size:0.8rem; color:var(--mu2);">Full Info: ADRES, SISBEN y más. Consultas precisas 24/7.</p>
+    <div class="service-card">
+        <h3>Data Analysis</h3>
+        <p style="color: var(--muted); margin-bottom: 20px;">Consultas en bases de datos institucionales y verificación de perfiles.</p>
+        <div style="margin-top: 20px; font-size: 0.8rem; color: var(--primary);">
+            ➜ Acceso a ADRES / SISBEN / DB Privadas
+        </div>
     </div>
-    <div class="card">
-      <h3>APKs Premium</h3>
-      <p style="font-size:0.8rem; color:var(--mu2);">Versiones finas para iOS y Android con Saldo Fantasma.</p>
-    </div>
-  </div>
-</div>
+</section>
 
 <footer>
-  <p>© 2026 Proyecto Broquicalifox 🔥 · <a href="https://t.me/Broquicalifoxx">Soporte ADM</a></p>
+    <div class="footer-text">
+        DEPARTAMENTO DE OPERACIONES DIGITALES<br>
+        ANÓNIMOS DATA © 2026<br>
+        CANAL OFICIAL: @AnonimosSupport_bot
+    </div>
 </footer>
 
 </body>
