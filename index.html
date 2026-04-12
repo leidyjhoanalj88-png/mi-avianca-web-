@@ -21,75 +21,39 @@ body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;font-si
 .glow2{bottom:0;right:-100px;width:400px;height:400px;background:var(--pk)}
 
 /* NAV */
-nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:rgba(7,7,13,0.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--bor)}
+nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:rgba(7,7,13,0.9);backdrop-filter:blur(166px);border-bottom:1px solid var(--bor)}
 .logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.95rem;background:linear-gradient(135deg,var(--p2),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-cta{background:linear-gradient(135deg,var(--p),var(--pk));color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;text-decoration:none;letter-spacing:0.01em}
+.nav-cta{background:linear-gradient(135deg,var(--p),var(--pk));color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;text-decoration:none}
 
 /* HERO */
 .hero{position:relative;z-index:1;padding:48px 20px 36px;max-width:600px;margin:0 auto;text-align:center}
-.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(139,92,246,0.1);border:1px solid var(--bor2);color:var(--p2);font-size:0.72rem;font-weight:500;padding:4px 12px;border-radius:20px;margin-bottom:20px;letter-spacing:0.04em;text-transform:uppercase}
-.hero h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.6rem,5vw,2.4rem);line-height:1.15;margin-bottom:12px}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(139,92,246,0.1);border:1px solid var(--bor2);color:var(--p2);font-size:0.72rem;font-weight:500;padding:4px 12px;border-radius:20px;margin-bottom:20px;text-transform:uppercase}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.1;margin-bottom:12px}
 .hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--p2),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:var(--mu2);font-size:0.88rem;line-height:1.65;margin-bottom:28px;max-width:420px;margin-left:auto;margin-right:auto}
-.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.btn-p{background:linear-gradient(135deg,var(--p),var(--pk));color:#fff;border:none;padding:10px 22px;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:opacity .2s,transform .2s;box-shadow:0 4px 20px rgba(139,92,246,0.35)}
-.btn-p:hover{opacity:.85;transform:translateY(-1px)}
-.btn-o{background:transparent;color:var(--tx);border:1px solid var(--bor2);padding:10px 22px;border-radius:8px;font-size:0.82rem;font-weight:500;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:border-color .2s,background .2s}
-.btn-o:hover{border-color:var(--p2);background:rgba(139,92,246,0.07)}
+.hero p{color:var(--mu2);font-size:0.9rem;margin-bottom:28px}
 
-/* STATS */
-.stats{position:relative;z-index:1;display:flex;justify-content:center;gap:0;max-width:500px;margin:0 auto 48px;border:1px solid var(--bor);border-radius:12px;overflow:hidden;background:var(--card)}
-.stat{flex:1;padding:16px 12px;text-align:center;border-right:1px solid var(--bor)}
-.stat:last-child{border-right:none}
-.sn{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.2rem;background:linear-gradient(135deg,var(--p2),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.sl{color:var(--mu);font-size:0.68rem;margin-top:2px}
+.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-p{background:linear-gradient(135deg,var(--p),var(--pk));color:#fff;padding:10px 22px;border-radius:8px;font-size:0.82rem;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;box-shadow:0 4px 20px rgba(139,92,246,0.3)}
+.btn-o{background:transparent;color:var(--tx);border:1px solid var(--bor2);padding:10px 22px;border-radius:8px;font-size:0.82rem;font-weight:500;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
 
 /* SECTION */
 .sec{position:relative;z-index:1;padding:40px 20px;max-width:800px;margin:0 auto}
-.sec-h{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem;margin-bottom:4px}
+.sec-h{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.1rem;margin-bottom:4px}
 .sec-s{color:var(--mu);font-size:0.8rem;margin-bottom:24px}
 
 /* GRID */
-.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-
-/* CARD */
-.card{background:var(--card);border:1px solid var(--bor);border-radius:12px;padding:20px;transition:border-color .2s,transform .2s;position:relative;overflow:hidden}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--bor);border-radius:12px;padding:20px;transition:0.3s}
 .card:hover{border-color:var(--bor2);transform:translateY(-3px)}
-.ci{font-size:1.4rem;margin-bottom:12px;display:block}
-.card h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.88rem;margin-bottom:6px}
-.card p{color:var(--mu2);font-size:0.78rem;line-height:1.6;margin-bottom:14px}
-.tag{display:inline-block;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);color:var(--p2);font-size:0.68rem;padding:2px 8px;border-radius:4px;margin:2px}
-
-/* PRICING */
-.pricing{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.pc{background:var(--card);border:1px solid var(--bor);border-radius:12px;padding:24px 18px;text-align:center;transition:transform .2s}
-.pc.feat{border-color:var(--p);background:linear-gradient(145deg,rgba(139,92,246,0.1),rgba(244,114,182,0.05));position:relative}
-.pc.feat::before{content:'🔥 Mejor Opción';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--p),var(--pk));color:#fff;font-size:0.68rem;font-weight:600;padding:3px 12px;border-radius:20px;white-space:nowrap}
-.pa{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.8rem;margin-bottom:2px}
-.pf{list-style:none;text-align:left;margin-bottom:20px}
-.pf li{color:var(--mu2);font-size:0.78rem;padding:4px 0;display:flex;align-items:flex-start;gap:8px}
-.pf li::before{content:'✓';color:var(--p2);font-weight:700;flex-shrink:0}
-
-/* APK */
-.apk-h{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.apk-ico{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
-.and{background:rgba(52,211,153,0.12)}
-.ios{background:rgba(139,92,246,0.12)}
 
 /* TABLE */
-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:0.82rem}
-th{color:var(--mu);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;padding:10px 14px;text-align:left;border-bottom:1px solid var(--bor)}
-td{padding:11px 14px;border-bottom:1px solid rgba(139,92,246,0.07);color:var(--mu2)}
-.tc1{color:var(--p2);font-weight:600}
-.tc2{color:var(--pk);font-weight:600}
+table{width:100%;border-collapse:collapse;margin-top:16px}
+th{color:var(--mu);font-size:0.7rem;text-transform:uppercase;padding:12px;text-align:left;border-bottom:1px solid var(--bor)}
+td{padding:12px;border-bottom:1px solid rgba(139,92,246,0.05);font-size:0.85rem}
+.tc-p{color:var(--p2);font-weight:600}
+.tc-s{color:var(--pk);font-weight:700}
 
-/* CONTACT */
-.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
-.cc{background:var(--card);border:1px solid var(--bor);border-radius:10px;padding:18px;text-align:center;text-decoration:none;color:var(--tx);transition:transform .2s,border-color .2s;display:block}
-.cc:hover{transform:translateY(-3px);border-color:var(--bor2)}
-
-footer{position:relative;z-index:1;text-align:center;padding:28px 20px;color:var(--mu);font-size:0.75rem;border-top:1px solid var(--bor)}
-footer a{color:var(--p2);text-decoration:none}
+footer{text-align:center;padding:30px;color:var(--mu);font-size:0.75rem;border-top:1px solid var(--bor)}
 </style>
 </head>
 <body>
@@ -99,126 +63,86 @@ footer a{color:var(--p2);text-decoration:none}
 
 <nav>
   <div class="logo">Broquicalifox 🔥</div>
-  <a href="https://t.me/Broquicalifoxx" target="_blank" class="nav-cta">📲 Contactar ADM</a>
+  <a href="https://t.me/Broquicalifoxx" target="_blank" class="nav-cta">ADM</a>
 </nav>
 
 <div class="hero">
   <div class="badge">✦ Tecnología de Poder · 2026</div>
-  <h1>Inicia Proyecto<br><em>Broquicalifox</em></h1>
-  <p>Domina el mercado con Saldo Fantasma, APKs automáticas para iOS/Android y bots de última generación.</p>
+  <h1>Proyecto <em>Broquicalifox</em></h1>
+  <p>Software avanzado de comprobantes, servicio SMS real y Dox Consultas especializado.</p>
   <div class="btns">
-    <a href="https://t.me/Broquicalifoxx" target="_blank" class="btn-p">🚀 Empezar Ya</a>
-    <a href="https://t.me/Tiizatech" target="_blank" class="btn-o">💼 Administración</a>
-  </div>
-</div>
-
-<div class="stats" style="margin:0 20px 40px">
-  <div class="stat"><div class="sn">iOS/AND</div><div class="sl">Sistemas</div></div>
-  <div class="stat"><div class="sn">AUTO</div><div class="sl">Nombres</div></div>
-  <div class="stat"><div class="sn">24/7</div><div class="sl">Activo</div></div>
-  <div class="stat"><div class="sn">100%</div><div class="sl">Real</div></div>
-</div>
-
-<div class="sec">
-  <div class="sec-h">💎 Sistema de Poder</div>
-  <div class="sec-s">Plataforma exclusiva de Saldo Fantasma</div>
-  <div class="card" style="background: linear-gradient(145deg, #0F0F1A, #1a1a2e); border-color: var(--p);">
-    <span class="ci">👻</span>
-    <h3>Saldo Fantasma Dinámico</h3>
-    <p>Tecnología que refleja saldo real en la interfaz y desaparece según configuración. Pocos ganadores, máxima discreción.</p>
-    <span class="tag">Reflejo Inmediato</span><span class="tag">Desaparición Programada</span><span class="tag">VIP Only</span>
+    <a href="https://t.me/nequibanco" target="_blank" class="btn-p">🤖 Bot Comprobantes</a>
+    <a href="https://t.me/Broquicalifoxx" target="_blank" class="btn-o">🔍 Dox Consultas</a>
   </div>
 </div>
 
 <div class="sec">
-  <div class="sec-h">📱 APKs Premium Finas</div>
-  <div class="sec-s">Las mejores del mercado con nombres automáticos</div>
+  <div class="sec-h">📲 Servicio SMS Real</div>
+  <div class="sec-s">Notifica transferencias con mensajes de texto directos</div>
+  <div class="grid2">
+    <div class="card" style="border-left: 4px solid var(--p);">
+      <h3>¿Cómo funciona?</h3>
+      <p style="font-size:0.8rem; margin-top:8px; color:var(--mu2);">El bot envía un SMS real al destinatario confirmando la transacción. Máxima credibilidad.</p>
+      <ul style="font-size:0.75rem; margin-top:10px; color:var(--p2); list-style:none;">
+        <li>• Usuarios ADM: SMS Ilimitados ✅</li>
+        <li>• Usuarios VIP: Compra por paquetes</li>
+      </ul>
+    </div>
+    <div class="card">
+      <table style="margin-top:0">
+        <thead><tr><th>Paquete</th><th>Precio</th></tr></thead>
+        <tbody>
+          <tr><td>100 SMS</td><td class="tc-s">$10.000</td></tr>
+          <tr><td>200 SMS</td><td class="tc-s">$20.000</td></tr>
+          <tr><td>500 SMS</td><td class="tc-s">$50.000</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-h">🔑 Bot de Comprobantes</div>
+  <div class="sec-s">Planes mensuales y herramientas especiales</div>
   <div class="grid2">
     <div class="card">
-      <div class="apk-h">
-        <div class="apk-ico and">🤖</div>
-        <div><div class="apk-n">Bancolombia</div><div class="apk-os">Android & iOS</div></div>
-      </div>
-      <p>Interfaz idéntica a la real. Escanea QR sin agregar víctimas.</p>
-      <span class="tag">Automática</span><span class="tag">QR Ready</span>
+      <h3>Lista de Precios Bot</h3>
+      <table>
+        <tbody>
+          <tr><td>Suscripción 1 Mes</td><td class="tc-p">$25.000</td></tr>
+          <tr><td>Suscripción 2 Meses</td><td class="tc-p">$45.000</td></tr>
+          <tr><td>Suscripción 3 Meses</td><td class="tc-p">$55.000</td></tr>
+        </tbody>
+      </table>
     </div>
     <div class="card">
-      <div class="apk-h">
-        <div class="apk-ico ios">🍎</div>
-        <div><div class="apk-n">Nequi iOS</div><div class="apk-os">Exclusivo iPhone</div></div>
-      </div>
-      <p>Única versión que corre en iOS sin errores. Todo automático.</p>
-      <span class="tag">iOS Pro</span><span class="tag">Sin Jailbreak</span>
-    </div>
-  </div>
-
-  <div style="margin-top:32px">
-    <div class="sec-h">💰 Precios de Activación</div>
-    <div class="pricing">
-      <div class="pc">
-        <div class="pn">Versión Sencilla</div>
-        <div class="pa">$30k <small>COP</small></div>
-        <ul class="pf">
-          <li>6 Millones en saldo</li>
-          <li>Nombres Manuales</li>
-          <li>Escaneo QR Directo</li>
-        </ul>
-      </div>
-      <div class="pc feat">
-        <div class="pn">Versión Premium</div>
-        <div class="pa">$50k <small>COP</small></div>
-        <ul class="pf">
-          <li>8 Millones en saldo</li>
-          <li>Nombres Automáticos</li>
-          <li>Interfaz Mejorada Pro</li>
-          <li>Soporte Prioritario</li>
-        </ul>
+      <h3>Funciones Pro</h3>
+      <p style="font-size:0.8rem; color:var(--mu2); margin-top:8px;">Acceso a herramientas exclusivas del mercado colombiano:</p>
+      <div style="margin-top:10px;">
+        <span class="tag" style="background:rgba(139,92,246,0.1); padding:4px 8px; border-radius:4px; font-size:0.7rem; color:var(--p2);">🔑 Llave Bre B</span>
+        <span class="tag" style="background:rgba(244,114,182,0.1); padding:4px 8px; border-radius:4px; font-size:0.7rem; color:var(--pk); margin-left:5px;">🟣 Transfiya</span>
       </div>
     </div>
-  </div>
-
-  <div style="margin-top:28px">
-    <div class="sec-h">🎁 Combos Especiales</div>
-    <table>
-      <thead><tr><th>Producto</th><th>Precio Especial</th></tr></thead>
-      <tbody>
-        <tr><td class="tc1">Combo 2 Apps Sencillas</td><td class="tc2">$50.000</td></tr>
-        <tr><td class="tc1">Combo 2 Apps Premium</td><td class="tc2">$80.000</td></tr>
-        <tr><td class="tc1">Segunda Recarga</td><td class="tc2">¡GRATIS!</td></tr>
-      </tbody>
-    </table>
   </div>
 </div>
 
 <div class="sec">
-  <div class="sec-h">📨 Integraciones Extra</div>
-  <div class="sec-s">Lleva tu bot al siguiente nivel</div>
-  <div class="card">
-    <span class="ci">🔔</span>
-    <h3>SMS & Notificaciones</h3>
-    <p>Integramos sistema de alertas por SMS o notificaciones push para que el cliente sienta la experiencia real al 100%.</p>
-    <a href="https://t.me/Broquicalifoxx" target="_blank" class="btn-o" style="margin-top:10px">Consultar sistema</a>
-  </div>
-</div>
-
-<div class="sec">
-  <div class="sec-h">👨‍💼 Contacto Oficial</div>
-  <div class="cg">
-    <a href="https://t.me/Broquicalifoxx" target="_blank" class="cc">
-      <span class="i">🦊</span>
-      <div class="n">@Broquicalifoxx</div>
-      <div class="r">Dueño del Proyecto</div>
-    </a>
-    <a href="https://t.me/Tiizatech" target="_blank" class="cc">
-      <span class="i">🛠️</span>
-      <div class="n">@Tiizatech</div>
-      <div class="r">Administración Central</div>
-    </a>
+  <div class="sec-h">🏛️ Dox Consultas & APKs</div>
+  <div class="sec-s">Bases de datos y Software iOS/Android</div>
+  <div class="grid2">
+    <div class="card">
+      <h3>Consultas DB</h3>
+      <p style="font-size:0.8rem; color:var(--mu2);">Full Info: ADRES, SISBEN y más. Consultas precisas 24/7.</p>
+    </div>
+    <div class="card">
+      <h3>APKs Premium</h3>
+      <p style="font-size:0.8rem; color:var(--mu2);">Versiones finas para iOS y Android con Saldo Fantasma.</p>
+    </div>
   </div>
 </div>
 
 <footer>
-  <p>© 2026 Inicio Proyecto Broquicalifox 🔥 · <a href="https://t.me/Broquicalifoxx">Soporte</a></p>
+  <p>© 2026 Proyecto Broquicalifox 🔥 · <a href="https://t.me/Broquicalifoxx">Soporte ADM</a></p>
 </footer>
 
 </body>
