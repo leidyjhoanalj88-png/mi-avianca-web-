@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nequi Colombia 🔥</title>
+<title>Proyecto Broquicalifox 🔥</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -44,9 +44,6 @@ nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between
 .sn{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.2rem;background:linear-gradient(135deg,var(--p2),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .sl{color:var(--mu);font-size:0.68rem;margin-top:2px}
 
-/* DIVIDER */
-.div{height:1px;background:linear-gradient(90deg,transparent,var(--bor2),transparent);margin:0 20px}
-
 /* SECTION */
 .sec{position:relative;z-index:1;padding:40px 20px;max-width:800px;margin:0 auto}
 .sec-h{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem;margin-bottom:4px}
@@ -54,13 +51,10 @@ nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between
 
 /* GRID */
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
 
 /* CARD */
 .card{background:var(--card);border:1px solid var(--bor);border-radius:12px;padding:20px;transition:border-color .2s,transform .2s;position:relative;overflow:hidden}
-.card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--p),var(--pk));opacity:0;transition:opacity .3s}
 .card:hover{border-color:var(--bor2);transform:translateY(-3px)}
-.card:hover::after{opacity:1}
 .ci{font-size:1.4rem;margin-bottom:12px;display:block}
 .card h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.88rem;margin-bottom:6px}
 .card p{color:var(--mu2);font-size:0.78rem;line-height:1.6;margin-bottom:14px}
@@ -70,55 +64,32 @@ nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between
 .pricing{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
 .pc{background:var(--card);border:1px solid var(--bor);border-radius:12px;padding:24px 18px;text-align:center;transition:transform .2s}
 .pc.feat{border-color:var(--p);background:linear-gradient(145deg,rgba(139,92,246,0.1),rgba(244,114,182,0.05));position:relative}
-.pc.feat::before{content:'⭐ Popular';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--p),var(--pk));color:#fff;font-size:0.68rem;font-weight:600;padding:3px 12px;border-radius:20px;white-space:nowrap}
-.pc:hover{transform:translateY(-3px)}
-.pn{font-size:0.72rem;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px}
+.pc.feat::before{content:'🔥 Mejor Opción';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--p),var(--pk));color:#fff;font-size:0.68rem;font-weight:600;padding:3px 12px;border-radius:20px;white-space:nowrap}
 .pa{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.8rem;margin-bottom:2px}
-.pa small{font-size:0.75rem;color:var(--mu);font-weight:400}
-.pp{color:var(--mu);font-size:0.72rem;margin-bottom:16px}
 .pf{list-style:none;text-align:left;margin-bottom:20px}
 .pf li{color:var(--mu2);font-size:0.78rem;padding:4px 0;display:flex;align-items:flex-start;gap:8px}
-.pf li::before{content:'✓';color:var(--p2);font-weight:700;flex-shrink:0;font-size:0.8rem}
+.pf li::before{content:'✓';color:var(--p2);font-weight:700;flex-shrink:0}
 
 /* APK */
 .apk-h{display:flex;align-items:center;gap:12px;margin-bottom:14px}
 .apk-ico{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
 .and{background:rgba(52,211,153,0.12)}
 .ios{background:rgba(139,92,246,0.12)}
-.apk-n{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.88rem}
-.apk-os{color:var(--mu);font-size:0.72rem}
-.apk-f{list-style:none}
-.apk-f li{color:var(--mu2);font-size:0.78rem;padding:4px 0;display:flex;align-items:center;gap:6px}
-.apk-f li::before{content:'→';color:var(--p2);font-size:0.8rem}
 
 /* TABLE */
 table{width:100%;border-collapse:collapse;margin-top:16px;font-size:0.82rem}
 th{color:var(--mu);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;padding:10px 14px;text-align:left;border-bottom:1px solid var(--bor)}
 td{padding:11px 14px;border-bottom:1px solid rgba(139,92,246,0.07);color:var(--mu2)}
-tr:hover td{background:rgba(139,92,246,0.04)}
 .tc1{color:var(--p2);font-weight:600}
 .tc2{color:var(--pk);font-weight:600}
-
-/* SMS CARD */
-.sms-card{background:var(--card);border:1px solid var(--bor);border-radius:12px;padding:20px;display:flex;align-items:flex-start;gap:14px}
-.sms-ico{width:40px;height:40px;border-radius:10px;background:rgba(139,92,246,0.12);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;margin-top:2px}
-.sms-body h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.88rem;margin-bottom:5px}
-.sms-body p{color:var(--mu2);font-size:0.78rem;line-height:1.6}
 
 /* CONTACT */
 .cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
 .cc{background:var(--card);border:1px solid var(--bor);border-radius:10px;padding:18px;text-align:center;text-decoration:none;color:var(--tx);transition:transform .2s,border-color .2s;display:block}
 .cc:hover{transform:translateY(-3px);border-color:var(--bor2)}
-.cc .i{font-size:1.5rem;margin-bottom:8px;display:block}
-.cc .n{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.82rem;margin-bottom:3px}
-.cc .r{color:var(--mu);font-size:0.72rem}
 
 footer{position:relative;z-index:1;text-align:center;padding:28px 20px;color:var(--mu);font-size:0.75rem;border-top:1px solid var(--bor)}
 footer a{color:var(--p2);text-decoration:none}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.hero>*{animation:fadeUp .5s ease both}
-.badge{animation-delay:.05s}.hero h1{animation-delay:.1s}.hero p{animation-delay:.15s}.btns{animation-delay:.2s}
 </style>
 </head>
 <body>
@@ -127,221 +98,127 @@ footer a{color:var(--p2);text-decoration:none}
 <div class="glow glow2"></div>
 
 <nav>
-  <div class="logo">Nequi Colombia 🔥</div>
-  <a href="https://t.me/Comprobante0bot" target="_blank" class="nav-cta">📲 Bot</a>
+  <div class="logo">Broquicalifox 🔥</div>
+  <a href="https://t.me/Broquicalifoxx" target="_blank" class="nav-cta">📲 Contactar ADM</a>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
-  <div class="badge">✦ Servicios Digitales · Colombia</div>
-  <h1>Bots, APKs &<br><em>Notificaciones</em></h1>
-  <p>Comprobantes bancarios al instante, APKs con saldo y sistema de notificaciones SMS para tu negocio.</p>
+  <div class="badge">✦ Tecnología de Poder · 2026</div>
+  <h1>Inicia Proyecto<br><em>Broquicalifox</em></h1>
+  <p>Domina el mercado con Saldo Fantasma, APKs automáticas para iOS/Android y bots de última generación.</p>
   <div class="btns">
-    <a href="https://t.me/Comprobante0bot" target="_blank" class="btn-p">🤖 Usar Bot</a>
-    <a href="https://t.me/Nequiibotgv" target="_blank" class="btn-o">👥 Grupo</a>
+    <a href="https://t.me/Broquicalifoxx" target="_blank" class="btn-p">🚀 Empezar Ya</a>
+    <a href="https://t.me/Tiizatech" target="_blank" class="btn-o">💼 Administración</a>
   </div>
 </div>
 
-<!-- STATS -->
-<div class="stats" style="position:relative;z-index:1;margin:0 20px 40px">
-  <div class="stat"><div class="sn">143+</div><div class="sl">Miembros</div></div>
-  <div class="stat"><div class="sn">10+</div><div class="sl">Comprobantes</div></div>
-  <div class="stat"><div class="sn">24/7</div><div class="sl">VIP</div></div>
-  <div class="stat"><div class="sn">🇨🇴</div><div class="sl">Colombia</div></div>
+<div class="stats" style="margin:0 20px 40px">
+  <div class="stat"><div class="sn">iOS/AND</div><div class="sl">Sistemas</div></div>
+  <div class="stat"><div class="sn">AUTO</div><div class="sl">Nombres</div></div>
+  <div class="stat"><div class="sn">24/7</div><div class="sl">Activo</div></div>
+  <div class="stat"><div class="sn">100%</div><div class="sl">Real</div></div>
 </div>
 
-<div class="div"></div>
-
-<!-- BOT -->
 <div class="sec">
-  <div class="sec-h">🤖 Bot de Comprobantes</div>
-  <div class="sec-s">Genera desde Telegram en segundos</div>
-  <div class="grid2">
-    <div class="card">
-      <span class="ci">💜</span>
-      <h3>Nequi</h3>
-      <p>Transferencia con movimiento negativo incluido automáticamente.</p>
-      <span class="tag">Nequi</span><span class="tag">Nequi QR</span><span class="tag">Anulado</span>
-    </div>
-    <div class="card">
-      <span class="ci">🏦</span>
-      <h3>Bancolombia</h3>
-      <p>Ahorros, Corriente, BC a Nequi, BC QR, Nequi a BC.</p>
-      <span class="tag">Ahorros</span><span class="tag">Corriente</span><span class="tag">BC QR</span>
-    </div>
-    <div class="card">
-      <span class="ci">🔴</span>
-      <h3>Daviplata</h3>
-      <p>Comprobante con cuentas y valores personalizados.</p>
-      <span class="tag">Daviplata</span>
-    </div>
-    <div class="card">
-      <span class="ci">🔑</span>
-      <h3>Bre B / Llaves</h3>
-      <p>Con llave, banco y movimiento enmascarado automático.</p>
-      <span class="tag">Bre B</span><span class="tag">Transfiya</span>
-    </div>
-  </div>
-
-  <!-- PLANES BOT -->
-  <div style="margin-top:32px">
-    <div class="sec-h">💰 Planes Bot</div>
-    <div class="sec-s" style="margin-bottom:16px">Acceso al generador de comprobantes</div>
-    <div class="pricing">
-      <div class="pc">
-        <div class="pn">1 Mes</div>
-        <div class="pa">$25k <small>COP</small></div>
-        <div class="pp">30 días</div>
-        <ul class="pf">
-          <li>Todos los comprobantes</li>
-          <li>Fechas manuales</li>
-          <li>Referencias manuales</li>
-        </ul>
-        <a href="https://t.me/Comprobante0bot" target="_blank" class="btn-o" style="width:100%;justify-content:center;font-size:0.78rem">Adquirir</a>
-      </div>
-      <div class="pc feat">
-        <div class="pn">2 Meses</div>
-        <div class="pa">$45k <small>COP</small></div>
-        <div class="pp">60 días</div>
-        <ul class="pf">
-          <li>Todos los comprobantes</li>
-          <li>Fechas manuales</li>
-          <li>Referencias manuales</li>
-          <li>Soporte prioritario</li>
-        </ul>
-        <a href="https://t.me/Comprobante0bot" target="_blank" class="btn-p" style="width:100%;justify-content:center;font-size:0.78rem">Adquirir</a>
-      </div>
-      <div class="pc">
-        <div class="pn">3 Meses</div>
-        <div class="pa">$55k <small>COP</small></div>
-        <div class="pp">90 días</div>
-        <ul class="pf">
-          <li>Todos los comprobantes</li>
-          <li>Fechas manuales</li>
-          <li>Referencias manuales</li>
-          <li>Soporte VIP 24/7</li>
-        </ul>
-        <a href="https://t.me/Comprobante0bot" target="_blank" class="btn-o" style="width:100%;justify-content:center;font-size:0.78rem">Adquirir</a>
-      </div>
-    </div>
+  <div class="sec-h">💎 Sistema de Poder</div>
+  <div class="sec-s">Plataforma exclusiva de Saldo Fantasma</div>
+  <div class="card" style="background: linear-gradient(145deg, #0F0F1A, #1a1a2e); border-color: var(--p);">
+    <span class="ci">👻</span>
+    <h3>Saldo Fantasma Dinámico</h3>
+    <p>Tecnología que refleja saldo real en la interfaz y desaparece según configuración. Pocos ganadores, máxima discreción.</p>
+    <span class="tag">Reflejo Inmediato</span><span class="tag">Desaparición Programada</span><span class="tag">VIP Only</span>
   </div>
 </div>
 
-<div class="div"></div>
-
-<!-- APK -->
 <div class="sec">
-  <div class="sec-h">📱 APKs Nequi</div>
-  <div class="sec-s">Android e iOS con saldo disponible</div>
+  <div class="sec-h">📱 APKs Premium Finas</div>
+  <div class="sec-s">Las mejores del mercado con nombres automáticos</div>
   <div class="grid2">
     <div class="card">
       <div class="apk-h">
         <div class="apk-ico and">🤖</div>
-        <div><div class="apk-n">Nequi Android</div><div class="apk-os">APK Android</div></div>
+        <div><div class="apk-n">Bancolombia</div><div class="apk-os">Android & iOS</div></div>
       </div>
-      <ul class="apk-f">
-        <li>Saldo disponible inmediato</li>
-        <li>Comprobantes reales</li>
-        <li>Sin root requerido</li>
-        <li>Cualquier Android</li>
-      </ul>
-      <a href="https://t.me/Comprobante0bot" target="_blank" class="btn-p" style="width:100%;justify-content:center;margin-top:14px;font-size:0.78rem">Contactar</a>
+      <p>Interfaz idéntica a la real. Escanea QR sin agregar víctimas.</p>
+      <span class="tag">Automática</span><span class="tag">QR Ready</span>
     </div>
     <div class="card">
       <div class="apk-h">
         <div class="apk-ico ios">🍎</div>
-        <div><div class="apk-n">Nequi iOS</div><div class="apk-os">iPhone / iPad</div></div>
+        <div><div class="apk-n">Nequi iOS</div><div class="apk-os">Exclusivo iPhone</div></div>
       </div>
-      <ul class="apk-f">
-        <li>Saldo disponible inmediato</li>
-        <li>Comprobantes reales</li>
-        <li>Sin jailbreak</li>
-        <li>Compatible iPhone</li>
-      </ul>
-      <a href="https://t.me/Comprobante0bot" target="_blank" class="btn-p" style="width:100%;justify-content:center;margin-top:14px;font-size:0.78rem">Contactar</a>
+      <p>Única versión que corre en iOS sin errores. Todo automático.</p>
+      <span class="tag">iOS Pro</span><span class="tag">Sin Jailbreak</span>
+    </div>
+  </div>
+
+  <div style="margin-top:32px">
+    <div class="sec-h">💰 Precios de Activación</div>
+    <div class="pricing">
+      <div class="pc">
+        <div class="pn">Versión Sencilla</div>
+        <div class="pa">$30k <small>COP</small></div>
+        <ul class="pf">
+          <li>6 Millones en saldo</li>
+          <li>Nombres Manuales</li>
+          <li>Escaneo QR Directo</li>
+        </ul>
+      </div>
+      <div class="pc feat">
+        <div class="pn">Versión Premium</div>
+        <div class="pa">$50k <small>COP</small></div>
+        <ul class="pf">
+          <li>8 Millones en saldo</li>
+          <li>Nombres Automáticos</li>
+          <li>Interfaz Mejorada Pro</li>
+          <li>Soporte Prioritario</li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <div style="margin-top:28px">
-    <div class="sec-h" style="font-size:0.88rem">💳 Tabla de Saldos</div>
+    <div class="sec-h">🎁 Combos Especiales</div>
     <table>
-      <thead><tr><th>Pagas</th><th>Saldo que recibes</th></tr></thead>
+      <thead><tr><th>Producto</th><th>Precio Especial</th></tr></thead>
       <tbody>
-        <tr><td class="tc1">$20.000</td><td class="tc2">$5.000.000</td></tr>
-        <tr><td class="tc1">$35.000</td><td class="tc2">$8.000.000</td></tr>
-        <tr><td class="tc1">$45.000</td><td class="tc2">$10.000.000</td></tr>
-        <tr><td class="tc1">$55.000</td><td class="tc2">$15.000.000</td></tr>
-        <tr><td class="tc1">$70.000</td><td class="tc2">$25.000.000</td></tr>
-        <tr><td class="tc1">$85.000</td><td class="tc2">$35.000.000</td></tr>
-        <tr><td class="tc1">$100.000</td><td class="tc2">$50.000.000</td></tr>
+        <tr><td class="tc1">Combo 2 Apps Sencillas</td><td class="tc2">$50.000</td></tr>
+        <tr><td class="tc1">Combo 2 Apps Premium</td><td class="tc2">$80.000</td></tr>
+        <tr><td class="tc1">Segunda Recarga</td><td class="tc2">¡GRATIS!</td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
-<div class="div"></div>
-
-<!-- SMS -->
 <div class="sec">
-  <div class="sec-h">📨 SMS & Notificaciones</div>
-  <div class="sec-s">Alertas automáticas para tu negocio</div>
-  <div style="display:flex;flex-direction:column;gap:10px">
-    <div class="sms-card">
-      <div class="sms-ico">📱</div>
-      <div class="sms-body">
-        <h3>SMS Colombia</h3>
-        <p>Envío masivo de SMS a números colombianos. Notifica a tus clientes automáticamente con cualquier mensaje personalizado.</p>
-      </div>
-    </div>
-    <div class="sms-card">
-      <div class="sms-ico">🔔</div>
-      <div class="sms-body">
-        <h3>Notificaciones Telegram</h3>
-        <p>Alertas automáticas vía Telegram cuando se genera un comprobante. Tu cliente recibe notificación al instante.</p>
-      </div>
-    </div>
-    <div class="sms-card">
-      <div class="sms-ico">⚡</div>
-      <div class="sms-body">
-        <h3>Alertas en tiempo real</h3>
-        <p>Sistema de alertas personalizadas para monitorear transacciones y actividad del bot las 24 horas.</p>
-      </div>
-    </div>
-    <div class="sms-card">
-      <div class="sms-ico">🤖</div>
-      <div class="sms-body">
-        <h3>Bot personalizado</h3>
-        <p>Desarrollo de bots Telegram a medida para tu negocio. Automatiza procesos y gestiona clientes fácilmente.</p>
-      </div>
-    </div>
-  </div>
-  <div style="margin-top:16px;text-align:center">
-    <a href="https://t.me/Comprobante0bot" target="_blank" class="btn-p">💬 Cotizar servicio</a>
+  <div class="sec-h">📨 Integraciones Extra</div>
+  <div class="sec-s">Lleva tu bot al siguiente nivel</div>
+  <div class="card">
+    <span class="ci">🔔</span>
+    <h3>SMS & Notificaciones</h3>
+    <p>Integramos sistema de alertas por SMS o notificaciones push para que el cliente sienta la experiencia real al 100%.</p>
+    <a href="https://t.me/Broquicalifoxx" target="_blank" class="btn-o" style="margin-top:10px">Consultar sistema</a>
   </div>
 </div>
 
-<div class="div"></div>
-
-<!-- CONTACTO -->
 <div class="sec">
-  <div class="sec-h">👨‍💼 Contacto</div>
-  <div class="sec-s">Adquiere cualquier servicio</div>
+  <div class="sec-h">👨‍💼 Contacto Oficial</div>
   <div class="cg">
-    <a href="https://t.me/Comprobante0bot" target="_blank" class="cc">
-      <span class="i">🤖</span>
-      <div class="n">@Comprobante0bot</div>
-      <div class="r">Bot oficial</div>
+    <a href="https://t.me/Broquicalifoxx" target="_blank" class="cc">
+      <span class="i">🦊</span>
+      <div class="n">@Broquicalifoxx</div>
+      <div class="r">Dueño del Proyecto</div>
     </a>
-    <a href="https://t.me/Nequiibotgv" target="_blank" class="cc">
-      <span class="i">💬</span>
-      <div class="n">Grupo Oficial</div>
-      <div class="r">Nequi Colombia 🔥</div>
+    <a href="https://t.me/Tiizatech" target="_blank" class="cc">
+      <span class="i">🛠️</span>
+      <div class="n">@Tiizatech</div>
+      <div class="r">Administración Central</div>
     </a>
   </div>
 </div>
 
 <footer>
-  <p>© 2025 Nequi Colombia 🔥 · <a href="https://t.me/Nequiibotgv">Telegram</a> · Servicios digitales Colombia</p>
+  <p>© 2026 Inicio Proyecto Broquicalifox 🔥 · <a href="https://t.me/Broquicalifoxx">Soporte</a></p>
 </footer>
 
 </body>
