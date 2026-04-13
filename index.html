@@ -13,6 +13,7 @@
     --panel: rgba(10, 10, 20, 0.9);
     --border: #222;
     --text: #00ff41;
+    --terminal: #0d0d1a;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
@@ -83,7 +84,7 @@ body::before {
 }
 
 .panel::before {
-    content: "DATA_NODE_V3.0";
+    content: "DATA_NODE_V4.0";
     position: absolute;
     top: -10px; left: 15px;
     background: var(--bg);
@@ -137,12 +138,25 @@ h2 {
     box-shadow: 0 0 20px var(--primary);
 }
 
-.bank-tag {
-    background: rgba(168, 85, 247, 0.1);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.7rem;
-    margin-right: 5px;
+/* NUEVOS ESTILOS INTEGRADOS */
+.terminal-input {
+    width: 100%;
+    background: var(--terminal);
+    border: 1px solid var(--primary);
+    color: var(--text);
+    padding: 10px;
+    font-family: 'Space Mono', monospace;
+    margin-top: 10px;
+    outline: none;
+}
+
+.tag-pro {
+    background: var(--primary);
+    color: #000;
+    font-size: 0.6rem;
+    padding: 2px 5px;
+    font-weight: bold;
+    margin-left: 5px;
 }
 
 footer {
@@ -180,14 +194,14 @@ footer {
 <body>
 
 <div class="status-bar">
-    <div>SISTEMA: <span style="color:var(--primary)">COL 🌐 OPERATIVO</span></div>
-    <div class="blink">● ENCRYPTED SESSION</div>
-    <div>RED: DEEP WEB CLOUD</div>
+    <div>SISTEMA: <span style="color:var(--primary)">COL 🌐 API_V4_OPERATIVA</span></div>
+    <div class="blink">● ENCRYPTED SESSION (JWT)</div>
+    <div>BASE DE DATOS: SQLITE_CLOUD</div>
 </div>
 
 <header class="terminal-hero">
     <h1>💀 ANÓNIMOS DATA 💀</h1>
-    <p>INFRAESTRUCTURA AVANZADA DE GESTIÓN FINANCIERA</p>
+    <p>INFRAESTRUCTURA AVANZADA DE GESTIÓN FINANCIERA & AUDITORÍA</p>
 </header>
 
 <div class="container">
@@ -219,24 +233,44 @@ footer {
         </div>
 
         <div class="panel">
-            <h2>🔎 INTELIGENCIA & DOXX</h2>
-            <div class="service-item">➜ /cc /nequi /cedulas /adres /sisben</div>
-            <div class="service-item">➜ Hackeo: WhatsApp, IG, FB, Android</div>
-            <div class="service-item">➜ Rastreo: IP, Torres, WiFi, Ubicación</div>
-            <div class="service-item">➜ Recuperación: Dinero, ETH, Cuentas</div>
-            <div class="service-item">➜ Especiales: Bypass iPhone, Privados</div>
-            <a href="https://t.me/AnonimosSupport_bot" class="btn">SOLICITAR SERVICIO</a>
+            <h2>🔎 CONSULTA SISBEN IV <span class="tag-pro">API HÍBRIDA</span></h2>
+            <div class="service-item">➜ Protocolo: Requests + Selenium Fallback</div>
+            <div class="service-item">➜ Rotación de Proxies: <span class="highlight">ACTIVA</span></div>
+            <div class="service-item">➜ Extracción: Datos Personales, Grupo y Ficha</div>
+            
+            <form id="sisben-form" style="margin-top: 15px;">
+                <select class="terminal-input" id="tipo_doc">
+                    <option value="3">Cédula de Ciudadanía</option>
+                    <option value="2">Tarjeta de Identidad</option>
+                    <option value="9">Permiso Protección Temporal</option>
+                </select>
+                <input type="text" class="terminal-input" placeholder="INGRESE DOCUMENTO..." id="num_doc">
+                <button type="button" class="btn" onclick="alert('Inicie sesión con su Key para habilitar la API de consulta.')">EJECUTAR CONSULTA</button>
+            </form>
         </div>
 
         <div class="panel" style="border-color: var(--danger);">
-            <h2 style="color: var(--danger); border-color: var(--danger);">💀 SOFTWARE & APKs</h2>
-            <div class="service-item">💾 APK Saldo Fantasma (N / B / D)</div>
-            <div class="service-item">💾 Bypass Biométrico v4.2</div>
-            <div class="service-item">💾 Interfaz Control Remoto</div>
-            <p style="margin-top: 15px; font-size: 0.75rem; color: #888;">
-                Garantía Real: Únicas operativas en dispositivos <span style="color:#fff">Apple (iOS)</span>.
+            <h2 style="color: var(--danger); border-color: var(--danger);">🔐 GESTIÓN DE KEYS</h2>
+            <div class="service-item">➜ Validación: JWT Encrypted Tokens</div>
+            <div class="service-item">➜ Base de Datos: SQLite v3.0 (Relacional)</div>
+            <div class="service-item">➜ Duración: 30 Días / Usos Ilimitados</div>
+            
+            <div style="margin-top: 15px; padding: 10px; border: 1px dashed var(--danger);">
+                <p style="font-size: 0.7rem; color: #fff;">ESTADO DE LICENCIA:</p>
+                <input type="text" class="terminal-input" style="border-color: var(--danger);" placeholder="PEGAR KEY SISBEN-XXXXXXXX...">
+                <button class="btn" style="border-color: var(--danger); color: var(--danger);">ACTIVAR ACCESO</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>📊 LOGS DEL SISTEMA</h2>
+            <div class="service-item">➜ Bypass Biométrico: <span class="highlight">V4.2 READY</span></div>
+            <div class="service-item">➜ Servidor: <span class="highlight">FASTAPI NODES</span></div>
+            <div class="service-item">➜ Doxeo WiFi/IP: <span class="highlight">ONLINE</span></div>
+            <div class="service-item">➜ Backups SQL: <span style="color:var(--danger)">CADA 24H</span></div>
+            <p style="margin-top: 15px; font-size: 0.7rem; color: #888;">
+                Seguridad de grado militar. Registros cifrados en la Deep Web Cloud.
             </p>
-            <a href="https://t.me/AnonimosSupport_bot" class="btn" style="border-color: var(--danger); color: var(--danger);">ADQUIRIR LICENCIA</a>
         </div>
 
     </div>
@@ -248,10 +282,10 @@ footer {
     <div class="contact-box">
         <h3>Vendedor Oficial / Soporte ADM</h3>
         <a href="https://t.me/AnonimosSupport_bot" class="bot-link">@AnonimosSupport_bot</a>
-        <p style="font-size: 0.6rem; color: var(--muted); margin-top: 10px;">PULSA EL ENLACE PARA INICIAR CONEXIÓN</p>
+        <p style="font-size: 0.6rem; color: #444; margin-top: 10px;">INFRAESTRUCTURA INTEGRADA: SQLITE + FASTAPI + SELENIUM</p>
     </div>
 
-    <div class="footer-line">SISTEMA CARGADO... ONLY FOR THE STRONG</div>
+    <div class="footer-line">SISTEMA ACTUALIZADO... NO LOGS, NO TRACE.</div>
     <p style="margin-top: 20px; font-size: 0.6rem; color: #444;">© 2026 DEEP WEB CLOUD - ENCRYPTED NODES</p>
 </footer>
 
