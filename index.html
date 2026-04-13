@@ -150,16 +150,62 @@ h2 {
     margin-left: 5px;
 }
 
-#output-console {
-    margin-top: 20px;
-    background: #000;
-    border: 1px solid var(--text);
-    padding: 15px;
-    font-size: 0.8rem;
-    height: 120px;
-    overflow-y: auto;
+/* ESTILOS DEL CHAT INTEGRADO */
+#chat-tiiza {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+#box-tiiza {
     display: none;
+    width: 300px;
+    background: #05050a;
+    border: 1px solid var(--primary);
+    flex-direction: column;
+    margin-bottom: 15px;
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+}
+
+.chat-header {
+    background: var(--primary);
+    color: #000;
+    padding: 10px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+}
+
+#msjs-tiiza {
+    height: 250px;
+    overflow-y: auto;
+    padding: 15px;
+    font-size: 0.75rem;
     color: var(--text);
+    background: rgba(0,0,0,0.8);
+}
+
+.chat-input-area {
+    padding: 10px;
+    border-top: 1px solid #222;
+    display: flex;
+    gap: 5px;
+}
+
+.chat-btn-open {
+    background: var(--primary);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 20px var(--primary);
+    font-size: 24px;
+    float: right;
 }
 
 footer {
@@ -206,72 +252,94 @@ footer {
 
     <div class="buy-box">
         <h3>🛒 ADQUIRIR LICENCIAS / KEYS</h3>
-        <p style="font-size: 0.9rem; margin-bottom: 20px; color: #fff;">Todas las transacciones se procesan vía Telegram para garantizar anonimato total.</p>
-        <a href="https://t.me/AnonimosSupport_bot?start=website_purchase" class="bot-link">👉 @AnonimosSupport_bot</a>
-        <p style="margin-top: 15px; font-size: 0.7rem; color: #888;">[ AUTOMATIC SALES 24/7 | CRYPTO & COL-GATEWAYS ]</p>
+        <p style="font-size: 0.9rem; margin-bottom: 20px; color: #fff;">Transacciones vía Telegram para anonimato total.</p>
+        <a href="https://t.me/AnonimosSupport_bot" class="bot-link">👉 @AnonimosSupport_bot</a>
     </div>
 
     <div class="grid">
-        
         <div class="panel">
             <h2>🔎 CONSULTA SISBEN IV <span class="tag-pro">API HÍBRIDA</span></h2>
-            <div class="service-item">➜ Protocolo: Requests + Selenium Fallback</div>
-            <div class="service-item">➜ Base de Datos: <span class="highlight">SQLite Relacional</span></div>
-            
-            <form id="sisben-form" style="margin-top: 15px;">
+            <form id="sisben-form">
                 <select class="terminal-input" id="tipo_doc">
                     <option value="3">Cédula de Ciudadanía</option>
                     <option value="2">Tarjeta de Identidad</option>
-                    <option value="9">PPT / Otros</option>
                 </select>
-                <input type="text" class="terminal-input" placeholder="INGRESE DOCUMENTO..." id="num_doc">
-                <button type="button" class="btn" onclick="ejecutarConsulta()">EJECUTAR CONSULTA</button>
+                <input type="text" class="terminal-input" placeholder="DOCUMENTO..." id="num_doc">
+                <button type="button" class="btn">EJECUTAR CONSULTA</button>
             </form>
-            <div id="output-console"></div>
         </div>
 
         <div class="panel" style="border-color: var(--danger);">
             <h2 style="color: var(--danger); border-color: var(--danger);">🔐 ACTIVACIÓN DE KEY</h2>
-            <div class="service-item">➜ Obtén tu Key con el bot de ventas.</div>
-            <div class="service-item">➜ Validación: JWT Tokens de un solo uso.</div>
-            
-            <div style="margin-top: 15px; padding: 10px; border: 1px dashed var(--danger);">
-                <input type="text" id="input-key" class="terminal-input" style="border-color: var(--danger);" placeholder="PEGAR KEY AQUÍ...">
-                <button class="btn" style="border-color: var(--danger); color: var(--danger);" onclick="activarAcceso()">VALIDAR LICENCIA</button>
-            </div>
+            <input type="text" id="input-key" class="terminal-input" style="border-color: var(--danger);" placeholder="PEGAR KEY...">
+            <button class="btn" style="border-color: var(--danger); color: var(--danger);">VALIDAR</button>
         </div>
 
         <div class="panel">
-            <h2>🏦 ENTIDADES & APKs</h2>
-            <div class="service-item">➜ NEQUI PRO (iOS / Android)</div>
-            <div class="service-item">➜ BANCOLOMBIA PREMIUM 2026</div>
-            <div class="service-item">➜ DAVIPLATA ELITE (Notificaciones)</div>
-            <div class="service-item">➜ Bypass Biométrico v4.2</div>
-            <a href="https://t.me/AnonimosSupport_bot" class="btn">VER CATÁLOGO COMPLETO</a>
+            <h2>🏦 ENTIDADES</h2>
+            <div class="service-item">➜ NEQUI PRO v4.2</div>
+            <div class="service-item">➜ BANCOLOMBIA PREMIUM</div>
+            <div class="service-item">➜ DAVIPLATA ELITE</div>
+            <a href="https://t.me/AnonimosSupport_bot" class="btn">CATÁLOGO</a>
         </div>
-
     </div>
+</div>
+
+<div id="chat-tiiza">
+    <div id="box-tiiza">
+        <div class="chat-header">
+            <span>📡 SOPORTE EN VIVO</span>
+            <span onclick="toggleChat()" style="cursor: pointer;">[ _ ]</span>
+        </div>
+        <div id="msjs-tiiza">
+            <div>> Conexión establecida con el Nodo @Tiizatech.</div>
+            <div>> ¿En qué podemos ayudarte hoy?</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="input-msg" placeholder="Escribir..." style="flex:1; background:#000; border:1px solid var(--primary); color:var(--text); padding:5px; outline:none;">
+            <button onclick="enviarMensaje()" style="background:var(--primary); border:none; padding:5px 10px; cursor:pointer; color:#000; font-weight:bold;">></button>
+        </div>
+    </div>
+    <div onclick="toggleChat()" class="chat-btn-open">💬</div>
 </div>
 
 <footer>
     <div class="footer-line">SISTEMA CARGADO... ONLY FOR THE STRONG</div>
-    <p style="margin-top: 20px; font-size: 0.6rem; color: #444;">© 2026 DEEP WEB CLOUD - ENCRYPTED NODES</p>
+    <p>© 2026 DEEP WEB CLOUD | @Tiizatech</p>
 </footer>
 
 <script>
-// Lógica de conexión simplificada
-async function activarAcceso() {
-    const key = document.getElementById('input-key').value;
-    if(!key) return alert("Ingrese una key.");
-    
-    // Aquí iría el fetch a tu FastAPI
-    alert("Enviando validación al nodo central...");
+const BOT_TOKEN = "8759042236:AAGri_H-rimJAjr5R7m8yK3oiJkhOxSbpGE";
+const ADMIN_ID = "PON_AQUI_TU_ID_PERSONAL"; // Cambia esto por tu ID de Telegram real
+
+function toggleChat() {
+    const box = document.getElementById('box-tiiza');
+    box.style.display = box.style.display === 'none' ? 'flex' : 'none';
 }
 
-async function ejecutarConsulta() {
-    const key = localStorage.getItem('auth_key');
-    if(!key) return alert("⚠️ Requiere Key activa. Cómprala en el bot.");
-    // Lógica de consulta
+async function enviarMensaje() {
+    const input = document.getElementById('input-msg');
+    const msg = input.value;
+    if(!msg) return;
+
+    const chatBox = document.getElementById('msjs-tiiza');
+    chatBox.innerHTML += `<div style="color:#fff; margin-top:5px;">Tú: ${msg}</div>`;
+    input.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    const webId = "USER_" + Math.floor(Math.random() * 9999);
+    const textoTelegram = `🌐 **NUEVO MENSAJE WEB**\nID: \`${webId}\`\nMsg: ${msg}\n\nResponder con: \`${webId} [mensaje]\``;
+
+    try {
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ chat_id: ADMIN_ID, text: textoTelegram, parse_mode: 'Markdown' })
+        });
+        chatBox.innerHTML += `<div style="color:var(--primary); font-size:0.6rem;">> Enviado al Nodo Central.</div>`;
+    } catch (e) {
+        chatBox.innerHTML += `<div style="color:red;">> Error de red.</div>`;
+    }
 }
 </script>
 
