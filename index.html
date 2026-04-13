@@ -25,7 +25,6 @@ body {
     overflow-x: hidden;
 }
 
-/* EFECTO SCANLINE */
 body::before {
     content: " ";
     display: block;
@@ -130,6 +129,7 @@ h2 {
     margin-top: 20px;
     transition: 0.3s;
     text-transform: uppercase;
+    cursor: pointer;
 }
 
 .btn:hover {
@@ -138,7 +138,6 @@ h2 {
     box-shadow: 0 0 20px var(--primary);
 }
 
-/* NUEVOS ESTILOS INTEGRADOS */
 .terminal-input {
     width: 100%;
     background: var(--terminal);
@@ -157,6 +156,19 @@ h2 {
     padding: 2px 5px;
     font-weight: bold;
     margin-left: 5px;
+}
+
+/* TERMINAL DE RESULTADOS */
+#output-console {
+    margin-top: 20px;
+    background: #000;
+    border: 1px solid var(--text);
+    padding: 15px;
+    font-size: 0.8rem;
+    height: 150px;
+    overflow-y: auto;
+    display: none;
+    color: var(--text);
 }
 
 footer {
@@ -194,8 +206,8 @@ footer {
 <body>
 
 <div class="status-bar">
-    <div>SISTEMA: <span style="color:var(--primary)">COL 🌐 API_V4_OPERATIVA</span></div>
-    <div class="blink">● ENCRYPTED SESSION (JWT)</div>
+    <div>SISTEMA: <span id="sys-status" style="color:var(--primary)">COL 🌐 API_V4_OPERATIVA</span></div>
+    <div class="blink" id="session-tag">● ENCRYPTED SESSION (JWT)</div>
     <div>BASE DE DATOS: SQLITE_CLOUD</div>
 </div>
 
@@ -236,7 +248,6 @@ footer {
             <h2>🔎 CONSULTA SISBEN IV <span class="tag-pro">API HÍBRIDA</span></h2>
             <div class="service-item">➜ Protocolo: Requests + Selenium Fallback</div>
             <div class="service-item">➜ Rotación de Proxies: <span class="highlight">ACTIVA</span></div>
-            <div class="service-item">➜ Extracción: Datos Personales, Grupo y Ficha</div>
             
             <form id="sisben-form" style="margin-top: 15px;">
                 <select class="terminal-input" id="tipo_doc">
@@ -245,20 +256,20 @@ footer {
                     <option value="9">Permiso Protección Temporal</option>
                 </select>
                 <input type="text" class="terminal-input" placeholder="INGRESE DOCUMENTO..." id="num_doc">
-                <button type="button" class="btn" onclick="alert('Inicie sesión con su Key para habilitar la API de consulta.')">EJECUTAR CONSULTA</button>
+                <button type="button" class="btn" id="btn-consulta" onclick="ejecutarConsulta()">EJECUTAR CONSULTA</button>
             </form>
+            <div id="output-console"></div>
         </div>
 
         <div class="panel" style="border-color: var(--danger);">
             <h2 style="color: var(--danger); border-color: var(--danger);">🔐 GESTIÓN DE KEYS</h2>
             <div class="service-item">➜ Validación: JWT Encrypted Tokens</div>
             <div class="service-item">➜ Base de Datos: SQLite v3.0 (Relacional)</div>
-            <div class="service-item">➜ Duración: 30 Días / Usos Ilimitados</div>
             
             <div style="margin-top: 15px; padding: 10px; border: 1px dashed var(--danger);">
                 <p style="font-size: 0.7rem; color: #fff;">ESTADO DE LICENCIA:</p>
-                <input type="text" class="terminal-input" style="border-color: var(--danger);" placeholder="PEGAR KEY SISBEN-XXXXXXXX...">
-                <button class="btn" style="border-color: var(--danger); color: var(--danger);">ACTIVAR ACCESO</button>
+                <input type="text" id="input-key" class="terminal-input" style="border-color: var(--danger);" placeholder="PEGAR KEY SISBEN-XXXXXXXX...">
+                <button class="btn" id="btn-activar" style="border-color: var(--danger); color: var(--danger);" onclick="activarAcceso()">ACTIVAR ACCESO</button>
             </div>
         </div>
 
@@ -266,7 +277,6 @@ footer {
             <h2>📊 LOGS DEL SISTEMA</h2>
             <div class="service-item">➜ Bypass Biométrico: <span class="highlight">V4.2 READY</span></div>
             <div class="service-item">➜ Servidor: <span class="highlight">FASTAPI NODES</span></div>
-            <div class="service-item">➜ Doxeo WiFi/IP: <span class="highlight">ONLINE</span></div>
             <div class="service-item">➜ Backups SQL: <span style="color:var(--danger)">CADA 24H</span></div>
             <p style="margin-top: 15px; font-size: 0.7rem; color: #888;">
                 Seguridad de grado militar. Registros cifrados en la Deep Web Cloud.
@@ -277,17 +287,103 @@ footer {
 </div>
 
 <footer>
-    <p>▰▰▰▰▰▰▰▰▰▰▰▰▰▰⩺ ANÓNIMOS DATA ⩹▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰</p>
-    
     <div class="contact-box">
         <h3>Vendedor Oficial / Soporte ADM</h3>
         <a href="https://t.me/AnonimosSupport_bot" class="bot-link">@AnonimosSupport_bot</a>
         <p style="font-size: 0.6rem; color: #444; margin-top: 10px;">INFRAESTRUCTURA INTEGRADA: SQLITE + FASTAPI + SELENIUM</p>
     </div>
-
     <div class="footer-line">SISTEMA ACTUALIZADO... NO LOGS, NO TRACE.</div>
     <p style="margin-top: 20px; font-size: 0.6rem; color: #444;">© 2026 DEEP WEB CLOUD - ENCRYPTED NODES</p>
 </footer>
 
+<script>
+// --- LÓGICA DE CONEXIÓN AL BACKEND ---
+
+function logToConsole(text) {
+    const consoleBox = document.getElementById('output-console');
+    consoleBox.style.display = 'block';
+    consoleBox.innerHTML += `> ${text}<br>`;
+    consoleBox.scrollTop = consoleBox.scrollHeight;
+}
+
+async function activarAcceso() {
+    const key = document.getElementById('input-key').value.trim();
+    if(!key) return alert("ERROR: Ingrese una llave válida.");
+
+    logToConsole("Iniciando validación de Key...");
+    
+    try {
+        const response = await fetch('/activar', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ key: key })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            localStorage.setItem('auth_key', key);
+            logToConsole("✅ ACCESO CONCEDIDO: Licencia activa.");
+            document.getElementById('session-tag').style.color = 'var(--text)';
+            document.getElementById('session-tag').innerText = '● SESSION ACTIVE: ' + key.substring(0,10);
+            alert("Acceso activado exitosamente.");
+        } else {
+            logToConsole("❌ ERROR: " + (data.detail || "Llave rechazada."));
+            alert("Key inválida o expirada.");
+        }
+    } catch (e) {
+        logToConsole("❌ CRITICAL ERROR: Fallo de conexión con el nodo API.");
+    }
+}
+
+async function ejecutarConsulta() {
+    const key = localStorage.getItem('auth_key');
+    const tipo = document.getElementById('tipo_doc').value;
+    const num = document.getElementById('num_doc').value.trim();
+
+    if(!key) {
+        logToConsole("⚠️ ACCESO DENEGADO: Requiere activación.");
+        return alert("Inicie sesión con su Key primero.");
+    }
+
+    if(!num) return alert("Ingrese un número de documento.");
+
+    logToConsole(`Consultando SISBEN IV: ${num}...`);
+    logToConsole("Usando Protocolo Híbrido (Requests + Proxies)...");
+
+    try {
+        const response = await fetch('/consultar', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ tipo: tipo, numero: num, key: key })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            logToConsole("✅ DATOS RECUPERADOS EXITOSAMENTE");
+            logToConsole(`---------------------------`);
+            logToConsole(`NOMBRE: ${result.data.nombres || 'No encontrado'}`);
+            logToConsole(`GRUPO: ${result.data.grupo || 'N/A'}`);
+            logToConsole(`MUNICIPIO: ${result.data.municipio || 'N/A'}`);
+            logToConsole(`---------------------------`);
+        } else {
+            logToConsole("❌ FALLO EN LA EXTRACCIÓN: " + result.detail);
+        }
+    } catch (e) {
+        logToConsole("❌ ERROR DE RED: Servidor no responde.");
+    }
+}
+
+// Persistencia de sesión al recargar
+window.onload = () => {
+    const savedKey = localStorage.getItem('auth_key');
+    if(savedKey) {
+        document.getElementById('session-tag').style.color = 'var(--text)';
+        document.getElementById('session-tag').innerText = '● SESSION ACTIVE: ' + savedKey.substring(0,10);
+        document.getElementById('input-key').value = savedKey;
+    }
+}
+</script>
 </body>
 </html>
