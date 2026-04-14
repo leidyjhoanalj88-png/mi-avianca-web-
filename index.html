@@ -1,303 +1,152 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ANÓNIMOS DATA | DEEP WEB CLOUD</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<style>
-:root {
-    --primary: #A855F7;
-    --danger: #ef4444;
-    --warning: #f59e0b;
-    --info: #3b82f6;
-    --bg: #030305;
-    --panel: rgba(10, 10, 20, 0.9);
-    --border: #222;
-    --text: #00ff41;
-    --terminal: #0d0d1a;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKAM MAFIA | DATABASE</title>
+    <style>
+        body {
+            background-color: #050505;
+            color: #d1d1d1;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
 
-* { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        .terminal-container {
+            width: 90%;
+            max-width: 600px;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid #333;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.1);
+            border-radius: 5px;
+        }
 
-body {
-    background-color: var(--bg);
-    color: var(--text);
-    font-family: 'Space Mono', monospace;
-    overflow-x: hidden;
-}
+        .branding {
+            text-align: center;
+            color: #ff0000;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
 
-/* Efecto de líneas de escaneo CRT */
-body::before {
-    content: " ";
-    display: block;
-    position: fixed;
-    top: 0; left: 0; bottom: 0; right: 0;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    z-index: 200;
-    background-size: 100% 2px, 3px 100%;
-    pointer-events: none;
-}
+        .header-box {
+            text-align: center;
+            color: #fff;
+            margin: 15px 0;
+            white-space: pre;
+        }
 
-.status-bar {
-    background: #000;
-    padding: 10px 5%;
-    border-bottom: 2px solid var(--primary);
-    font-size: 0.8rem;
-    display: flex;
-    justify-content: space-between;
-}
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
-.blink { animation: blinker 1s linear infinite; color: var(--danger); }
-@keyframes blinker { 50% { opacity: 0; } }
+        input {
+            flex-grow: 1;
+            background: #000;
+            border: 1px solid #444;
+            color: #0f0;
+            padding: 10px;
+            outline: none;
+        }
 
-.terminal-hero {
-    padding: 60px 5%;
-    text-align: center;
-    border-bottom: 1px solid var(--border);
-}
+        button {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
 
-.terminal-hero h1 {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: clamp(2rem, 10vw, 4rem);
-    text-shadow: 0 0 20px var(--primary);
-    margin-bottom: 10px;
-    color: #fff;
-}
+        button:hover { background: #b30000; }
 
-.container {
-    padding: 40px 5%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
+        .result-area {
+            display: none;
+            border-top: 1px dashed #444;
+            padding-top: 20px;
+            animation: fadeIn 0.5s;
+        }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 25px;
-}
+        .divider { color: #444; text-align: center; }
 
-.panel {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    padding: 25px;
-    position: relative;
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.1);
-    display: flex;
-    flex-direction: column;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-.panel::before {
-    content: "NODE_STABLE_V4";
-    position: absolute;
-    top: -10px; left: 15px;
-    background: var(--bg);
-    padding: 0 10px;
-    font-size: 0.7rem;
-    color: var(--primary);
-}
-
-h2 {
-    font-size: 1.1rem;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--primary);
-    padding-bottom: 5px;
-    color: #fff;
-    text-transform: uppercase;
-}
-
-.service-item {
-    font-size: 0.8rem;
-    margin-bottom: 8px;
-    color: #ccc;
-    line-height: 1.4;
-}
-
-.highlight { color: var(--primary); font-weight: bold; }
-.price-tag { color: var(--text); font-weight: bold; float: right; }
-
-.btn {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    background: transparent;
-    border: 1px solid var(--primary);
-    color: var(--primary);
-    text-align: center;
-    text-decoration: none;
-    font-weight: bold;
-    margin-top: auto;
-    transition: 0.3s;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-}
-
-.btn:hover {
-    background: var(--primary);
-    color: #000;
-    box-shadow: 0 0 15px var(--primary);
-}
-
-.terminal-input {
-    width: 100%;
-    background: var(--terminal);
-    border: 1px solid var(--primary);
-    color: var(--text);
-    padding: 10px;
-    font-family: 'Space Mono', monospace;
-    margin-bottom: 10px;
-    outline: none;
-    font-size: 0.8rem;
-}
-
-.tag-pro {
-    background: var(--primary);
-    color: #000;
-    font-size: 0.6rem;
-    padding: 2px 5px;
-    font-weight: bold;
-    border-radius: 2px;
-}
-
-/* CHAT STYLES */
-#chat-tiiza { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
-#box-tiiza {
-    display: none;
-    width: 300px;
-    background: #05050a;
-    border: 1px solid var(--primary);
-    flex-direction: column;
-    margin-bottom: 15px;
-}
-.chat-header { background: var(--primary); color: #000; padding: 10px; font-weight: bold; display: flex; justify-content: space-between; font-size: 0.8rem; }
-#msjs-tiiza { height: 200px; overflow-y: auto; padding: 15px; font-size: 0.75rem; background: rgba(0,0,0,0.8); }
-.chat-input-area { padding: 10px; display: flex; gap: 5px; border-top: 1px solid #222; }
-.chat-btn-open { background: var(--primary); width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 24px; float: right; }
-
-footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); margin-top: 40px; opacity: 0.7; font-size: 0.8rem; }
-</style>
+        .glitch { color: #ff0000; font-weight: bold; }
+    </style>
 </head>
 <body>
 
-<div class="status-bar">
-    <div>INFRAESTRUCTURA: <span style="color:var(--primary)">TIIZA TECH</span></div>
-    <div class="blink">● SISTEMA OPERATIVO 24/7</div>
-    <div>SOPORTE: @AnonimosSupport_bot</div>
-</div>
-
-<header class="terminal-hero">
-    <h1>ANÓNIMOS DATA</h1>
-    <p style="letter-spacing: 5px; color: var(--primary);">SOLUCIONES FINANCIERAS HÍBRIDAS</p>
-</header>
-
-<div class="container">
-
-    <h2 style="border: none; text-align: center; font-size: 1.5rem; margin-bottom: 30px;">[ SUSCRIPCIONES MENSUALES ]</h2>
-    <div class="grid" style="margin-bottom: 50px;">
-        <div class="panel" style="border-color: var(--text);">
-            <h2>PLAN BÁSICO (NODE)</h2>
-            <div class="service-item">➜ Acceso a Consultas Sisben</div>
-            <div class="service-item">➜ Generador Comprobantes GNV</div>
-            <div class="service-item">➜ Soporte Estándar</div>
-            <div class="price-tag">$50.000 / Mes</div>
-            <a href="https://t.me/AnonimosSupport_bot?start=plan_basico" class="btn">ADQUIRIR</a>
-        </div>
-        <div class="panel" style="border-color: var(--primary); transform: scale(1.05); z-index: 10;">
-            <h2>PLAN VIP (FULL APK) <span class="tag-pro">TOP</span></h2>
-            <div class="service-item">➜ Todo el Plan Básico</div>
-            <div class="service-item">➜ APKs Premium (Intercepción SMS)</div>
-            <div class="service-item">➜ Bypass Biométrico Actualizado</div>
-            <div class="price-tag">$120.000 / Mes</div>
-            <a href="https://t.me/AnonimosSupport_bot?start=plan_vip" class="btn" style="background: var(--primary); color: #000;">ACCESO TOTAL</a>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="panel" style="border-color: var(--info);">
-            <h2 style="color: var(--info); border-color: var(--info);">📄 BOT COMPROBANTES GNV</h2>
-            <div class="service-item">Sistema automatizado para generar vouchers de transferencias.</div>
-            <div class="service-item">➜ <span class="highlight">Formatos:</span> Nequi, Bancolombia, Daviplata.</div>
-            <div class="service-item">➜ <span class="highlight">Calidad:</span> 4K con edición de fecha/hora.</div>
-            <a href="https://t.me/AnonimosSupport_bot?start=bot_comprobantes" class="btn" style="border-color: var(--info); color: var(--info);">ABRIR BOT GNV</a>
+    <div class="terminal-container">
+        <div class="branding">
+            『 ꧁༺ 𝓐𝓚𝓐𝓜 .𝔞𝔨𝔞𝔪 𝔪𝔞𝔣𝔦𝔞.𝓜𝓐𝓕𝓘𝓐 ༻꧂ 』
         </div>
 
-        <div class="panel">
-            <h2>📲 NEQUI PRO (AND/iOS)</h2>
-            <div class="service-item">➜ <span class="highlight">Función:</span> Saldo Infinito (Simulado) y Bypass de Rostro.</div>
-            <div class="service-item">➜ <span class="highlight">SMS:</span> Captura de mensajes OTP entrantes.</div>
-            <div class="service-item">➜ <span class="highlight">Compatibilidad:</span> Android 10+ / iOS Jailbreak.</div>
-            <a href="https://t.me/AnonimosSupport_bot?start=info_nequi" class="btn">DESCARGAR APK</a>
+        <div class="search-box">
+            <input type="text" id="target" placeholder="/tg @username o número...">
+            <button onclick="buscar()">EJECUTAR</button>
         </div>
 
-        <div class="panel">
-            <h2>📲 BANCO PREMIUM v2</h2>
-            <div class="service-item">➜ <span class="highlight">Función:</span> Inyector de comprobantes internos.</div>
-            <div class="service-item">➜ <span class="highlight">Logs:</span> Panel de administración para ver datos.</div>
-            <div class="service-item">➜ <span class="highlight">Anti-Ban:</span> Encriptación de paquete SSL.</div>
-            <a href="https://t.me/AnonimosSupport_bot?start=info_banco" class="btn">DESCARGAR APK</a>
+        <div id="loading" style="display:none; text-align:center;">
+            <p class="glitch">ACCEDIENDO A LOS REGISTROS...</p>
         </div>
 
-        <div class="panel">
-            <h2>🔎 CONSULTA SISBEN IV</h2>
-            <input type="text" class="terminal-input" placeholder="INGRESE DOCUMENTO...">
-            <button class="btn">EJECUTAR API</button>
+        <div id="resultado" class="result-area">
+            <div class="header-box">
+╔═══════════════════════╗
+║      🔍  AKAM DATA      ║
+╚═══════════════════════╝
+            </div>
+
+            <p class="glitch">✅ Resultado encontrado</p>
+            <p>👤 <b>Usuario:</b> <span id="res_user"></span></p>
+            <p>📱 <b>Número:</b> <span id="res_num"></span></p>
+            <p>🆔 <b>ID Telegram:</b> <span id="res_id"></span></p>
+            <p>🌍 <b>País:</b> Colombia</p>
+            <p>🔢 <b>Código país:</b> +57</p>
+
+            <p class="divider">─────────────────────────</p>
+            <p>🔍 <b>Consultas:</b> <span id="res_cons">1</span></p>
+            <p>✅ <b>Usuarios registrados:</b> 80</p>
+            <p class="divider">─────────────────────────</p>
+            <p>🔧 <b>Herramienta:</b> AKAM-OSINT v4.0</p>
+            <p>🕐 <b>Logs:</b> 2026-04-14 01:25:00</p>
+            <p class="divider">─────────────────────────</p>
+            <p style="text-align: center;">🛠️ <b>By AKAM MAFIA - @AkamMafiia</b></p>
         </div>
     </div>
-</div>
 
-<div id="chat-tiiza">
-    <div id="box-tiiza">
-        <div class="chat-header">
-            <span>📡 NODO CENTRAL @Tiizatech</span>
-            <span onclick="toggleChat()" style="cursor: pointer;">[ _ ]</span>
-        </div>
-        <div id="msjs-tiiza">
-            <div>> Nodo activo. Esperando consulta...</div>
-        </div>
-        <div class="chat-input-area">
-            <input type="text" id="input-msg" placeholder="Escribir..." style="flex:1; background:#000; border:1px solid var(--primary); color:var(--text); padding:5px; outline:none;">
-            <button onclick="enviarMensaje()" style="background:var(--primary); border:none; padding:5px 10px; cursor:pointer; color:#000; font-weight:bold;">></button>
-        </div>
-    </div>
-    <div onclick="toggleChat()" class="chat-btn-open">💬</div>
-</div>
+    <script>
+        function buscar() {
+            let val = document.getElementById('target').value;
+            if(!val) return;
 
-<footer>
-    <p>© 2026 ANÓNIMOS DATA INFRASTRUCTURE</p>
-    <p style="color: var(--primary);">POWERED BY @Tiizatech | @Broquicalifoxx</p>
-</footer>
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultado').style.display = 'none';
 
-<script>
-const BOT_TOKEN = "8759042236:AAGri_H-rimJAjr5R7m8yK3oiJkhOxSbpGE";
-const ADMIN_ID = "8114050673"; 
-
-function toggleChat() {
-    const box = document.getElementById('box-tiiza');
-    box.style.display = box.style.display === 'none' ? 'flex' : 'none';
-}
-
-async function enviarMensaje() {
-    const input = document.getElementById('input-msg');
-    const msg = input.value;
-    if(!msg) return;
-
-    const chatBox = document.getElementById('msjs-tiiza');
-    chatBox.innerHTML += `<div style="color:#fff; margin-top:5px;">Tú: ${msg}</div>`;
-    input.value = '';
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    const webId = "USER_" + Math.floor(Math.random() * 9999);
-    const textoTelegram = `🌐 **MENSAJE WEB**\nID: \`${webId}\`\nMsg: ${msg}\n\nResponder: \`${webId} [mensaje]\``;
-
-    try {
-        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ chat_id: ADMIN_ID, text: textoTelegram, parse_mode: 'Markdown' })
-        });
-    } catch (e) { console.error("Error al enviar"); }
-}
-</script>
-
+            // Simulación de búsqueda en tiempo real
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('resultado').style.display = 'block';
+                
+                // Rellenar con los datos (esto después se conecta a tu API)
+                document.getElementById('res_user').innerText = val;
+                document.getElementById('res_num').innerText = "304" + Math.floor(Math.random() * 9999999);
+                document.getElementById('res_id').innerText = Math.floor(Math.random() * 9000000000);
+            }, 2000);
+        }
+    </script>
 </body>
 </html>
