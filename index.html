@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AKAM MAFIA | DATABASE</title>
+    <title>AKAM MAFIA | SECTOR CENTRAL</title>
     <style>
         body {
             background-color: #050505;
@@ -12,140 +12,144 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
             margin: 0;
+            padding: 20px;
             overflow-x: hidden;
         }
 
         .terminal-container {
-            width: 90%;
-            max-width: 600px;
-            background: rgba(10, 10, 10, 0.95);
-            border: 1px solid #333;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.1);
-            border-radius: 5px;
+            width: 100%;
+            max-width: 700px;
+            background: rgba(10, 10, 10, 0.98);
+            border: 1px solid #444;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.15);
+            border-radius: 2px;
+            margin-bottom: 20px;
         }
 
         .branding {
             text-align: center;
             color: #ff0000;
-            font-size: 1.2em;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            text-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
         }
 
-        .header-box {
-            text-align: center;
-            color: #fff;
-            margin: 15px 0;
-            white-space: pre;
+        .comunicado {
+            border-left: 3px solid #ff0000;
+            padding-left: 20px;
+            margin: 20px 0;
+            line-height: 1.6;
+            font-size: 0.95em;
+            text-align: justify;
         }
 
-        .search-box {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+        h2 { color: #fff; text-align: center; font-size: 1.2em; text-transform: uppercase; letter-spacing: 3px; }
+
+        .rules {
+            background: rgba(255, 0, 0, 0.05);
+            padding: 15px;
+            border: 1px solid #222;
+            margin-top: 20px;
         }
+
+        .rule-item { margin-bottom: 10px; border-bottom: 1px solid #1a1a1a; padding-bottom: 5px; }
+        .rule-item b { color: #ff0000; }
+
+        .search-section {
+            margin-top: 40px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+        }
+
+        .search-box { display: flex; gap: 5px; }
 
         input {
             flex-grow: 1;
             background: #000;
             border: 1px solid #444;
-            color: #0f0;
-            padding: 10px;
+            color: #ff0000;
+            padding: 12px;
             outline: none;
+            font-family: 'Courier New', monospace;
         }
 
         button {
             background: #ff0000;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 25px;
             cursor: pointer;
             font-weight: bold;
-            text-transform: uppercase;
         }
 
-        button:hover { background: #b30000; }
+        button:hover { background: #fff; color: #000; }
 
-        .result-area {
-            display: none;
-            border-top: 1px dashed #444;
-            padding-top: 20px;
-            animation: fadeIn 0.5s;
+        .glitch-text { animation: pulse 2s infinite; color: #ff0000; text-align: center; font-weight: bold; }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
 
-        .divider { color: #444; text-align: center; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .glitch { color: #ff0000; font-weight: bold; }
+        .footer { font-size: 0.8em; text-align: center; margin-top: 30px; color: #444; }
     </style>
 </head>
 <body>
 
     <div class="terminal-container">
         <div class="branding">
-            『 ꧁༺ 𝓐𝓚𝓐𝓜 .𝔞𝔨𝔞𝔪 𝔪𝔞𝔣𝔦𝔞.𝓜𝓐𝓕𝓘𝓐 ༻꧂ 』
+            『 ꧁༺ 𝓐𝓚𝓐𝓜 𝓜𝓐𝓕𝓘𝓐 ༻꧂ 』
         </div>
 
-        <div class="search-box">
-            <input type="text" id="target" placeholder="/tg @username o número...">
-            <button onclick="buscar()">EJECUTAR</button>
+        <h2>COMUNICADO OFICIAL: SECTOR CENTRAL 🏛️</h2>
+
+        <div class="comunicado">
+            Bienvenido. Estás ingresando a una organización preparada y altamente estudiada. No somos aficionados; somos una estructura dedicada al análisis profundo de plataformas bancarias, seguridad, asesoría y hacking ético.
+            <br><br>
+            <span style="color: #fff;">👁️ NUESTRA VISIÓN:</span> Donde el ojo se posa, el universo se manifiesta. Desde el inframundo de la red hasta el control total de los sistemas, nosotros vigilamos y ejecutamos.
         </div>
 
-        <div id="loading" style="display:none; text-align:center;">
-            <p class="glitch">ACCEDIENDO A LOS REGISTROS...</p>
+        <div class="rules">
+            <div class="glitch-text">⚠️ REGLAS DE OPERACIÓN</div>
+            <br>
+            <div class="rule-item"><b>INICIO DE LABORES:</b> Hoy a las 7:00 PM arrancamos el trabajo pesado.</div>
+            <div class="rule-item"><b>ORDEN ABSOLUTO:</b> Se exige máxima disciplina. El desorden no tiene lugar.</div>
+            <div class="rule-item"><b>JERARQUÍA:</b> Sigue las instrucciones del Sector Central para evitar la expulsión.</div>
         </div>
 
-        <div id="resultado" class="result-area">
-            <div class="header-box">
-╔═══════════════════════╗
-║      🔍  AKAM DATA      ║
-╚═══════════════════════╝
+        <div class="search-section">
+            <p style="font-size: 0.8em; color: #666;">[ SISTEMA DE CONSULTA OSINT ACTIVADO ]</p>
+            <div class="search-box">
+                <input type="text" id="target" placeholder="Ingrese @username o ID...">
+                <button onclick="ejecutar()">EJECUTAR</button>
             </div>
+        </div>
 
-            <p class="glitch">✅ Resultado encontrado</p>
-            <p>👤 <b>Usuario:</b> <span id="res_user"></span></p>
-            <p>📱 <b>Número:</b> <span id="res_num"></span></p>
-            <p>🆔 <b>ID Telegram:</b> <span id="res_id"></span></p>
-            <p>🌍 <b>País:</b> Colombia</p>
-            <p>🔢 <b>Código país:</b> +57</p>
-
-            <p class="divider">─────────────────────────</p>
-            <p>🔍 <b>Consultas:</b> <span id="res_cons">1</span></p>
-            <p>✅ <b>Usuarios registrados:</b> 80</p>
-            <p class="divider">─────────────────────────</p>
-            <p>🔧 <b>Herramienta:</b> AKAM-OSINT v4.0</p>
-            <p>🕐 <b>Logs:</b> 2026-04-14 01:25:00</p>
-            <p class="divider">─────────────────────────</p>
-            <p style="text-align: center;">🛠️ <b>By AKAM MAFIA - @AkamMafiia</b></p>
+        <div id="resultado" style="display:none; margin-top:20px; border: 1px solid #ff0000; padding: 15px; background: #000;">
+            <p class="glitch-text">BÚSQUEDA EN CURSO...</p>
+            <pre id="consola" style="font-size: 0.8em; color: #0f0;"></pre>
         </div>
     </div>
 
+    <div class="footer">
+        EL OJO LO VE TODO. EL SECTOR CENTRAL LO DOMINA TODO.<br>
+        <b>AKAM MAFIA © 2026 | @AkamMafiia</b>
+    </div>
+
     <script>
-        function buscar() {
+        function ejecutar() {
             let val = document.getElementById('target').value;
             if(!val) return;
-
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('resultado').style.display = 'none';
-
-            // Simulación de búsqueda en tiempo real
+            document.getElementById('resultado').style.display = 'block';
+            let consola = document.getElementById('consola');
+            consola.innerHTML = "> Accediendo a registros...\n> Analizando perfiles vinculados...\n> ";
+            
             setTimeout(() => {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('resultado').style.display = 'block';
-                
-                // Rellenar con los datos (esto después se conecta a tu API)
-                document.getElementById('res_user').innerText = val;
-                document.getElementById('res_num').innerText = "304" + Math.floor(Math.random() * 9999999);
-                document.getElementById('res_id').innerText = Math.floor(Math.random() * 9000000000);
-            }, 2000);
+                consola.innerHTML += "\n[!] ERROR DE ACCESO: Credenciales VIP requeridas.\n[!] Contacte a @AkamMafiia para autorización.";
+            }, 1500);
         }
     </script>
 </body>
