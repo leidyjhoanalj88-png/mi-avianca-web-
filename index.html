@@ -1,223 +1,32 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AKAM MAFIA | SECTOR CENTRAL</title>
-    <style>
-        :root {
-            --primary: #ff0000;
-            --bg: #050505;
-            --panel: #0a0a0a;
-            --text: #e0e0e0;
+async function ejecutarBusqueda() {
+    let num = document.getElementById('target').value;
+    if(!num) return;
+
+    document.getElementById('status').style.display = 'block';
+    document.getElementById('resultado').style.display = 'none';
+
+    try {
+        // CUANDO SUBAS A RAILWAY, CAMBIA ESTA URL POR LA QUE TE DEN
+        const url = `https://TU-APP-EN-RAILWAY.up.railway.app/consultar?num=${num}&tipo=3`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+
+        document.getElementById('status').style.display = 'none';
+        let res = document.getElementById('resultado');
+        res.style.display = 'block';
+
+        if(data.error) {
+            res.innerHTML = `<div style="color:red; text-align:center;">[!] ERROR: ${data.error.toUpperCase()}</div>`;
+        } else {
+            res.innerHTML = `
+                <div class="data-header">DATOS REALES - SECTOR CENTRAL</div>
+                <div class="data-row"><span class="label">NOMBRE:</span> <span class="value">${data.nombres} ${data.apellidos}</span></div>
+                <div class="data-row"><span class="label">GRUPO SISBEN:</span> <span class="value highlight">${data.grupo}</span></div>
+                <div class="data-row"><span class="label">UBICACIÓN:</span> <span class="value">${data.municipio}, ${data.departamento}</span></div>
+            `;
         }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-
-        /* Línea de escaneo láser */
-        body::before {
-            content: "";
-            position: fixed;
-            top: -10px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--primary);
-            box-shadow: 0 0 15px var(--primary);
-            z-index: 100;
-            animation: scanline 4s linear infinite;
-            opacity: 0.3;
-        }
-
-        @keyframes scanline {
-            0% { top: -10px; }
-            100% { top: 100%; }
-        }
-
-        .terminal-container {
-            width: 100%;
-            max-width: 750px;
-            background: var(--panel);
-            border: 1px solid #222;
-            padding: 30px;
-            box-shadow: 0 0 50px rgba(255, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .branding {
-            text-align: center;
-            color: var(--primary);
-            font-size: 1.5em;
-            margin-bottom: 25px;
-            text-shadow: 0 0 10px var(--primary);
-            font-weight: bold;
-        }
-
-        .comunicado-box {
-            border-left: 3px solid var(--primary);
-            padding: 15px 20px;
-            margin-bottom: 30px;
-            font-size: 0.85em;
-            background: rgba(255, 0, 0, 0.03);
-            line-height: 1.6;
-            color: #aaa;
-        }
-
-        .search-section {
-            background: #000;
-            padding: 5px;
-            border: 1px solid #333;
-            display: flex;
-            gap: 0;
-        }
-
-        input {
-            flex-grow: 1;
-            background: transparent;
-            border: none;
-            color: var(--primary);
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            outline: none;
-            font-size: 1em;
-        }
-
-        button {
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            padding: 0 25px;
-            cursor: pointer;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: all 0.3s;
-        }
-
-        button:hover {
-            background: #fff;
-            color: #000;
-            box-shadow: 0 0 15px #fff;
-        }
-
-        #status {
-            text-align: center;
-            margin: 20px 0;
-            color: var(--primary);
-            font-size: 0.8em;
-            letter-spacing: 2px;
-        }
-
-        #resultado {
-            display: none;
-            margin-top: 25px;
-            padding: 20px;
-            background: #000;
-            border: 1px solid #222;
-            color: #fff;
-            font-size: 0.9em;
-            border-top: 2px solid var(--primary);
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .data-header {
-            color: var(--primary);
-            text-align: center;
-            border-bottom: 1px solid #222;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-
-        .footer-tag {
-            margin-top: 40px;
-            font-size: 0.7em;
-            color: #444;
-            text-align: center;
-            letter-spacing: 3px;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="terminal-container">
-        <div class="branding">
-            『 𝓐𝓚𝓐𝓜 𝓜𝓐𝓕𝓘𝓐 』
-        </div>
-
-        <div class="comunicado-box">
-            <b>SISTEMA CENTRAL DE INTELIGENCIA 🏛️</b><br>
-            Acceso restringido para el sector central. No se admiten aficionados. 
-            Nuestra visión es absoluta: Donde el ojo se posa, ejecutamos. 
-            <br><br>
-            <span style="color:var(--primary)">ESTADO:</span> OPERATIVO v4.5 | <span style="color:var(--primary)">INICIO:</span> 19:00 HRS
-        </div>
-
-        <div class="search-section">
-            <input type="text" id="target" placeholder="INGRESAR ID, @USER O NÚMERO..." autocomplete="off">
-            <button onclick="ejecutarBusqueda()">SCAN</button>
-        </div>
-
-        <div id="status" style="display:none;">[ ACCEDIENDO AL NODO CENTRAL... ]</div>
-
-        <div id="resultado">
-            </div>
-    </div>
-
-    <div class="footer-tag">
-        AKAM MAFIA ORGANIZATION &copy; 2026<br>
-        <b>EL OJO LO VE TODO.</b>
-    </div>
-
-    <script>
-        function ejecutarBusqueda() {
-            let target = document.getElementById('target').value;
-            if(!target) return;
-
-            const status = document.getElementById('status');
-            const resBox = document.getElementById('resultado');
-
-            status.style.display = 'block';
-            resBox.style.display = 'none';
-
-            // Simulación de proceso de red
-            setTimeout(() => {
-                status.style.display = 'none';
-                resBox.style.display = 'block';
-
-                let idFalso = Math.floor(Math.random() * 9000000000) + 1000000000;
-                let numFalso = "3" + Math.floor(Math.random() * 900000000);
-                let fecha = new Date().toLocaleString();
-
-                resBox.innerHTML = `
-                    <div class="data-header">RESULTADO ENCONTRADO - AKAM OSINT</div>
-                    <table style="width:100%; border-collapse: collapse;">
-                        <tr><td style="color:#666; padding:5px;">OBJETIVO:</td><td style="color:var(--primary)">${target}</td></tr>
-                        <tr><td style="color:#666; padding:5px;">ID REGISTRO:</td><td>#${idFalso}</td></tr>
-                        <tr><td style="color:#666; padding:5px;">TELÉFONO:</td><td>+57 ${numFalso}</td></tr>
-                        <tr><td style="color:#666; padding:5px;">UBICACIÓN:</td><td>COLOMBIA (CO)</td></tr>
-                        <tr><td style="color:#666; padding:5px;">NODOS:</td><td>4 ACTIVOS</td></tr>
-                    </table>
-                    <div style="margin-top:15px; padding-top:10px; border-top:1px solid #222; font-size:0.8em; color:#555;">
-                        LOG: Sesión autorizada en ${fecha}<br>
-                        BY AKAM MAFIA - OPERACIÓN TIEMPO REAL
-                    </div>
-                `;
-            }, 1800);
-        }
-    </script>
-</body>
-</html>
+    } catch (e) {
+        document.getElementById('status').innerHTML = "[!] ERROR: FALLÓ LA CONEXIÓN AL NODO";
+    }
+}
