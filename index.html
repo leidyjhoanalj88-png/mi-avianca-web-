@@ -14,87 +14,74 @@
             align-items: center;
             margin: 0;
             padding: 20px;
-            overflow-x: hidden;
         }
 
         .terminal-container {
             width: 100%;
             max-width: 700px;
             background: rgba(10, 10, 10, 0.98);
-            border: 1px solid #444;
-            padding: 30px;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.15);
-            border-radius: 2px;
-            margin-bottom: 20px;
+            border: 1px solid #333;
+            padding: 25px;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.2);
         }
 
         .branding {
             text-align: center;
             color: #ff0000;
-            font-size: 1.1em;
-            margin-bottom: 25px;
-            text-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
+            font-size: 1em;
+            margin-bottom: 20px;
         }
 
-        .comunicado {
-            border-left: 3px solid #ff0000;
-            padding-left: 20px;
-            margin: 20px 0;
-            line-height: 1.6;
-            font-size: 0.95em;
-            text-align: justify;
-        }
-
-        h2 { color: #fff; text-align: center; font-size: 1.2em; text-transform: uppercase; letter-spacing: 3px; }
-
-        .rules {
-            background: rgba(255, 0, 0, 0.05);
+        .comunicado-box {
+            border: 1px solid #1a1a1a;
             padding: 15px;
-            border: 1px solid #222;
-            margin-top: 20px;
+            margin-bottom: 25px;
+            font-size: 0.85em;
+            background: rgba(255, 0, 0, 0.02);
+            line-height: 1.4;
         }
-
-        .rule-item { margin-bottom: 10px; border-bottom: 1px solid #1a1a1a; padding-bottom: 5px; }
-        .rule-item b { color: #ff0000; }
 
         .search-section {
-            margin-top: 40px;
-            border-top: 1px solid #333;
-            padding-top: 20px;
+            background: #000;
+            padding: 20px;
+            border: 1px solid #222;
         }
 
-        .search-box { display: flex; gap: 5px; }
-
         input {
-            flex-grow: 1;
+            width: 70%;
             background: #000;
             border: 1px solid #444;
             color: #ff0000;
-            padding: 12px;
-            outline: none;
+            padding: 10px;
             font-family: 'Courier New', monospace;
+            outline: none;
         }
 
         button {
             background: #ff0000;
-            color: white;
+            color: #fff;
             border: none;
-            padding: 10px 25px;
+            padding: 10px 15px;
             cursor: pointer;
             font-weight: bold;
         }
 
         button:hover { background: #fff; color: #000; }
 
-        .glitch-text { animation: pulse 2s infinite; color: #ff0000; text-align: center; font-weight: bold; }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
+        #resultado {
+            display: none;
+            margin-top: 25px;
+            padding: 15px;
+            white-space: pre-wrap;
+            border-top: 1px dashed #444;
+            color: #fff;
+            font-size: 0.9em;
+            animation: scan 0.5s ease-in-out;
         }
 
-        .footer { font-size: 0.8em; text-align: center; margin-top: 30px; color: #444; }
+        .status-msg { color: #ff0000; text-align: center; margin: 10px 0; font-weight: bold; }
+
+        @keyframes scan { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -104,52 +91,74 @@
             『 ꧁༺ 𝓐𝓚𝓐𝓜 𝓜𝓐𝓕𝓘𝓐 ༻꧂ 』
         </div>
 
-        <h2>COMUNICADO OFICIAL: SECTOR CENTRAL 🏛️</h2>
-
-        <div class="comunicado">
-            Bienvenido. Estás ingresando a una organización preparada y altamente estudiada. No somos aficionados; somos una estructura dedicada al análisis profundo de plataformas bancarias, seguridad, asesoría y hacking ético.
-            <br><br>
-            <span style="color: #fff;">👁️ NUESTRA VISIÓN:</span> Donde el ojo se posa, el universo se manifiesta. Desde el inframundo de la red hasta el control total de los sistemas, nosotros vigilamos y ejecutamos.
-        </div>
-
-        <div class="rules">
-            <div class="glitch-text">⚠️ REGLAS DE OPERACIÓN</div>
-            <br>
-            <div class="rule-item"><b>INICIO DE LABORES:</b> Hoy a las 7:00 PM arrancamos el trabajo pesado.</div>
-            <div class="rule-item"><b>ORDEN ABSOLUTO:</b> Se exige máxima disciplina. El desorden no tiene lugar.</div>
-            <div class="rule-item"><b>JERARQUÍA:</b> Sigue las instrucciones del Sector Central para evitar la expulsión.</div>
+        <div class="comunicado-box">
+            <b>COMUNICADO OFICIAL: SECTOR CENTRAL 🏛️</b><br><br>
+            Estás ingresando a una organización preparada. No somos aficionados; somos una estructura dedicada al análisis profundo de seguridad, asesoría y hacking ético.<br><br>
+            👁️ <b>VISIÓN:</b> Donde el ojo se posa, el universo se manifiesta. Vigilamos y ejecutamos.<br><br>
+            ⚠️ <b>REGLAS:</b> Orden absoluto y disciplina jerárquica. Inicio de labores: 7:00 PM.
         </div>
 
         <div class="search-section">
-            <p style="font-size: 0.8em; color: #666;">[ SISTEMA DE CONSULTA OSINT ACTIVADO ]</p>
-            <div class="search-box">
-                <input type="text" id="target" placeholder="Ingrese @username o ID...">
-                <button onclick="ejecutar()">EJECUTAR</button>
+            <div style="display: flex; gap: 5px;">
+                <input type="text" id="target" placeholder="/tg @username o número...">
+                <button onclick="ejecutarBusqueda()">EJECUTAR</button>
             </div>
         </div>
 
-        <div id="resultado" style="display:none; margin-top:20px; border: 1px solid #ff0000; padding: 15px; background: #000;">
-            <p class="glitch-text">BÚSQUEDA EN CURSO...</p>
-            <pre id="consola" style="font-size: 0.8em; color: #0f0;"></pre>
-        </div>
+        <div id="status" class="status-msg" style="display:none;">[!] ACCEDIENDO A LOS REGISTROS...</div>
+
+        <div id="resultado"></div>
     </div>
 
-    <div class="footer">
+    <div style="margin-top: 20px; font-size: 0.7em; color: #444; text-align: center;">
         EL OJO LO VE TODO. EL SECTOR CENTRAL LO DOMINA TODO.<br>
         <b>AKAM MAFIA © 2026 | @AkamMafiia</b>
     </div>
 
     <script>
-        function ejecutar() {
+        function ejecutarBusqueda() {
             let val = document.getElementById('target').value;
             if(!val) return;
-            document.getElementById('resultado').style.display = 'block';
-            let consola = document.getElementById('consola');
-            consola.innerHTML = "> Accediendo a registros...\n> Analizando perfiles vinculados...\n> ";
-            
+
+            document.getElementById('status').style.display = 'block';
+            document.getElementById('resultado').style.display = 'none';
+
             setTimeout(() => {
-                consola.innerHTML += "\n[!] ERROR DE ACCESO: Credenciales VIP requeridas.\n[!] Contacte a @AkamMafiia para autorización.";
-            }, 1500);
+                document.getElementById('status').style.display = 'none';
+                let res = document.getElementById('resultado');
+                res.style.display = 'block';
+
+                let idFalso = Math.floor(Math.random() * 8000000000) + 1000000000;
+                let numFalso = "3" + Math.floor(Math.random() * 900000000);
+                let ahora = new Date().toISOString().replace('T', ' ').substring(0, 19);
+
+                res.innerHTML = `『 ꧁༺ 𝓐𝓚𝓐𝓜 .𝔞𝔨𝔞𝔪 𝔪𝔞𝔣𝔦𝔞.𝓜𝓐𝓕𝓘𝓐 ༻꧂ 』
+
+<b>AKAM MAFIA DATA:</b>
+╔═══════════════════════╗
+║      🔍  AKAM DATA      ║
+╚═══════════════════════╝
+
+✅ Resultado encontrado
+
+👤 Usuario: <b>${val}</b>
+📱 Número: ${numFalso}
+🆔 ID Telegram: ${idFalso}
+🌍 País: Colombia
+🔢 Código país: +57
+
+─────────────────────────
+🔍 Búsquedas a este perfil: 1
+─────────────────────────
+✅ Usuarios nuevos hoy: 1
+✅ Total usuarios registrados: 80
+─────────────────────────
+🔧 Herramienta: AKAM-OSINT v4.0
+⏱️ Tiempo respuesta: 2.82s
+🕐 Fecha y hora: ${ahora}
+─────────────────────────
+🛠️ BY AKAM MAFIA - OPERACIÓN TIEMPO REAL`;
+            }, 2000);
         }
     </script>
 </body>
