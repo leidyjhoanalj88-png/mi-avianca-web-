@@ -1,0 +1,49 @@
+import os
+import random
+import requests
+from bs4 import BeautifulSoup
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+
+URL_SISBEN = "https://reportes.sisben.gov.co/dnp_sisbenconsulta"
+USER_AGENTS = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"]
+
+def extraer_datos_reales(html):
+    if "no se encontr" in html.lower(): return None
+    soup = BeautifulSoup(html, "html.parser")
+    res = {}
+    grupo_elem = soup.find("p", class_=lambda x: x and "text-uppercase" in x and "text-white" in x)
+    if grupo_elem: res["grupo"] = grupo_elem.get_text(strip=True)
+    
+    campos = [("Nombres", "nombres"), ("Apellidos", "apellidos"), ("Municipio", "municipio"), ("Departamento", "departamento")]
+    for texto, clave in campos:
+        elem = soup.find("p", string=lambda x: texto in str(x) if x else False)
+        if elem:
+            sig = elem.find_next_sibling("p")
+            if sig: res[clave] = " ".join(sig.get_text().split())
+    return res
+
+@app.route('/consultar', methods=['GET'])
+def consultar():
+    tipo = request.args.get('tipo', '3')
+    num = request.args.get('num')
+    if not num: return jsonify({"error": "Falta documento"}), 400
+
+    session = requests.Session()
+    session.headers.update({"User-Agent": random.choice(USER_AGENTS)})
+    try:
+        r = session.get(URL_SISBEN, timeout=10)
+        soup = BeautifulSoup(r.text, "html.parser")
+        token = soup.find("input", {"name": "__RequestVerificationToken"}).get("value", "")
+        r = session.post(URL_SISBEN, data={"TipoID": tipo, "documento": num, "__RequestVerificationToken": token}, timeout=10)
+        info = extraer_datos_reales(r.text)
+        return jsonify(info) if info else jsonify({"error": "No encontrado"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
