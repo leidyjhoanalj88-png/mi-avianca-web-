@@ -1,2 +1,2 @@
-web: gunicorn api:app
-worker: python bot.py
+web: gunicorn AkamMafiia_Core.api:app
+worker: python AkamMafiia_Core/bot.py
