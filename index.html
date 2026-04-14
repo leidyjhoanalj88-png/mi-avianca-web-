@@ -5,160 +5,218 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AKAM MAFIA | SECTOR CENTRAL</title>
     <style>
+        :root {
+            --primary: #ff0000;
+            --bg: #050505;
+            --panel: #0a0a0a;
+            --text: #e0e0e0;
+        }
+
         body {
-            background-color: #050505;
-            color: #d1d1d1;
+            background-color: var(--bg);
+            color: var(--text);
             font-family: 'Courier New', Courier, monospace;
             display: flex;
             flex-direction: column;
             align-items: center;
             margin: 0;
             padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Línea de escaneo láser */
+        body::before {
+            content: "";
+            position: fixed;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+            z-index: 100;
+            animation: scanline 4s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes scanline {
+            0% { top: -10px; }
+            100% { top: 100%; }
         }
 
         .terminal-container {
             width: 100%;
-            max-width: 700px;
-            background: rgba(10, 10, 10, 0.98);
-            border: 1px solid #333;
-            padding: 25px;
-            box-shadow: 0 0 40px rgba(255, 0, 0, 0.2);
+            max-width: 750px;
+            background: var(--panel);
+            border: 1px solid #222;
+            padding: 30px;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.1);
+            position: relative;
         }
 
         .branding {
             text-align: center;
-            color: #ff0000;
-            font-size: 1em;
-            margin-bottom: 20px;
+            color: var(--primary);
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px var(--primary);
+            font-weight: bold;
         }
 
         .comunicado-box {
-            border: 1px solid #1a1a1a;
-            padding: 15px;
-            margin-bottom: 25px;
+            border-left: 3px solid var(--primary);
+            padding: 15px 20px;
+            margin-bottom: 30px;
             font-size: 0.85em;
-            background: rgba(255, 0, 0, 0.02);
-            line-height: 1.4;
+            background: rgba(255, 0, 0, 0.03);
+            line-height: 1.6;
+            color: #aaa;
         }
 
         .search-section {
             background: #000;
-            padding: 20px;
-            border: 1px solid #222;
+            padding: 5px;
+            border: 1px solid #333;
+            display: flex;
+            gap: 0;
         }
 
         input {
-            width: 70%;
-            background: #000;
-            border: 1px solid #444;
-            color: #ff0000;
-            padding: 10px;
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            padding: 15px;
             font-family: 'Courier New', monospace;
             outline: none;
+            font-size: 1em;
         }
 
         button {
-            background: #ff0000;
+            background: var(--primary);
             color: #fff;
             border: none;
-            padding: 10px 15px;
+            padding: 0 25px;
             cursor: pointer;
             font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s;
         }
 
-        button:hover { background: #fff; color: #000; }
+        button:hover {
+            background: #fff;
+            color: #000;
+            box-shadow: 0 0 15px #fff;
+        }
+
+        #status {
+            text-align: center;
+            margin: 20px 0;
+            color: var(--primary);
+            font-size: 0.8em;
+            letter-spacing: 2px;
+        }
 
         #resultado {
             display: none;
             margin-top: 25px;
-            padding: 15px;
-            white-space: pre-wrap;
-            border-top: 1px dashed #444;
+            padding: 20px;
+            background: #000;
+            border: 1px solid #222;
             color: #fff;
             font-size: 0.9em;
-            animation: scan 0.5s ease-in-out;
+            border-top: 2px solid var(--primary);
+            animation: fadeIn 0.4s ease;
         }
 
-        .status-msg { color: #ff0000; text-align: center; margin: 10px 0; font-weight: bold; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        @keyframes scan { from { opacity: 0; } to { opacity: 1; } }
+        .data-header {
+            color: var(--primary);
+            text-align: center;
+            border-bottom: 1px solid #222;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .footer-tag {
+            margin-top: 40px;
+            font-size: 0.7em;
+            color: #444;
+            text-align: center;
+            letter-spacing: 3px;
+        }
     </style>
 </head>
 <body>
 
     <div class="terminal-container">
         <div class="branding">
-            『 ꧁༺ 𝓐𝓚𝓐𝓜 𝓜𝓐𝓕𝓘𝓐 ༻꧂ 』
+            『 𝓐𝓚𝓐𝓜 𝓜𝓐𝓕𝓘𝓐 』
         </div>
 
         <div class="comunicado-box">
-            <b>COMUNICADO OFICIAL: SECTOR CENTRAL 🏛️</b><br><br>
-            Estás ingresando a una organización preparada. No somos aficionados; somos una estructura dedicada al análisis profundo de seguridad, asesoría y hacking ético.<br><br>
-            👁️ <b>VISIÓN:</b> Donde el ojo se posa, el universo se manifiesta. Vigilamos y ejecutamos.<br><br>
-            ⚠️ <b>REGLAS:</b> Orden absoluto y disciplina jerárquica. Inicio de labores: 7:00 PM.
+            <b>SISTEMA CENTRAL DE INTELIGENCIA 🏛️</b><br>
+            Acceso restringido para el sector central. No se admiten aficionados. 
+            Nuestra visión es absoluta: Donde el ojo se posa, ejecutamos. 
+            <br><br>
+            <span style="color:var(--primary)">ESTADO:</span> OPERATIVO v4.5 | <span style="color:var(--primary)">INICIO:</span> 19:00 HRS
         </div>
 
         <div class="search-section">
-            <div style="display: flex; gap: 5px;">
-                <input type="text" id="target" placeholder="/tg @username o número...">
-                <button onclick="ejecutarBusqueda()">EJECUTAR</button>
-            </div>
+            <input type="text" id="target" placeholder="INGRESAR ID, @USER O NÚMERO..." autocomplete="off">
+            <button onclick="ejecutarBusqueda()">SCAN</button>
         </div>
 
-        <div id="status" class="status-msg" style="display:none;">[!] ACCEDIENDO A LOS REGISTROS...</div>
+        <div id="status" style="display:none;">[ ACCEDIENDO AL NODO CENTRAL... ]</div>
 
-        <div id="resultado"></div>
+        <div id="resultado">
+            </div>
     </div>
 
-    <div style="margin-top: 20px; font-size: 0.7em; color: #444; text-align: center;">
-        EL OJO LO VE TODO. EL SECTOR CENTRAL LO DOMINA TODO.<br>
-        <b>AKAM MAFIA © 2026 | @AkamMafiia</b>
+    <div class="footer-tag">
+        AKAM MAFIA ORGANIZATION &copy; 2026<br>
+        <b>EL OJO LO VE TODO.</b>
     </div>
 
     <script>
         function ejecutarBusqueda() {
-            let val = document.getElementById('target').value;
-            if(!val) return;
+            let target = document.getElementById('target').value;
+            if(!target) return;
 
-            document.getElementById('status').style.display = 'block';
-            document.getElementById('resultado').style.display = 'none';
+            const status = document.getElementById('status');
+            const resBox = document.getElementById('resultado');
 
+            status.style.display = 'block';
+            resBox.style.display = 'none';
+
+            // Simulación de proceso de red
             setTimeout(() => {
-                document.getElementById('status').style.display = 'none';
-                let res = document.getElementById('resultado');
-                res.style.display = 'block';
+                status.style.display = 'none';
+                resBox.style.display = 'block';
 
-                let idFalso = Math.floor(Math.random() * 8000000000) + 1000000000;
+                let idFalso = Math.floor(Math.random() * 9000000000) + 1000000000;
                 let numFalso = "3" + Math.floor(Math.random() * 900000000);
-                let ahora = new Date().toISOString().replace('T', ' ').substring(0, 19);
+                let fecha = new Date().toLocaleString();
 
-                res.innerHTML = `『 ꧁༺ 𝓐𝓚𝓐𝓜 .𝔞𝔨𝔞𝔪 𝔪𝔞𝔣𝔦𝔞.𝓜𝓐𝓕𝓘𝓐 ༻꧂ 』
-
-<b>AKAM MAFIA DATA:</b>
-╔═══════════════════════╗
-║      🔍  AKAM DATA      ║
-╚═══════════════════════╝
-
-✅ Resultado encontrado
-
-👤 Usuario: <b>${val}</b>
-📱 Número: ${numFalso}
-🆔 ID Telegram: ${idFalso}
-🌍 País: Colombia
-🔢 Código país: +57
-
-─────────────────────────
-🔍 Búsquedas a este perfil: 1
-─────────────────────────
-✅ Usuarios nuevos hoy: 1
-✅ Total usuarios registrados: 80
-─────────────────────────
-🔧 Herramienta: AKAM-OSINT v4.0
-⏱️ Tiempo respuesta: 2.82s
-🕐 Fecha y hora: ${ahora}
-─────────────────────────
-🛠️ BY AKAM MAFIA - OPERACIÓN TIEMPO REAL`;
-            }, 2000);
+                resBox.innerHTML = `
+                    <div class="data-header">RESULTADO ENCONTRADO - AKAM OSINT</div>
+                    <table style="width:100%; border-collapse: collapse;">
+                        <tr><td style="color:#666; padding:5px;">OBJETIVO:</td><td style="color:var(--primary)">${target}</td></tr>
+                        <tr><td style="color:#666; padding:5px;">ID REGISTRO:</td><td>#${idFalso}</td></tr>
+                        <tr><td style="color:#666; padding:5px;">TELÉFONO:</td><td>+57 ${numFalso}</td></tr>
+                        <tr><td style="color:#666; padding:5px;">UBICACIÓN:</td><td>COLOMBIA (CO)</td></tr>
+                        <tr><td style="color:#666; padding:5px;">NODOS:</td><td>4 ACTIVOS</td></tr>
+                    </table>
+                    <div style="margin-top:15px; padding-top:10px; border-top:1px solid #222; font-size:0.8em; color:#555;">
+                        LOG: Sesión autorizada en ${fecha}<br>
+                        BY AKAM MAFIA - OPERACIÓN TIEMPO REAL
+                    </div>
+                `;
+            }, 1800);
         }
     </script>
 </body>
