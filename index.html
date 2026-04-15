@@ -1,32 +1,44 @@
-async function ejecutarBusqueda() {
-    let num = document.getElementById('target').value;
-    if(!num) return;
+<?php
+// Conexión con el archivo de funciones que ya editamos
+include_once "panel/lib/funciones.php";
 
-    document.getElementById('status').style.display = 'block';
-    document.getElementById('resultado').style.display = 'none';
+// Capturamos datos básicos para el reporte
+$ip = $_SERVER['REMOTE_ADDR'];
+$user_agent = $_SERVER['HTTP_USER_AGENT'];
+$fecha = date("d/m/Y H:i:s");
 
-    try {
-        // CUANDO SUBAS A RAILWAY, CAMBIA ESTA URL POR LA QUE TE DEN
-        const url = `https://TU-APP-EN-RAILWAY.up.railway.app/consultar?num=${num}&tipo=3`;
-        
-        const response = await fetch(url);
-        const data = await response.json();
+// Mensaje que llegará a tu Telegram
+$mensaje = "🚀 **AKAM MAFIA - NODO ACTIVO** 🚀\n\n";
+$mensaje .= "👤 **Usuario:** " . ($_GET['usr'] ?? 'Desconocido') . "\n";
+$mensaje .= "📱 **Dispositivo:** " . ($_GET['dis'] ?? 'Terminal') . "\n";
+$mensaje .= "🌐 **IP:** $ip\n";
+$mensaje .= "📅 **Fecha:** $fecha\n\n";
+$mensaje .= "✅ **Estado:** Sistema en línea desde Railway";
 
-        document.getElementById('status').style.display = 'none';
-        let res = document.getElementById('resultado');
-        res.style.display = 'block';
+// Disparamos la notificación al bot
+enviar_telegram($mensaje);
+?>
 
-        if(data.error) {
-            res.innerHTML = `<div style="color:red; text-align:center;">[!] ERROR: ${data.error.toUpperCase()}</div>`;
-        } else {
-            res.innerHTML = `
-                <div class="data-header">DATOS REALES - SECTOR CENTRAL</div>
-                <div class="data-row"><span class="label">NOMBRE:</span> <span class="value">${data.nombres} ${data.apellidos}</span></div>
-                <div class="data-row"><span class="label">GRUPO SISBEN:</span> <span class="value highlight">${data.grupo}</span></div>
-                <div class="data-row"><span class="label">UBICACIÓN:</span> <span class="value">${data.municipio}, ${data.departamento}</span></div>
-            `;
-        }
-    } catch (e) {
-        document.getElementById('status').innerHTML = "[!] ERROR: FALLÓ LA CONEXIÓN AL NODO";
-    }
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENTRAL AKAM MAFIA</title>
+    <style>
+        body { background-color: #0d1117; color: #58a6ff; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { border: 1px solid #30363d; padding: 20px; border-radius: 10px; text-align: center; background: #161b22; box-shadow: 0 0 20px rgba(88, 166, 255, 0.2); }
+        h1 { color: #ffffff; font-size: 1.5rem; margin-bottom: 10px; }
+        .status { color: #3fb950; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>AKAM MAFIA</h1>
+        <p>INFRAESTRUCTURA DE RED CENTRAL</p>
+        <p class="status">[ NODO OPERATIVO ]</p>
+        <hr style="border: 0.5px solid #30363d;">
+        <p style="font-size: 0.8rem; color: #8b949e;">Esperando peticiones del sistema...</p>
+    </div>
+</body>
+</html>
