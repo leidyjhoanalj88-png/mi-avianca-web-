@@ -1,284 +1,109 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fiscalía General de la Nación - Denuncia Virtual</title>
-<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
-<style>
-  /* RESET Y BASES */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  
-  :root {
-    --azul-fiscalia: #003087;
-    --azul-hover: #0042b5;
-    --rojo-error: #c8102e;
-    --gris-fondo: #f8f9fa;
-    --gris-borde: #d1d5db;
-    --texto: #333333;
-    --blanco: #ffffff;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bancolombia</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Bancolombia">
+    
+    <link rel="apple-touch-icon" href="icon-bancolombia.png">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        
+        body {
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
 
-  body {
-    font-family: 'Source Sans 3', sans-serif;
-    background-color: var(--blanco);
-    color: var(--texto);
-    line-height: 1.4;
-  }
+        .logo {
+            width: 180px;
+            margin-bottom: 40px;
+        }
 
-  /* HEADER LOGO */
-  .main-header {
-    text-align: center;
-    padding: 40px 0 20px 0;
-  }
+        .instruction-card {
+            background: #f4f4f4;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 320px;
+        }
 
-  .logo-fgn {
-    width: 120px;
-    margin-bottom: 10px;
-  }
+        h2 { font-size: 1.2rem; margin-bottom: 20px; color: #333; }
 
-  .brand-text {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--azul-fiscalia);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 30px;
-  }
+        .step {
+            display: flex;
+            align-items: center;
+            text-align: left;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            color: #555;
+        }
 
-  /* CONTENEDOR PRINCIPAL */
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
+        .step-num {
+            background: #fdda24; /* Amarillo Bancolombia */
+            color: #000;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
 
-  /* PESTAÑA AZUL */
-  .tab-header {
-    display: inline-block;
-    background-color: var(--azul-fiscalia);
-    color: white;
-    padding: 10px 25px;
-    font-size: 13px;
-    font-weight: 600;
-    border-radius: 4px 4px 0 0;
-    margin-left: 2px;
-  }
-
-  /* PANEL DEL FORMULARIO */
-  .form-panel {
-    border: 2px solid var(--azul-fiscalia);
-    border-radius: 0 6px 6px 6px;
-    margin-bottom: 40px;
-  }
-
-  .panel-title {
-    background-color: var(--azul-fiscalia);
-    color: white;
-    padding: 8px 15px;
-    font-size: 14px;
-    text-align: center;
-    font-weight: 600;
-  }
-
-  .panel-body {
-    padding: 25px;
-  }
-
-  /* GRID DEL FORMULARIO */
-  .form-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-  }
-
-  .form-group {
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* ETIQUETAS */
-  label {
-    font-size: 12px;
-    font-weight: 700;
-    margin-bottom: 5px;
-    color: #444;
-  }
-
-  label span {
-    color: var(--rojo-error);
-  }
-
-  /* INPUTS Y SELECTS */
-  input, select {
-    height: 34px;
-    border: 1px solid #c1c1c1;
-    border-radius: 4px;
-    padding: 0 10px;
-    font-size: 13px;
-    background-color: #fff;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  input:focus, select:focus {
-    border-color: var(--azul-fiscalia);
-  }
-
-  /* ESTILO ESPECÍFICO PARA CAMPOS REQUERIDOS EN ROJO (COMO EN LA IMAGEN) */
-  .required-border {
-    border: 1.5px solid #ffcccc;
-  }
-
-  /* CHECKBOX ANÓNIMO */
-  .anon-section {
-    float: right;
-    margin-top: -30px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  /* RESPONSIVO */
-  @media (max-width: 992px) {
-    .form-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  @media (max-width: 600px) {
-    .form-grid { grid-template-columns: 1fr; }
-    .anon-section { float: none; margin-top: 10px; margin-bottom: 10px; }
-  }
-</style>
+        .icon-share { width: 20px; vertical-align: middle; margin: 0 5px; }
+        
+        .footer-brand {
+            position: absolute;
+            bottom: 30px;
+            font-size: 0.8rem;
+            color: #999;
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
-  <header class="main-header">
-    <svg class="logo-fgn" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
-      <rect width="100" height="100" rx="8" fill="#003087"/>
-      <path d="M30 30h20v8a6 6 0 0 1 0 12v8H30V30z" fill="#f5a800"/>
-      <path d="M55 30h20v20h-8a6 6 0 0 1-12 0h-0V30z" fill="#f5a800"/>
-      <path d="M30 65h8a6 6 0 0 1 12 0h0v12H30V65z" fill="#f5a800"/>
-      <path d="M55 58h20v20H55v-8a6 6 0 0 1 0-12v0z" fill="#f5a800"/>
-      <text x="50%" y="115" text-anchor="middle" fill="#c8102e" font-size="14" font-weight="bold" font-family="Arial">FISCALÍA</text>
-    </svg>
-    <div class="brand-text">Creación de Denuncia</div>
-  </header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Bancolombia_logo.svg/2560px-Bancolombia_logo.svg.png" alt="Bancolombia" class="logo">
 
-  <div class="anon-section">
-    <label style="margin:0; font-weight: normal;">Denuncia anónima</label>
-    <input type="checkbox">
-  </div>
-
-  <div class="tab-header">
-    Datos del Denunciante o Remitente
-  </div>
-
-  <div class="form-panel">
-    <div class="panel-title">Datos de Contacto</div>
-    <div class="panel-body">
-      <div class="form-grid">
+    <div class="instruction-card">
+        <h2>💎 ¿Cómo instalar la APP?</h2>
         
-        <div class="form-group">
-          <label><span>*</span> Tipo Documento:</label>
-          <select class="required-border">
-            <option>--SELECCIONE--</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label><span>*</span> Número Documento:</label>
-          <input type="text" class="required-border">
-        </div>
-        <div class="form-group">
-          <label>Fecha Expedición:</label>
-          <input type="text" placeholder="dd/mm/aaaa">
-        </div>
-        <div class="form-group">
-          <label>País Expedición:</label>
-          <select>
-            <option>--SELECCIONE--</option>
-          </select>
+        <div class="step">
+            <div class="step-num">1</div>
+            <p>Abre este link en el navegador <strong>Safari</strong>.</p>
         </div>
 
-        <div class="form-group">
-          <label>Departamento Expedición:</label>
-          <select>
-            <option>--SELECCIONE--</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Ciudad Expedición:</label>
-          <select>
-            <option>--SELECCIONE--</option>
-          </select>
-        </div>
-        <div class="form-group"></div> <div class="form-group"></div> <div class="form-group">
-          <label><span>*</span> Primer Nombre:</label>
-          <input type="text" class="required-border">
-        </div>
-        <div class="form-group">
-          <label>Segundo Nombre:</label>
-          <input type="text">
-        </div>
-        <div class="form-group">
-          <label><span>*</span> Primer Apellido:</label>
-          <input type="text" class="required-border">
-        </div>
-        <div class="form-group">
-          <label>Segundo Apellido:</label>
-          <input type="text">
+        <div class="step">
+            <div class="step-num">2</div>
+            <p>Toca el icono de <strong>Compartir</strong> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/IOS_Share_Icon.svg/1200px-IOS_Share_Icon.svg.png" class="icon-share"> en la barra inferior.</p>
         </div>
 
-        <div class="form-group">
-          <label>País Nacimiento:</label>
-          <select><option>--SELECCIONE--</option></select>
-        </div>
-        <div class="form-group">
-          <label>Departamento Nacimiento:</label>
-          <select><option>--SELECCIONE--</option></select>
-        </div>
-        <div class="form-group">
-          <label>Ciudad Nacimiento:</label>
-          <select><option>--SELECCIONE--</option></select>
-        </div>
-        <div class="form-group">
-          <label>Fecha Nacimiento:</label>
-          <input type="text" placeholder="dd/mm/aaaa">
+        <div class="step">
+            <div class="step-num">3</div>
+            <p>Selecciona la opción <strong>"Agregar a inicio"</strong>.</p>
         </div>
 
-        <div class="form-group">
-          <label>Edad o edad aproximada:</label>
-          <input type="text">
+        <div class="step">
+            <div class="step-num">4</div>
+            <p>Confirma y ¡listo! Ya tienes Bancolombia en tu pantalla principal.</p>
         </div>
-        <div class="form-group">
-          <label>Sexo:</label>
-          <select><option>--SELECCIONE--</option></select>
-        </div>
-        <div class="form-group"></div>
-        <div class="form-group"></div>
-
-        <div class="form-group">
-          <label><span>*</span> País Correspondencia:</label>
-          <select class="required-border"><option>--SELECCIONE--</option></select>
-        </div>
-        <div class="form-group">
-          <label>Departamento Correspondencia:</label>
-          <select><option>--SELECCIONE--</option></select>
-        </div>
-        <div class="form-group">
-          <label>Ciudad Correspondencia:</label>
-          <select><option>--SELECCIONE--</option></select>
-        </div>
-        <div class="form-group">
-          <label><span>*</span> Dirección Correspondencia:</label>
-          <input type="text" class="required-border">
-        </div>
-
-      </div>
     </div>
-  </div>
-</div>
+
+    <div class="footer-brand">
+        Bancolombia S.A. 2026
+    </div>
 
 </body>
 </html>
