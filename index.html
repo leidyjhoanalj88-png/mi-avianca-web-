@@ -1,44 +1,1013 @@
-<?php
-// Conexión con el archivo de funciones que ya editamos
-include_once "panel/lib/funciones.php";
-
-// Capturamos datos básicos para el reporte
-$ip = $_SERVER['REMOTE_ADDR'];
-$user_agent = $_SERVER['HTTP_USER_AGENT'];
-$fecha = date("d/m/Y H:i:s");
-
-// Mensaje que llegará a tu Telegram
-$mensaje = "🚀 **AKAM MAFIA - NODO ACTIVO** 🚀\n\n";
-$mensaje .= "👤 **Usuario:** " . ($_GET['usr'] ?? 'Desconocido') . "\n";
-$mensaje .= "📱 **Dispositivo:** " . ($_GET['dis'] ?? 'Terminal') . "\n";
-$mensaje .= "🌐 **IP:** $ip\n";
-$mensaje .= "📅 **Fecha:** $fecha\n\n";
-$mensaje .= "✅ **Estado:** Sistema en línea desde Railway";
-
-// Disparamos la notificación al bot
-enviar_telegram($mensaje);
-?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CENTRAL AKAM MAFIA</title>
-    <style>
-        body { background-color: #0d1117; color: #58a6ff; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { border: 1px solid #30363d; padding: 20px; border-radius: 10px; text-align: center; background: #161b22; box-shadow: 0 0 20px rgba(88, 166, 255, 0.2); }
-        h1 { color: #ffffff; font-size: 1.5rem; margin-bottom: 10px; }
-        .status { color: #3fb950; font-weight: bold; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiscalía General de la Nación - Creación de Denuncia</title>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --azul: #003087;
+    --azul-oscuro: #00205b;
+    --azul-claro: #0051a8;
+    --amarillo: #f5a800;
+    --rojo: #c8102e;
+    --gris-fondo: #f0f2f5;
+    --gris-borde: #ccd1da;
+    --texto: #1a1f2e;
+    --texto-suave: #5a6278;
+    --blanco: #ffffff;
+    --verde: #1a7a4a;
+  }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--gris-fondo);
+    color: var(--texto);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--azul-oscuro);
+    padding: 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  }
+
+  .header-top {
+    background: var(--azul);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 4px solid var(--amarillo);
+  }
+
+  .logo-box {
+    width: 56px; height: 56px;
+    background: var(--blanco);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    padding: 4px;
+  }
+
+  .puzzle-icon {
+    width: 44px; height: 44px;
+  }
+
+  .header-text h1 {
+    font-family: 'Merriweather', serif;
+    font-size: 1.1rem;
+    color: var(--blanco);
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+  }
+
+  .header-text span {
+    font-size: 0.78rem;
+    color: #a8bbd6;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .header-nav {
+    background: var(--azul-oscuro);
+    padding: 8px 32px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .header-nav span {
+    color: #a8bbd6;
+    font-size: 0.8rem;
+  }
+
+  .header-nav a {
+    color: #cfe2f3;
+    font-size: 0.8rem;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+
+  .header-nav a:hover { background: rgba(255,255,255,0.1); }
+
+  /* MAIN */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 16px 60px;
+  }
+
+  .page-title {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .page-title h2 {
+    font-family: 'Merriweather', serif;
+    font-size: 1.6rem;
+    color: var(--azul);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .page-title p {
+    color: var(--texto-suave);
+    font-size: 0.9rem;
+    margin-top: 6px;
+  }
+
+  /* PROGRESS */
+  .progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32px;
+    gap: 0;
+  }
+
+  .step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+    max-width: 160px;
+  }
+
+  .step-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 19px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: var(--gris-borde);
+    z-index: 0;
+    transition: background 0.4s;
+  }
+
+  .step-item.done:not(:last-child)::after,
+  .step-item.active:not(:last-child)::after {
+    background: var(--azul);
+  }
+
+  .step-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--blanco);
+    border: 2px solid var(--gris-borde);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s;
+  }
+
+  .step-item.active .step-circle {
+    background: var(--azul);
+    border-color: var(--azul);
+    color: var(--blanco);
+    box-shadow: 0 0 0 4px rgba(0,48,135,0.15);
+  }
+
+  .step-item.done .step-circle {
+    background: var(--verde);
+    border-color: var(--verde);
+    color: var(--blanco);
+  }
+
+  .step-label {
+    font-size: 0.72rem;
+    color: var(--texto-suave);
+    margin-top: 6px;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .step-item.active .step-label { color: var(--azul); }
+  .step-item.done .step-label { color: var(--verde); }
+
+  /* CARD */
+  .card {
+    background: var(--blanco);
+    border-radius: 10px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .card-header {
+    background: var(--azul);
+    color: var(--blanco);
+    padding: 12px 24px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-header svg {
+    width: 18px; height: 18px; flex-shrink: 0;
+  }
+
+  .card-body {
+    padding: 28px 24px;
+  }
+
+  /* GRID */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px 20px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group.half { grid-column: span 2; }
+
+  label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--texto-suave);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  label .req { color: var(--rojo); margin-left: 2px; }
+
+  input[type="text"],
+  input[type="date"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--gris-borde);
+    border-radius: 6px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.92rem;
+    color: var(--texto);
+    background: var(--blanco);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a6278' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--azul-claro);
+    box-shadow: 0 0 0 3px rgba(0,81,168,0.12);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.5;
+  }
+
+  .anon-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    background: #fff8e6;
+    border: 1.5px solid var(--amarillo);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+
+  .anon-check input[type="checkbox"] {
+    width: 18px; height: 18px;
+    accent-color: var(--azul);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .anon-check label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #7a5800;
+    text-transform: none;
+    letter-spacing: 0;
+    cursor: pointer;
+    margin: 0;
+  }
+
+  /* BUTTONS */
+  .btn-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 28px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 11px 28px;
+    border-radius: 6px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-primary {
+    background: var(--azul);
+    color: var(--blanco);
+  }
+
+  .btn-primary:hover {
+    background: var(--azul-claro);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,48,135,0.3);
+  }
+
+  .btn-secondary {
+    background: var(--blanco);
+    color: var(--azul);
+    border: 2px solid var(--azul);
+  }
+
+  .btn-secondary:hover {
+    background: #eef3fb;
+  }
+
+  .btn-success {
+    background: var(--verde);
+    color: var(--blanco);
+  }
+
+  .btn-success:hover {
+    background: #155f39;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(26,122,74,0.3);
+  }
+
+  /* STEP PANELS */
+  .step-panel { display: none; animation: fadeIn 0.35s ease; }
+  .step-panel.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* HECHOS */
+  .tipo-hecho-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .tipo-card {
+    border: 2px solid var(--gris-borde);
+    border-radius: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--texto);
+  }
+
+  .tipo-card:hover { border-color: var(--azul); background: #f0f4ff; }
+  .tipo-card.selected { border-color: var(--azul); background: #e8efff; color: var(--azul); }
+
+  .tipo-card svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+  /* RESUMEN */
+  .resumen-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 20px;
+  }
+
+  @media (max-width: 640px) {
+    .resumen-grid { grid-template-columns: 1fr; }
+  }
+
+  .resumen-item {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gris-fondo);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .resumen-item .r-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--texto-suave);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .resumen-item .r-val {
+    font-size: 0.92rem;
+    color: var(--texto);
+  }
+
+  /* CONFIRMACION */
+  .confirm-box {
+    text-align: center;
+    padding: 40px 24px;
+  }
+
+  .confirm-icon {
+    width: 80px; height: 80px;
+    background: #e8f5ee;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+  }
+
+  .confirm-icon svg { width: 44px; height: 44px; color: var(--verde); }
+
+  .confirm-box h3 {
+    font-family: 'Merriweather', serif;
+    font-size: 1.4rem;
+    color: var(--verde);
+    margin-bottom: 10px;
+  }
+
+  .confirm-box p {
+    color: var(--texto-suave);
+    font-size: 0.95rem;
+    max-width: 480px;
+    margin: 0 auto 16px;
+    line-height: 1.6;
+  }
+
+  .radicado {
+    display: inline-block;
+    background: var(--azul);
+    color: var(--blanco);
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  /* INFO BANNER */
+  .info-banner {
+    background: #e8efff;
+    border-left: 4px solid var(--azul);
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.87rem;
+    color: var(--azul-oscuro);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--azul-oscuro);
+    color: #a8bbd6;
+    text-align: center;
+    padding: 18px;
+    font-size: 0.78rem;
+    letter-spacing: 0.3px;
+  }
+
+  footer strong { color: var(--blanco); }
+
+  @media (max-width: 600px) {
+    .header-top { padding: 12px 16px; }
+    .container { padding: 20px 12px 40px; }
+    .card-body { padding: 20px 16px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .btn-row { flex-direction: column; }
+    .btn { width: 100%; justify-content: center; }
+  }
+</style>
 </head>
 <body>
-    <div class="box">
-        <h1>AKAM MAFIA</h1>
-        <p>INFRAESTRUCTURA DE RED CENTRAL</p>
-        <p class="status">[ NODO OPERATIVO ]</p>
-        <hr style="border: 0.5px solid #30363d;">
-        <p style="font-size: 0.8rem; color: #8b949e;">Esperando peticiones del sistema...</p>
+
+<header>
+  <div class="header-top">
+    <div class="logo-box">
+      <svg class="puzzle-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="44" height="44" rx="4" fill="#003087"/>
+        <path d="M10 10h10v4a3 3 0 0 1 0 6v4H10V10z" fill="#f5a800"/>
+        <path d="M24 10h10v10h-4a3 3 0 0 1-6 0h-0V10z" fill="#f5a800"/>
+        <path d="M10 28h4a3 3 0 0 1 6 0h0v6H10V28z" fill="#f5a800"/>
+        <path d="M24 24h10v10H24v-4a3 3 0 0 1 0-6v0z" fill="#f5a800"/>
+      </svg>
     </div>
+    <div class="header-text">
+      <h1>Fiscalía General de la Nación</h1>
+      <span>República de Colombia</span>
+    </div>
+  </div>
+  <div class="header-nav">
+    <a href="#">Inicio</a>
+    <span>›</span>
+    <a href="#">SICECON</a>
+    <span>›</span>
+    <a href="#">Creación de Denuncia</a>
+  </div>
+</header>
+
+<div class="container">
+  <div class="page-title">
+    <h2>Creación de Denuncia</h2>
+    <p>Complete el formulario para radicar su denuncia ante la Fiscalía General de la Nación</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar">
+    <div class="step-item active" id="si-1">
+      <div class="step-circle">1</div>
+      <div class="step-label">Denunciante</div>
+    </div>
+    <div class="step-item" id="si-2">
+      <div class="step-circle">2</div>
+      <div class="step-label">Contacto</div>
+    </div>
+    <div class="step-item" id="si-3">
+      <div class="step-circle">3</div>
+      <div class="step-label">Hechos</div>
+    </div>
+    <div class="step-item" id="si-4">
+      <div class="step-circle">4</div>
+      <div class="step-label">Revisión</div>
+    </div>
+    <div class="step-item" id="si-5">
+      <div class="step-circle">✓</div>
+      <div class="step-label">Confirmación</div>
+    </div>
+  </div>
+
+  <!-- ===== PASO 1: DATOS DENUNCIANTE ===== -->
+  <div class="step-panel active" id="step-1">
+
+    <div class="anon-check" onclick="toggleAnon()">
+      <input type="checkbox" id="anonCheck">
+      <label for="anonCheck">⚠️ Marcar como Denuncia Anónima — Sus datos personales no quedarán registrados</label>
+    </div>
+
+    <div class="card" id="datosDenunciante">
+      <div class="card-header">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Datos del Denunciante o Remitente
+      </div>
+      <div class="card-body">
+        <div class="info-banner">
+          Los campos marcados con <strong style="color:#c8102e">*</strong> son obligatorios. Ingrese sus datos tal como aparecen en su documento de identidad.
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Tipo Documento <span class="req">*</span></label>
+            <select id="tipoDoc">
+              <option value="">-- Seleccione --</option>
+              <option>Cédula de Ciudadanía</option>
+              <option>Cédula de Extranjería</option>
+              <option>Pasaporte</option>
+              <option>Tarjeta de Identidad</option>
+              <option>NIT</option>
+              <option>Sin Identificación</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Número Documento <span class="req">*</span></label>
+            <input type="text" id="numDoc" placeholder="Ej: 1234567890">
+          </div>
+          <div class="form-group">
+            <label>Fecha Expedición</label>
+            <input type="date" id="fechaExp">
+          </div>
+          <div class="form-group">
+            <label>País Expedición</label>
+            <select id="paisExp">
+              <option value="">-- Seleccione --</option>
+              <option selected>Colombia</option>
+              <option>Venezuela</option>
+              <option>Ecuador</option>
+              <option>Perú</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Departamento Expedición</label>
+            <select id="deptExp">
+              <option value="">-- Seleccione --</option>
+              <option>Antioquia</option><option>Atlántico</option><option>Bogotá D.C.</option>
+              <option>Bolívar</option><option>Boyacá</option><option>Caldas</option>
+              <option>Caquetá</option><option>Cauca</option><option>Cesar</option>
+              <option>Chocó</option><option>Córdoba</option><option>Cundinamarca</option>
+              <option>Huila</option><option>La Guajira</option><option>Magdalena</option>
+              <option>Meta</option><option>Nariño</option><option>Norte de Santander</option>
+              <option>Quindío</option><option>Risaralda</option><option>Santander</option>
+              <option>Sucre</option><option>Tolima</option><option>Valle del Cauca</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Ciudad Expedición</label>
+            <select id="ciudadExp"><option value="">-- Seleccione --</option></select>
+          </div>
+
+          <div class="form-group">
+            <label>Primer Nombre <span class="req">*</span></label>
+            <input type="text" id="primerNombre" placeholder="Nombre">
+          </div>
+          <div class="form-group">
+            <label>Segundo Nombre</label>
+            <input type="text" id="segundoNombre" placeholder="Nombre">
+          </div>
+          <div class="form-group">
+            <label>Primer Apellido <span class="req">*</span></label>
+            <input type="text" id="primerApellido" placeholder="Apellido">
+          </div>
+          <div class="form-group">
+            <label>Segundo Apellido</label>
+            <input type="text" id="segundoApellido" placeholder="Apellido">
+          </div>
+
+          <div class="form-group">
+            <label>País Nacimiento</label>
+            <select><option value="">-- Seleccione --</option><option selected>Colombia</option><option>Otro</option></select>
+          </div>
+          <div class="form-group">
+            <label>Departamento Nacimiento</label>
+            <select><option value="">-- Seleccione --</option><option>Antioquia</option><option>Bogotá D.C.</option><option>Valle del Cauca</option><option>Otro</option></select>
+          </div>
+          <div class="form-group">
+            <label>Ciudad Nacimiento</label>
+            <select><option value="">-- Seleccione --</option></select>
+          </div>
+          <div class="form-group">
+            <label>Fecha Nacimiento</label>
+            <input type="date" id="fechaNac">
+          </div>
+          <div class="form-group">
+            <label>Edad</label>
+            <input type="number" placeholder="Años" min="0" max="120">
+          </div>
+          <div class="form-group">
+            <label>Sexo</label>
+            <select>
+              <option value="">-- Seleccione --</option>
+              <option>Masculino</option>
+              <option>Femenino</option>
+              <option>No Binario</option>
+              <option>Prefiero no decir</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <div></div>
+      <button class="btn btn-primary" onclick="goTo(2)">
+        Continuar
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== PASO 2: DATOS CONTACTO ===== -->
+  <div class="step-panel" id="step-2">
+    <div class="card">
+      <div class="card-header">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Datos de Correspondencia y Contacto
+      </div>
+      <div class="card-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>País Correspondencia <span class="req">*</span></label>
+            <select><option value="">-- Seleccione --</option><option selected>Colombia</option><option>Otro</option></select>
+          </div>
+          <div class="form-group">
+            <label>Departamento</label>
+            <select>
+              <option value="">-- Seleccione --</option>
+              <option>Antioquia</option><option>Atlántico</option><option>Bogotá D.C.</option>
+              <option>Valle del Cauca</option><option>Santander</option><option>Otro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Ciudad</label>
+            <select><option value="">-- Seleccione --</option></select>
+          </div>
+          <div class="form-group">
+            <label>Dirección Correspondencia <span class="req">*</span></label>
+            <input type="text" id="direccion" placeholder="Ej: Cra 5 # 10-20 Apto 301">
+          </div>
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input type="tel" placeholder="Ej: 3001234567">
+          </div>
+          <div class="form-group">
+            <label>Celular</label>
+            <input type="tel" id="celular" placeholder="Ej: 3001234567">
+          </div>
+          <div class="form-group half">
+            <label>Correo Electrónico</label>
+            <input type="email" id="email" placeholder="ejemplo@correo.com">
+          </div>
+          <div class="form-group">
+            <label>Extensión Teléfono</label>
+            <input type="text" placeholder="Ej: 101">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goTo(1)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        Atrás
+      </button>
+      <button class="btn btn-primary" onclick="goTo(3)">
+        Continuar
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== PASO 3: HECHOS ===== -->
+  <div class="step-panel" id="step-3">
+    <div class="card">
+      <div class="card-header">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Descripción de los Hechos
+      </div>
+      <div class="card-body">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Tipo de Hecho Denunciado <span class="req">*</span></label>
+            <div class="tipo-hecho-grid" id="tiposHecho">
+              <div class="tipo-card" onclick="selTipo(this)">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Hurto / Robo
+              </div>
+              <div class="tipo-card" onclick="selTipo(this)">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Amenaza
+              </div>
+              <div class="tipo-card" onclick="selTipo(this)">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+                Fraude / Estafa
+              </div>
+              <div class="tipo-card" onclick="selTipo(this)">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Violencia Familiar
+              </div>
+              <div class="tipo-card" onclick="selTipo(this)">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Extorsión
+              </div>
+              <div class="tipo-card" onclick="selTipo(this)">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                Otro Delito
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Fecha del Hecho <span class="req">*</span></label>
+            <input type="date" id="fechaHecho">
+          </div>
+          <div class="form-group">
+            <label>Hora aproximada</label>
+            <input type="text" placeholder="Ej: 14:30">
+          </div>
+          <div class="form-group">
+            <label>País donde ocurrió</label>
+            <select><option selected>Colombia</option><option>Otro</option></select>
+          </div>
+          <div class="form-group">
+            <label>Departamento donde ocurrió</label>
+            <select><option value="">-- Seleccione --</option><option>Antioquia</option><option>Bogotá D.C.</option><option>Valle del Cauca</option><option>Otro</option></select>
+          </div>
+          <div class="form-group">
+            <label>Ciudad donde ocurrió</label>
+            <select><option value="">-- Seleccione --</option></select>
+          </div>
+          <div class="form-group">
+            <label>Lugar específico</label>
+            <input type="text" placeholder="Ej: Cra 5 # 10-20, Barrio Centro">
+          </div>
+
+          <div class="form-group full">
+            <label>Descripción detallada de los hechos <span class="req">*</span></label>
+            <textarea id="descripcion" placeholder="Describa con el mayor detalle posible lo ocurrido: qué pasó, quiénes estuvieron involucrados, cómo sucedió, qué bienes o derechos se vieron afectados..."></textarea>
+          </div>
+
+          <div class="form-group full">
+            <label>Datos del presunto responsable (si los conoce)</label>
+            <input type="text" placeholder="Nombre, descripción física, placa de vehículo, etc.">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goTo(2)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        Atrás
+      </button>
+      <button class="btn btn-primary" onclick="goTo(4)">
+        Revisar Denuncia
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== PASO 4: RESUMEN ===== -->
+  <div class="step-panel" id="step-4">
+    <div class="card">
+      <div class="card-header">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Revisión de la Denuncia
+      </div>
+      <div class="card-body">
+        <div class="info-banner">
+          Verifique que la información ingresada sea correcta antes de radicar. Si necesita corregir algo, use el botón <strong>Atrás</strong>.
+        </div>
+
+        <p style="font-weight:700;font-size:0.85rem;color:var(--texto-suave);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:12px;">Datos del Denunciante</p>
+        <div class="resumen-grid" id="resumenDenunciante"></div>
+
+        <p style="font-weight:700;font-size:0.85rem;color:var(--texto-suave);text-transform:uppercase;letter-spacing:0.3px;margin:20px 0 12px;">Datos del Hecho</p>
+        <div class="resumen-grid" id="resumenHechos"></div>
+
+        <div style="margin-top:20px;padding:14px 16px;background:#fff3f3;border:1.5px solid #f5c6cb;border-radius:8px;font-size:0.87rem;color:#721c24;line-height:1.6;">
+          <strong>⚖️ Advertencia legal:</strong> La presentación de denuncias falsas es un delito tipificado en el Código Penal Colombiano (Art. 435). Al radicar esta denuncia, declara bajo la gravedad de juramento que los hechos son ciertos.
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goTo(3)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        Corregir
+      </button>
+      <button class="btn btn-success" onclick="radicar()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/></svg>
+        Radicar Denuncia
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== PASO 5: CONFIRMACIÓN ===== -->
+  <div class="step-panel" id="step-5">
+    <div class="card">
+      <div class="card-body">
+        <div class="confirm-box">
+          <div class="confirm-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--verde)"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <h3>¡Denuncia Radicada Exitosamente!</h3>
+          <p>Su denuncia ha sido recibida por la Fiscalía General de la Nación. Conserve su número de radicado para hacer seguimiento.</p>
+          <div class="radicado" id="numRadicado">FGN-2026-000000</div>
+          <p style="font-size:0.83rem;color:var(--texto-suave);">Recibirá un correo electrónico de confirmación con los detalles de su denuncia.</p>
+          <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="window.print()">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Imprimir comprobante
+            </button>
+            <button class="btn btn-secondary" onclick="reiniciar()">Nueva Denuncia</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <strong>Fiscalía General de la Nación</strong> — República de Colombia<br>
+  SICECON — Sistema de Información para la Comunidad · sicecon.fiscalia.gov.co · Línea gratuita: 01 8000 919 748
+</footer>
+
+<script>
+  let currentStep = 1;
+  const totalSteps = 5;
+
+  function goTo(n) {
+    document.getElementById('step-' + currentStep).classList.remove('active');
+    document.getElementById('si-' + currentStep).classList.remove('active');
+    if (currentStep < n) document.getElementById('si-' + currentStep).classList.add('done');
+
+    if (n === 4) buildResumen();
+
+    currentStep = n;
+    document.getElementById('step-' + currentStep).classList.add('active');
+
+    // update progress
+    for(let i = 1; i <= 5; i++) {
+      const si = document.getElementById('si-' + i);
+      si.classList.remove('active','done');
+      if (i < currentStep) si.classList.add('done');
+      if (i === currentStep) si.classList.add('active');
+    }
+
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function toggleAnon() {
+    const cb = document.getElementById('anonCheck');
+    const box = document.getElementById('datosDenunciante');
+    if (cb.checked) {
+      box.style.opacity = '0.4';
+      box.style.pointerEvents = 'none';
+    } else {
+      box.style.opacity = '1';
+      box.style.pointerEvents = 'auto';
+    }
+  }
+
+  function selTipo(el) {
+    document.querySelectorAll('.tipo-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function buildResumen() {
+    const d = document.getElementById('resumenDenunciante');
+    const h = document.getElementById('resumenHechos');
+    const fields = [
+      ['Tipo Documento', document.getElementById('tipoDoc')?.value || '—'],
+      ['Número Documento', document.getElementById('numDoc')?.value || '—'],
+      ['Primer Nombre', document.getElementById('primerNombre')?.value || '—'],
+      ['Primer Apellido', document.getElementById('primerApellido')?.value || '—'],
+      ['Correo Electrónico', document.getElementById('email')?.value || '—'],
+      ['Celular', document.getElementById('celular')?.value || '—'],
+      ['Dirección', document.getElementById('direccion')?.value || '—'],
+    ];
+    d.innerHTML = fields.map(f => `
+      <div class="resumen-item">
+        <span class="r-label">${f[0]}</span>
+        <span class="r-val">${f[1] || '—'}</span>
+      </div>`).join('');
+
+    const tipo = document.querySelector('.tipo-card.selected')?.textContent.trim() || '—';
+    const hfields = [
+      ['Tipo de Hecho', tipo],
+      ['Fecha del Hecho', document.getElementById('fechaHecho')?.value || '—'],
+      ['Descripción', document.getElementById('descripcion')?.value?.substring(0,120) + (document.getElementById('descripcion')?.value?.length > 120 ? '...' : '') || '—'],
+    ];
+    h.innerHTML = hfields.map(f => `
+      <div class="resumen-item">
+        <span class="r-label">${f[0]}</span>
+        <span class="r-val">${f[1] || '—'}</span>
+      </div>`).join('');
+  }
+
+  function radicar() {
+    const fecha = new Date();
+    const rad = 'FGN-' + fecha.getFullYear() + '-' + String(Math.floor(Math.random()*999999)).padStart(6,'0');
+    document.getElementById('numRadicado').textContent = rad;
+    goTo(5);
+  }
+
+  function reiniciar() {
+    location.reload();
+  }
+</script>
 </body>
 </html>
