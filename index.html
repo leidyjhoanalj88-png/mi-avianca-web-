@@ -9,100 +9,116 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Bancolombia">
     
-    <link rel="apple-touch-icon" href="icon-bancolombia.png">
-    
+    <link rel="apple-touch-icon" href="https://i.ibb.co/Xf8zXzR/App.png">
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         
         body {
-            background-color: #ffffff;
+            background-color: #000; /* Fondo negro como el icono */
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* DISEÑO DEL ICONO CENTRAL */
+        .main-icon {
+            width: 150px;
+            height: 150px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* CUADRO DE DESCARGA (POPUP) */
+        .download-modal {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 350px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            text-align: center;
-            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: 9999;
         }
 
-        .logo {
-            width: 180px;
-            margin-bottom: 40px;
+        @keyframes slideUp {
+            from { bottom: -200px; opacity: 0; }
+            to { bottom: 20px; opacity: 1; }
         }
 
-        .instruction-card {
-            background: #f4f4f4;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            max-width: 320px;
-        }
-
-        h2 { font-size: 1.2rem; margin-bottom: 20px; color: #333; }
-
-        .step {
-            display: flex;
-            align-items: center;
-            text-align: left;
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
             margin-bottom: 15px;
-            font-size: 0.95rem;
-            color: #555;
         }
 
-        .step-num {
-            background: #fdda24; /* Amarillo Bancolombia */
-            color: #000;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
+        .modal-text {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .modal-text h3 { font-size: 18px; margin-bottom: 5px; }
+        .modal-text p { font-size: 14px; color: #666; }
+
+        /* BOTONES DE PASOS */
+        .step-instruction {
+            width: 100%;
+            background: #f0f0f0;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #333;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 12px;
-            flex-shrink: 0;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
-        .icon-share { width: 20px; vertical-align: middle; margin: 0 5px; }
-        
-        .footer-brand {
-            position: absolute;
-            bottom: 30px;
-            font-size: 0.8rem;
-            color: #999;
+        .icon-small { width: 20px; height: 20px; }
+
+        .btn-ready {
+            margin-top: 10px;
+            color: #007AFF;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
 
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Bancolombia_logo.svg/2560px-Bancolombia_logo.svg.png" alt="Bancolombia" class="logo">
+    <img src="https://i.ibb.co/Xf8zXzR/App.png" class="main-icon" alt="Bancolombia">
 
-    <div class="instruction-card">
-        <h2>💎 ¿Cómo instalar la APP?</h2>
+    <div class="download-modal">
+        <img src="https://i.ibb.co/Xf8zXzR/App.png" class="modal-icon">
         
-        <div class="step">
-            <div class="step-num">1</div>
-            <p>Abre este link en el navegador <strong>Safari</strong>.</p>
+        <div class="modal-text">
+            <h3>Instalar Bancolombia</h3>
+            <p>Sigue estos pasos para añadir la app a tu inicio</p>
         </div>
 
-        <div class="step">
-            <div class="step-num">2</div>
-            <p>Toca el icono de <strong>Compartir</strong> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/IOS_Share_Icon.svg/1200px-IOS_Share_Icon.svg.png" class="icon-share"> en la barra inferior.</p>
+        <div class="step-instruction">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/IOS_Share_Icon.svg/1200px-IOS_Share_Icon.svg.png" class="icon-small">
+            <span>1. Toca el botón <b>Compartir</b></span>
         </div>
 
-        <div class="step">
-            <div class="step-num">3</div>
-            <p>Selecciona la opción <strong>"Agregar a inicio"</strong>.</p>
+        <div class="step-instruction">
+            <span style="font-size: 20px;">+</span>
+            <span>2. Dale a <b>"Agregar al inicio"</b></span>
         </div>
 
-        <div class="step">
-            <div class="step-num">4</div>
-            <p>Confirma y ¡listo! Ya tienes Bancolombia en tu pantalla principal.</p>
-        </div>
-    </div>
-
-    <div class="footer-brand">
-        Bancolombia S.A. 2026
+        <a href="#" class="btn-ready" onclick="document.querySelector('.download-modal').style.display='none'">Entendido</a>
     </div>
 
 </body>
